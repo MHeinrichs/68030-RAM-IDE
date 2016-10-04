@@ -98,8 +98,7 @@ architecture Behavioral of SDRAM_IDE is
 				data_wait,			--001001
 				data_wait2,			--001001
 				precharge,			--110011
-				precharge_wait,			--001001
-				precharge_wait2			--001001
+				precharge_wait			--001001
 				);
 	TYPE sdram_control IS (
 				c_nop,
@@ -161,6 +160,8 @@ signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal STERM_CLK : STD_LOGIC;
 signal LATCH_CLK : STD_LOGIC;
+signal RAM_ACCESS : STD_LOGIC;
+signal RANGER_ACCESS : STD_LOGIC;
    
 	
 	
@@ -181,12 +182,11 @@ begin
 	--RAM_SPACE   <= '0';
 	RAM_SPACE   <= '1'	when 
 									A(31 downto 24) >= x"08"  
-									--AND A(31 downto 16) < (x"0BFF")  
+									--AND A(31 downto 20) < (x"0BF")  
 									AND A(31 downto 24) <= x"0B"  
 						else '0'; -- Access to RAM-Space
 	--RANGER_SPACE   <= '1'	when 
-	--								A(31 downto 20) >= (x"00C")  
-	--								AND A(31 downto 20) < (x"00D")  
+	--								A(31 downto 20) = (x"00C")  
 	--					else '0'; -- Access to RANGER-Space
 	RANGER_SPACE   <= '0';
 
@@ -242,9 +242,26 @@ begin
 		elsif(rising_edge(LATCH_CLK))then
 			LE_30_RAM<= RW;
 			LE_RAM_30<= not RW;
-
 		end if;			
 	end process latch_states;
+
+	--latch_states: process(PLL_C,nAS)
+	--begin 
+	--	if( nAS = '1')then
+	--		LE_30_RAM<= '1';
+	--		LE_RAM_30<= '1';
+	--	elsif(falling_edge(PLL_C))then
+	--		if(CQ=data_wait and RW='0') then
+	--			LE_30_RAM<= '1';
+	--		elsif(CQ=data_wait and RW='1') then
+	--			LE_RAM_30<= '1';
+	--		elsif(CQ=start_ras )then
+	--			LE_30_RAM<= RW;
+	--			LE_RAM_30<= not RW;
+	--		end if;
+	--	end if;			
+	--end process latch_states;
+
 
 	buffer_oe: process(CLK) begin
 		if(rising_edge(clk))then
@@ -265,8 +282,15 @@ begin
    process (CQ,RESET,TRANSFER_CLK) begin
 		if(CQ = start_ras or RESET ='0')then
 			TRANSFER <= '0';
+			RANGER_ACCESS <= '0';
+			RAM_ACCESS <= '0';
 		elsif rising_edge(TRANSFER_CLK) then
 			TRANSFER <= '1';
+			if(RAM_SPACE ='1')then
+				RAM_ACCESS <='1';
+			else
+				RANGER_ACCESS <= '1';
+			end if;
 		end if;
 	end process;
  
@@ -287,7 +311,7 @@ begin
 						else '0';
 
 	ARAM_LOW  <=  "0000" & A(10 downto 2);
-	ARAM_HIGH <= A(23 downto 11);
+	ARAM_HIGH <= A(25 downto 13);-- when RAM_SPACE ='1' else "111111" & A(19 downto 13); --mux for ranger
 	ARAM_PRECHARGE <= "0010000000000";
 	ARAM_OPTCODE <= "0001000100000";
 
@@ -396,31 +420,31 @@ begin
 				CAS <= '1';
 				MEM_WE <= '1';
 				ARAM <= "0000000000000";
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			when c_ras=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '1';
 				ARAM <= ARAM_HIGH;
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			when c_cas=>
 				RAS <= '1';
 				CAS <= '0';
 				MEM_WE <= RW;
 				ARAM <= ARAM_LOW;
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			when c_precharge=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '0';
 				ARAM <= ARAM_PRECHARGE;
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			when c_refresh=>
 				RAS <= '0';
 				CAS <= '0';
 				MEM_WE <= '1';
 				ARAM <= "0000000000000";								
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			when c_opt_code=>
 				RAS <= '0';
 				CAS <= '0';
@@ -432,7 +456,7 @@ begin
 				CAS <= '1';
 				MEM_WE <= '0';
 				ARAM <= "0000000000000";								
-				BA <= A(25 downto 24);
+				BA <= A(12 downto 11);
 			end case;
 									
 	      if reset='0' then
@@ -451,17 +475,15 @@ begin
 
       when powerup =>
 		 ENACLK_PRE <= '1';		 
-		 SDRAM_OP<= c_nop;
-		 --if(AUTO_CONFIG_DONE(0)='1')then --wait until autoconfig is finished. this makes a nice delay!
-		 	CQ_D <= init_precharge;
-		 --else
-		 --CQ_D <= powerup;
-		 --end if;
-      when init_precharge =>
+		 SDRAM_OP <= c_nop;
+ 	 	 CQ_D <= init_precharge;
+      
+		when init_precharge =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_precharge;
+		 SDRAM_OP <= c_precharge;
 		 CQ_D <= init_precharge_commit;
-      when init_precharge_commit =>
+      
+		when init_precharge_commit =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
 		 if (NQ >= "0011") then
@@ -486,7 +508,7 @@ begin
 
       when init_refresh =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_refresh;
+		 SDRAM_OP <= c_refresh;
 		 CQ_D <= init_wait;
 
       when init_wait =>
@@ -501,10 +523,10 @@ begin
       when start_state =>		 
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;		 
-		 if (TRANSFER = '1') then
-		    CQ_D <= start_ras;
-		 elsif (REFRESH='1') then
+		 if (REFRESH = '1') then
 		    CQ_D <= refresh_start;
+		 elsif (TRANSFER = '1') then
+		    CQ_D <= start_ras;
 		 else
 		    CQ_D <= start_state;
 		 end if;
@@ -535,7 +557,7 @@ begin
 	  when commit_ras =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 if(nDS='0')then  --wait here for a valid datastrobe on writes
+		 if(nDS = '0')then  --wait here for a valid datastrobe on writes
 			CQ_D <= start_cas;
 		 else
 			CQ_D <= commit_ras;
@@ -543,12 +565,12 @@ begin
 
       when start_cas =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_cas;
+		 SDRAM_OP <= c_cas;
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_nop;
+		 SDRAM_OP <= c_nop;
  		 CQ_D <= data_wait;
 
       when data_wait =>
@@ -562,24 +584,19 @@ begin
       
 		when data_wait2 =>
 		 ENACLK_PRE <= '1'; 
-		 SDRAM_OP<= c_nop;
+		 SDRAM_OP <= c_nop;
 		 CQ_D <= precharge;
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_precharge;
+		 SDRAM_OP <= c_precharge;
 		 CQ_D <= precharge_wait;
 
       when precharge_wait =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_nop;
-		 CQ_D <= precharge_wait2; 
-      when precharge_wait2 =>
-		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_nop;
+		 SDRAM_OP <= c_nop;
 		 CQ_D <= start_state; 
 		end case;
-
    end process;
 
 	
