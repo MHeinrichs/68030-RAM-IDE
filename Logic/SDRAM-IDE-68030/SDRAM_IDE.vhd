@@ -211,7 +211,7 @@ begin
 	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
 	--STERM <= 'Z';
 	--enable caching for RAM
-	CIIN	<= --'1' when DSACK_32BIT ='0' else 
+	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
 				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
 				'Z';
 	CBACK <='Z';

@@ -33,3 +33,12 @@ Logic/SDRAM-IDE-68030/xst/work/sub00/vhpl00.vho
 *.xmsgs
 *.lst
 Logic/SDRAM-IDE-68030/SDRAM_IDE.rpt
+*.js
+Logic/SDRAM-IDE-68030/SDRAM_IDE_html/fit/appletref.htm
+*.htm
+Logic/SDRAM-IDE-68030/SDRAM_IDE_html/fit/ascii.tmp
+*.gif
+*.jpg
+Logic/SDRAM-IDE-68030/SDRAM_IDE_html/fit/style.css
+*.xmsgs
+Logic/SDRAM-IDE-68030/_xmsgs/cpldfit.xmsgs
