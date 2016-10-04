@@ -221,15 +221,6 @@ begin
 	--					else '0'; -- Access to RANGER-Space
 	RANGER_SPACE   <= '0';
 
-	--IDE_SPACE   <= '1'	when 
-	--								A(31 downto 16) = (x"00" & IDE_BASEADR)  
-	--								AND SHUT_UP = '0' 
-	--					else '0'; -- Access to IDE-Space
-	--AUTO_CONFIG	<= '1'	when 
-	--								A(31 downto 16) = x"00E8"
-	--								AND AUTO_CONFIG_DONE ='0'
-	--					else '0'; -- Access to Autoconfig space and internal autoconfig not complete
-
 	adr_decode: process(PLL_C) --only for the "slow" adresses
 	begin 
 		if(rising_edge(PLL_C))then
@@ -256,17 +247,6 @@ begin
 	CLK_EN 	<= ENACLK_PRE;
 
 	--LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
-
-	--latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
-	--begin 
-	--	if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
-	--		LE_30_RAM<= '1';
-	--		LE_RAM_30<= '1';
-	--	elsif(rising_edge(LATCH_CLK))then
-	--		LE_30_RAM<= RW;
-	--		LE_RAM_30<= not RW;
-	--	end if;			
-	--end process latch_states;
 
 	latch_states: process(PLL_C,nAS)
 	begin 
