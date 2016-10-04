@@ -232,35 +232,34 @@ begin
 	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
-	LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
+	--LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
 
-	latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
-	begin 
-		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
-			LE_30_RAM<= '1';
-			LE_RAM_30<= '1';
-		elsif(rising_edge(LATCH_CLK))then
-			LE_30_RAM<= RW;
-			LE_RAM_30<= not RW;
-		end if;			
-	end process latch_states;
-
-	--latch_states: process(PLL_C,nAS)
+	--latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
 	--begin 
-	--	if( nAS = '1')then
+	--	if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
 	--		LE_30_RAM<= '1';
 	--		LE_RAM_30<= '1';
-	--	elsif(falling_edge(PLL_C))then
-	--		if(CQ=data_wait and RW='0') then
-	--			LE_30_RAM<= '1';
-	--		elsif(CQ=data_wait and RW='1') then
-	--			LE_RAM_30<= '1';
-	--		elsif(CQ=start_ras )then
-	--			LE_30_RAM<= RW;
-	--			LE_RAM_30<= not RW;
-	--		end if;
+	--	elsif(rising_edge(LATCH_CLK))then
+	--		LE_30_RAM<= RW;
+	--		LE_RAM_30<= not RW;
 	--	end if;			
 	--end process latch_states;
+
+	latch_states: process(PLL_C,nAS)
+	begin 
+		if( nAS = '1')then
+			LE_30_RAM<= '1';
+			LE_RAM_30<= '1';
+		elsif(falling_edge(PLL_C))then
+			if(CQ = data_wait ) then
+				LE_30_RAM<= '1';
+				LE_RAM_30<= '1';
+			elsif(CQ = commit_ras )then
+				LE_30_RAM <= RW;
+				LE_RAM_30 <= not RW;
+			end if;
+		end if;			
+	end process latch_states;
 
 
 	buffer_oe: process(CLK) begin
