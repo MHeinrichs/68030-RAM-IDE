@@ -140,6 +140,7 @@ signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	AUTO_CONFIG_CYCLE:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
+signal TRANSFER_CLK:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
 signal CLRREFC: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
@@ -159,6 +160,7 @@ signal CLK_D1 : STD_LOGIC;
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal STERM_CLK : STD_LOGIC;
+signal LATCH_CLK : STD_LOGIC;
    
 	
 	
@@ -230,27 +232,69 @@ begin
 	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
-	latch_states: process(CQ,RESET, TRANSFER_IN_PROGRES)
+	LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
+
+	latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
 	begin 
-		if(CQ=data_wait or RESET = '0')then
+		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
 			LE_30_RAM<= '1';
 			LE_RAM_30<= '1';
-		elsif(rising_edge(TRANSFER_IN_PROGRES))then
+		elsif(rising_edge(LATCH_CLK))then
 			LE_30_RAM<= RW;
 			LE_RAM_30<= not RW;
 
-		end if;
-			
+		end if;			
 	end process latch_states;
 
+	buffer_oe: process(CLK) begin
+		if(rising_edge(clk))then
+			if((RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS='0') then
+				OE_30_RAM<= RW;
+				OE_RAM_30<= not RW;
+			else
+				OE_30_RAM<= '1';
+				OE_RAM_30<= '1';
+			end if;
+		end if;
+	end process buffer_oe;
 
-	ram_start: process(nAS,PLL_C) begin
+
+	TRANSFER_CLK <= '1' when 	(RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS='0'								
+						else '0';
+
+   process (CQ,RESET,TRANSFER_CLK) begin
+		if(CQ = start_ras or RESET ='0')then
+			TRANSFER <= '0';
+		elsif rising_edge(TRANSFER_CLK) then
+			TRANSFER <= '1';
+		end if;
+	end process;
+ 
+	STERM_CLK <= '1' when CQ=data_wait else '0';
+ 
+	sterm_gen:process(nAS, STERM_CLK)
+	begin
+		if(nAS='1')then
+			STERM_S <='1';
+		elsif(rising_edge(STERM_CLK))then
+			STERM_S <= '0' ;
+		end if;
+	end process sterm_gen;
+ 
+	--decoder signals
+	CLRREFC <= '1' when 	CQ = init_refresh or 
+								CQ = refresh_start 								
+						else '0';
+
+	ARAM_LOW  <=  "0000" & A(10 downto 2);
+	ARAM_HIGH <= A(23 downto 11);
+	ARAM_PRECHARGE <= "0010000000000";
+	ARAM_OPTCODE <= "0001000100000";
+
+	ram_sizing: process(nAS,PLL_C) begin
 		if(nAS= '1')then
-			OE_30_RAM<= '1';
-			OE_RAM_30<= '1';
 			TRANSFER_IN_PROGRES <= '0';
 			BYTE	<= "1111";
-
 		elsif(rising_edge(PLL_C)) then
 			if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 				TRANSFER_IN_PROGRES <= '1';
@@ -290,12 +334,9 @@ begin
 				else
 					BYTE(3)	<= '1';
 				end if;									
-								
-				OE_30_RAM<= RW;
-				OE_RAM_30<= not RW;
 			end if;
 		end if;
-	end process ram_start;
+	end process ram_sizing;
 
 	-- ram register Section
 	
@@ -401,38 +442,8 @@ begin
 			end if;
 		end if;
    end process;
-
-	CLRREFC <= '1' when 	CQ = init_refresh or 
-								CQ = refresh_start 								
-						else '0';
-
-
-   process (CQ,RESET,TRANSFER_IN_PROGRES) begin
-		if(CQ = start_ras or RESET ='0')then
-			TRANSFER <= '0';
-		elsif rising_edge(TRANSFER_IN_PROGRES) then
-			TRANSFER <= '1';
-		end if;
-	end process;
- 
-	STERM_CLK <= '1' when CQ=commit_cas else '0';
- 
-	sterm_gen:process(nAS, STERM_CLK)
-	begin
-		if(nAS='1')then
-			STERM_S <='1';
-		elsif(rising_edge(STERM_CLK))then
-			STERM_S <= '0' ;
-		end if;
-	end process sterm_gen;
- 
-
-	ARAM_LOW  <=  "0000" & A(10 downto 2);
-	ARAM_HIGH <= A(23 downto 11);
-	ARAM_PRECHARGE <= "0010000000000";
-	ARAM_OPTCODE <= "0001000100000";
 	
-	-- ram state machine
+	-- ram state machine decoder
    process (nDS, CQ, REFRESH, TRANSFER, NQ, RW)
    begin
       
