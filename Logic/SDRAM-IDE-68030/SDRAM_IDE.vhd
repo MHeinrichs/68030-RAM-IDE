@@ -184,7 +184,7 @@ begin
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
-	nDSACK		<= 	"ZZ" when MY_CYCLE ='1' ELSE
+	nDSACK		<= "ZZ" when MY_CYCLE ='1' ELSE
 						"01" when DSACK_16BIT	 ='0' else 						
 						"01" when AUTO_CONFIG_D0='1' else 
 						"11";
@@ -194,7 +194,7 @@ begin
 	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
 				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
 				'Z';
-	CBACK <= 'Z';
+	CBACK <= '1';
 	
 	--very tricky: a 5V device thinks 3,3v = 1 is floating! 
 	--So if the pll is a 570A (5V) all 1 must be replaced with Z and all Ms with 1.
@@ -600,11 +600,11 @@ begin
       when data_wait =>
 		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
-		 if(RW = '1')then
-			CQ_D <= data_wait2;
-		 else
+		 --if(RW = '1')then
+		 --	CQ_D <= data_wait2;
+		 --else
 			CQ_D <= precharge;
-		 end if;
+		 --end if;
       
 		when data_wait2 =>
 		 ENACLK_PRE <= '1'; 
