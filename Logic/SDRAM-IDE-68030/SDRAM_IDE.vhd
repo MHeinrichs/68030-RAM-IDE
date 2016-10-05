@@ -214,10 +214,10 @@ begin
 									--AND A(31 downto 20) < (x"0BF")  
 									AND A(31 downto 24) <= x"0B"  
 						else '0'; -- Access to RAM-Space
-	--RANGER_SPACE   <= '1'	when 
-	--								A(31 downto 20) = (x"00C")  
-	--					else '0'; -- Access to RANGER-Space
-	RANGER_SPACE   <= '0';
+	RANGER_SPACE   <= '1'	when 
+									A(31 downto 20) = (x"00C")  
+						else '0'; -- Access to RANGER-Space
+	--RANGER_SPACE   <= '0';
 
 	IDE_SPACE   <= '1'	when 
 									A(31 downto 16) = (x"00" & IDE_BASEADR)  
@@ -230,8 +230,7 @@ begin
 
 --	adr_decode: process(PLL_C) --only for the "slow" adresses
 --	begin 
---		if(rising_edge(PLL_C))then
---		
+--		if(rising_edge(PLL_C))then		
 --			if(	A(31 downto 16) = (x"00" & IDE_BASEADR)  
 --					AND SHUT_UP = '0')then
 --				IDE_SPACE   <= '1';
@@ -331,8 +330,7 @@ begin
 								CQ = refresh_start 								
 						else '0';
 
-	ARAM_LOW  <=  "0000" & A(10 downto 2);
-	ARAM_HIGH <= A(25 downto 13);-- when RAM_SPACE ='1' else "111111" & A(19 downto 13); --mux for ranger
+	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
 	ARAM_OPTCODE <= "0001000100000";
 
@@ -343,6 +341,11 @@ begin
 		elsif(rising_edge(PLL_C)) then
 			if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 				TRANSFER_IN_PROGRES <= '1';
+				if(RAM_SPACE = '1') then--mux for ranger
+					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
+				else
+					ARAM_LOW  <=  "0000111111" & A(4 downto 2);
+				end if;
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
 				
 				-- bits 0-7
@@ -441,31 +444,31 @@ begin
 				CAS <= '1';
 				MEM_WE <= '1';
 				ARAM <= "0000000000000";
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			when c_ras=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '1';
 				ARAM <= ARAM_HIGH;
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			when c_cas=>
 				RAS <= '1';
 				CAS <= '0';
 				MEM_WE <= RW;
 				ARAM <= ARAM_LOW;
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			when c_precharge=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '0';
 				ARAM <= ARAM_PRECHARGE;
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			when c_refresh=>
 				RAS <= '0';
 				CAS <= '0';
 				MEM_WE <= '1';
 				ARAM <= "0000000000000";								
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			when c_opt_code=>
 				RAS <= '0';
 				CAS <= '0';
@@ -477,7 +480,7 @@ begin
 				CAS <= '1';
 				MEM_WE <= '0';
 				ARAM <= "0000000000000";								
-				BA <= A(12 downto 11);
+				BA <= A(19 downto 18);
 			end case;
 									
 	      if reset='0' then
