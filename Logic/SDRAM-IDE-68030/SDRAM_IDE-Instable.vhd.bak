@@ -179,6 +179,7 @@ begin
 
 
 	--internal signals	
+
 	--output
 	MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or RAM_SPACE = '1' or RANGER_SPACE = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
@@ -208,6 +209,7 @@ begin
 	--S<="Z0"; --double the clock - FB is CLK/2 
 	S<="01"; --triple the clock - FB is CLK 
 
+	--address decode
 	--RAM_SPACE   <= '0';
 	RAM_SPACE   <= '1'	when 
 									A(31 downto 24) >= x"08"  
@@ -219,69 +221,48 @@ begin
 	--					else '0'; -- Access to RANGER-Space
 	RANGER_SPACE   <= '0';
 
-	IDE_SPACE   <= '1'	when 
-									A(31 downto 16) = (x"00" & IDE_BASEADR)  
-									AND SHUT_UP = '0' 
-						else '0'; -- Access to IDE-Space
-	AUTO_CONFIG	<= '1'	when 
-									A(31 downto 16) = x"00E8"
-									AND AUTO_CONFIG_DONE ='0'
-						else '0'; -- Access to Autoconfig space and internal autoconfig not complete
-
---	adr_decode: process(PLL_C) --only for the "slow" adresses
---	begin 
---		if(rising_edge(PLL_C))then
---		
---			if(	A(31 downto 16) = (x"00" & IDE_BASEADR)  
---					AND SHUT_UP = '0')then
---				IDE_SPACE   <= '1';
---			else
---				IDE_SPACE   <= '0';
---			end if;
---			
---			if(	A(31 downto 16) = x"00E8"
---					AND AUTO_CONFIG_DONE ='0')then
---				AUTO_CONFIG	<= '1';
---			else
---				AUTO_CONFIG	<= '0';
---			end if;
---		end if;
---	end process adr_decode;
+	adr_decode: process(PLL_C) --only for the "slow" adresses
+	begin 
+		if(rising_edge(PLL_C))then
+		
+			if(	A(31 downto 16) = (x"00" & IDE_BASEADR)  
+					AND SHUT_UP = '0')then
+				IDE_SPACE   <= '1';
+			else
+				IDE_SPACE   <= '0';
+			end if;
+			
+			if(	A(31 downto 16) = x"00E8"
+					AND AUTO_CONFIG_DONE ='0')then
+				AUTO_CONFIG	<= '1';
+			else
+				AUTO_CONFIG	<= '0';
+			end if;
+		end if;
+	end process adr_decode;
 
 
 	--SD-RAM stuff
 	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
-	LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
+	--LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
 
-	latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
+	latch_states: process(PLL_C,nAS)
 	begin 
-		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
-			LE_30_RAM<= '1';
-			LE_RAM_30<= '1';
-		elsif(rising_edge(LATCH_CLK))then
-			LE_30_RAM<= RW;
-			LE_RAM_30<= not RW;
+		if( nAS = '1')then
+			LE_30_RAM <= '1';
+			LE_RAM_30 <= '1';
+		elsif(falling_edge(PLL_C))then
+			if(CQ = data_wait ) then
+				LE_30_RAM <= '1';
+				LE_RAM_30 <= '1';
+			elsif(CQ = commit_ras )then
+				LE_30_RAM <= RW;
+				LE_RAM_30 <= not RW;
+			end if;
 		end if;			
 	end process latch_states;
-
-	--latch_states: process(PLL_C,nAS)
-	--begin 
-	--	if( nAS = '1')then
-	--		LE_30_RAM<= '1';
-	--		LE_RAM_30<= '1';
-	--	elsif(falling_edge(PLL_C))then
-	--		if(CQ=data_wait and RW='0') then
-	--			LE_30_RAM<= '1';
-	--		elsif(CQ=data_wait and RW='1') then
-	--			LE_RAM_30<= '1';
-	--		elsif(CQ=start_ras )then
-	--			LE_30_RAM<= RW;
-	--			LE_RAM_30<= not RW;
-	--		end if;
-	--	end if;			
-	--end process latch_states;
 
 
 	buffer_oe: process(CLK) begin
@@ -821,6 +802,5 @@ begin
 				AUTO_CONFIG_D0 <= '0';
 			end if;
 		end if;
-
 	end process autoconfig; --- that's all
 end Behavioral;

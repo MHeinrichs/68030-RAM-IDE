@@ -227,7 +227,6 @@ begin
 									A(31 downto 16) = x"00E8"
 									AND AUTO_CONFIG_DONE ='0'
 						else '0'; -- Access to Autoconfig space and internal autoconfig not complete
-
 --	adr_decode: process(PLL_C) --only for the "slow" adresses
 --	begin 
 --		if(rising_edge(PLL_C))then

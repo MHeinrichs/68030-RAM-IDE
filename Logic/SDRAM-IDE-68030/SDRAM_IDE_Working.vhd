@@ -179,35 +179,6 @@ begin
 
 
 	--internal signals	
-	--output
-	MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or RAM_SPACE = '1' or RANGER_SPACE = '1') else '1';
-	nRAM_SEL 	<= MY_CYCLE; 
-
-	--map DSACK signal
-	nDSACK		<= 	"ZZ" when MY_CYCLE ='1' ELSE
-						"01" when DSACK_16BIT	 ='0' else 						
-						"01" when AUTO_CONFIG_D0='1' else 
-						"11";
-	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
-
-	--enable caching for RAM
-	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
-				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
-				'Z';
-	CBACK <= 'Z';
-	
-	--very tricky: a 5V device thinks 3,3v = 1 is floating! 
-	--So if the pll is a 570A (5V) all 1 must be replaced with Z and all Ms with 1.
-	--A 570B (3.3V) behaves as descrived in the datasheet!
-		
-	--FB CLK/2: SJ2: left
-	--FB CLK  : SJ2: right
-	
-	
-	--values for the 570A
-	--S<="Z0"; --double the clock - FB is CLK/2 
-	S<="01"; --triple the clock - FB is CLK 
-
 	--RAM_SPACE   <= '0';
 	RAM_SPACE   <= '1'	when 
 									A(31 downto 24) >= x"08"  
@@ -227,27 +198,35 @@ begin
 									A(31 downto 16) = x"00E8"
 									AND AUTO_CONFIG_DONE ='0'
 						else '0'; -- Access to Autoconfig space and internal autoconfig not complete
+	--output
+	MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or RAM_SPACE = '1' or RANGER_SPACE = '1') else '1';
+	nRAM_SEL 	<= MY_CYCLE; 
 
---	adr_decode: process(PLL_C) --only for the "slow" adresses
---	begin 
---		if(rising_edge(PLL_C))then
---		
---			if(	A(31 downto 16) = (x"00" & IDE_BASEADR)  
---					AND SHUT_UP = '0')then
---				IDE_SPACE   <= '1';
---			else
---				IDE_SPACE   <= '0';
---			end if;
---			
---			if(	A(31 downto 16) = x"00E8"
---					AND AUTO_CONFIG_DONE ='0')then
---				AUTO_CONFIG	<= '1';
---			else
---				AUTO_CONFIG	<= '0';
---			end if;
---		end if;
---	end process adr_decode;
-
+	--map DSACK signal
+	nDSACK		<= 	"ZZ" when MY_CYCLE ='1' ELSE
+						--"00" when STERM_S    ='0' else
+						"01" when DSACK_16BIT	 ='0' else 						
+						"01" when AUTO_CONFIG_D0='1' else 
+						"11";
+	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
+	--STERM <= 'Z';
+	--enable caching for RAM
+	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
+				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
+				'Z';
+	CBACK <='Z';
+	
+	--very tricky: a 5V device thinks 3,3v = 1 is floating! 
+	--So if the pll is a 570A (5V) all 1 must be replaced with Z and all Ms with 1.
+	--A 570B (3.3V) behaves as descrived in the datasheet!
+		
+	--FB CLK/2: SJ2: left
+	--FB CLK  : SJ2: right
+	
+	
+	--values for the 570A
+	--S<="Z0"; --double the clock - FB is CLK/2 
+	S<="01"; --triple the clock - FB is CLK 
 
 	--SD-RAM stuff
 	CLK_RAM 	<= not PLL_C;
@@ -286,29 +265,29 @@ begin
 
 	buffer_oe: process(CLK) begin
 		if(rising_edge(clk))then
-			if((RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS = '0') then
-				OE_30_RAM <= RW;
-				OE_RAM_30 <= not RW;
+			if((RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS='0') then
+				OE_30_RAM<= RW;
+				OE_RAM_30<= not RW;
 			else
-				OE_30_RAM <= '1';
-				OE_RAM_30 <= '1';
+				OE_30_RAM<= '1';
+				OE_RAM_30<= '1';
 			end if;
 		end if;
 	end process buffer_oe;
 
 
-	TRANSFER_CLK <= '1' when 	(RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS='0'								
+	TRANSFER_CLK <= '1' when 	(RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS='0'								
 						else '0';
 
    process (CQ,RESET,TRANSFER_CLK) begin
-		if(CQ = start_ras or RESET = '0')then
+		if(CQ = start_ras or RESET ='0')then
 			TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
 		elsif rising_edge(TRANSFER_CLK) then
 			TRANSFER <= '1';
-			if(RAM_SPACE = '1')then
-				RAM_ACCESS <= '1';
+			if(RAM_SPACE ='1')then
+				RAM_ACCESS <='1';
 			else
 				RANGER_ACCESS <= '1';
 			end if;
@@ -319,8 +298,8 @@ begin
  
 	sterm_gen:process(nAS, STERM_CLK)
 	begin
-		if(nAS = '1')then
-			STERM_S <= '1';
+		if(nAS='1')then
+			STERM_S <='1';
 		elsif(rising_edge(STERM_CLK))then
 			STERM_S <= '0' ;
 		end if;
@@ -630,10 +609,10 @@ begin
 			-- reset
 			IDE_ENABLE			<='0';
 		elsif rising_edge(clk) then
-			if(IDE_SPACE = '1' and nAS = '0')then
-				if(RW = '0')then
+			if(IDE_SPACE='1' and nAS = '0')then
+				if(RW='0')then
 					--enable IDE on the first write on this IO-space!
-					IDE_ENABLE <= '1';
+					IDE_ENABLE<='1';
 				end if;
 			end if;							
 		end if;
@@ -645,25 +624,25 @@ begin
 	begin
 	
 		if rising_edge(clk) then
-			if(IDE_SPACE = '1' and nAS = '0')then
+			if(IDE_SPACE='1' and nAS='0')then
 
-				if(RW = '0')then
+				if(RW='0')then
 					--the write goes to the hdd!
 					IDE_W_S		<= '0';
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'1';
-					if(IDE_WAIT = '1')then --IDE I/O
+					if(IDE_WAIT ='1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D0;
 					end if;
-				elsif(RW = '1' and IDE_ENABLE = '1')then
+				elsif(RW='1' and IDE_ENABLE='1')then
 						--read from IDE instead from ROM
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '0';
 					ROM_OE_S		<=	'1';
-					if(IDE_WAIT = '1')then --IDE I/O
+					if(IDE_WAIT ='1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D0;
 					end if;
-				elsif(RW = '1' and IDE_ENABLE = '0')then
+				elsif(RW='1' and IDE_ENABLE='0')then
 					DSACK_16BIT		<= IDE_DSACK_D3;
 					--ROM_EN_S			<=	'0';						
 					IDE_W_S		<= '1';
@@ -693,8 +672,8 @@ begin
 	ide_dsack_gen: process (nAS, clk)
 	begin
 		if	nAS = '1' then
-			IDE_CYCLE <= '1';
-			IDE_BUF_S <= '1';
+			IDE_CYCLE <='1';
+			IDE_BUF_S <='1';
 		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock, Attention: The memory is triggered at the falling edge, so i can save one register!
 			if(IDE_SPACE = '1')then
 				IDE_CYCLE <= '0';
@@ -725,7 +704,7 @@ begin
 	acack_gen: process (nAS, clk)
 	begin
 		if	nAS = '1' then
-			AUTO_CONFIG_CYCLE <= '1';
+			AUTO_CONFIG_CYCLE <='1';
 		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock, Attention: The memory is triggered at the falling edge, so i can save one register!
 			if(AUTO_CONFIG = '1')then
 				AUTO_CONFIG_CYCLE <= '0';				
@@ -738,24 +717,24 @@ begin
 	begin
 		if	reset = '0' then
 			-- reset active ...
-			AUTO_CONFIG_PAUSE <= '0';
-			AUTO_CONFIG_DONE_CYCLE	<= '0';
-			AUTO_CONFIG_DONE	<= '0';
+			AUTO_CONFIG_PAUSE <='0';
+			AUTO_CONFIG_DONE_CYCLE	<='0';
+			AUTO_CONFIG_DONE	<='0';
 			
 			--use these presets for CDTV: This makes the DMAC config first!
 			--AUTO_CONFIG_PAUSE <='1';
 			--AUTO_CONFIG_DONE_CYCLE	<='1';
 			--AUTO_CONFIG_DONE	<='1';
-			Dout2 <= "1111";
-			SHUT_UP	<= '1';
-			IDE_BASEADR <= x"FF";
+			Dout2<="1111";
+			SHUT_UP	<='1';
+			IDE_BASEADR<=x"FF";
 			AUTO_CONFIG_D0 <= '0';
 		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock		
 			--nDS_D0				<=nDS;
 			--nDS_D1				<=nDS_D0;
 			nAS_D0				<=nAS;
 			if( 	A(31 downto 16) = x"00E8" 
-					and A (6 downto 1)= "100100"
+					and A (6 downto 1)="100100"
 					and RW='0' and nAS_D0='0')  then
 				AUTO_CONFIG_FINISH <= '1';
 			else
@@ -763,18 +742,18 @@ begin
 			end if;
 			
 			-- wait one autoconfig-strobe for CDTV!
-			if(AUTO_CONFIG_FINISH = '1'
+			if(AUTO_CONFIG_FINISH ='1'
 				and nAS_D0='1' and AUTO_CONFIG_PAUSE ='1') then
-				AUTO_CONFIG_PAUSE <= '0';
-				AUTO_CONFIG_DONE_CYCLE	<= '0';
+				AUTO_CONFIG_PAUSE <='0';
+				AUTO_CONFIG_DONE_CYCLE	<='0';
 				AUTO_CONFIG_DONE <= '0';
-			elsif(nAS= '1' and nAS_D0= '0' )then
+			elsif(nAS='1' and nAS_D0='0' )then
 				AUTO_CONFIG_DONE <= AUTO_CONFIG_DONE_CYCLE;
 			end if;
 		
-			if(AUTO_CONFIG = '1' and nAS = '0') then
-				AUTO_CONFIG_D0 <= '1';
-				if(RW = '1') then
+			if(AUTO_CONFIG= '1' and nAS='0') then
+				AUTO_CONFIG_D0 <='1';
+				if(RW='1') then
 					case A(6 downto 1) is
 						when "000000"	=> Dout2 <= 	"1101" ; --ZII, no Memory,  ROM
 						when "000001"	=> Dout2 <=	"0001" ; --one Card, 64kb = 001
@@ -803,22 +782,22 @@ begin
 						when others	=> Dout2 <=	"1111" ;
 					end case;	
 				else --write
-					if( nDS = '0')then
-						if(AUTO_CONFIG_DONE = '0')then
-							if(A (6 downto 1) = "100100")then
+					if( nDS='0')then
+						if(AUTO_CONFIG_DONE='0')then
+							if(A (6 downto 1)="100100")then
 								IDE_BASEADR(7 downto 4)	<= D(3 downto 0); --Base adress
 								SHUT_UP <= '0'; --enable board
-								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
-							elsif(A (6 downto 1) = "100101")then
+								AUTO_CONFIG_DONE_CYCLE	<='1'; --done here
+							elsif(A (6 downto 1)="100101")then
 								IDE_BASEADR(3 downto 0)	<= D(3 downto 0); --Base adress
-							elsif(A (6 downto 1) = "100110")then
-								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
+							elsif(A (6 downto 1)="100110")then
+								AUTO_CONFIG_DONE_CYCLE	<='1'; --done here
 							end if;
 						end if;
 					end if;
 				end if;
 			else
-				AUTO_CONFIG_D0 <= '0';
+				AUTO_CONFIG_D0 <='0';
 			end if;
 		end if;
 
