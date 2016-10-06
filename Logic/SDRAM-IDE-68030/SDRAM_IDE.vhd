@@ -144,6 +144,7 @@ signal REFRESH: std_logic:= '1';
 signal CLRREFC: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
 signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
+signal NQ_TIMEOUT :  STD_LOGIC_VECTOR (3 downto 0);
 signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
 signal RQ_TIMEOUT :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
@@ -283,9 +284,12 @@ begin
 	--end process latch_states;
 
 
-	buffer_oe: process(CLK) begin
-		if(rising_edge(clk))then
-			if((RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS = '0') then
+	buffer_oe: process(CLK, nAS) begin
+		if(nAS = '1')then
+				OE_30_RAM <= '1';
+				OE_RAM_30 <= '1';			
+		elsif(rising_edge(clk))then
+			if(RAM_SPACE = '1' or RANGER_SPACE = '1') then
 				OE_30_RAM <= RW;
 				OE_RAM_30 <= not RW;
 			else
@@ -389,8 +393,12 @@ begin
 	-- ram register Section
 	
 	RQ_TIMEOUT <= x"FF"; 
-	--8192 refreeshes in 64ms ->8192 refreshes in 3200000 50MHz ticks
+	--8192 refreshes in 64ms ->8192 refreshes in 3200000 50MHz ticks
 	-- -> Refresh after 390 tics -> 256 is a safe place to be!
+	NQ_TIMEOUT <= x"9"; 
+	--wait this number of cycles for a refresh
+	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
+	--puls one cycle for safety :(
    process (PLL_C) begin
       if rising_edge(PLL_C) then
 			if(CLRREFC ='1')then
@@ -414,11 +422,11 @@ begin
 				CQ = init_opcode_wait or
 				CQ = refresh_wait)
 			then
-				if(NQ < "1111")then
+				if(NQ < x"F")then
 					NQ <= NQ +1;
 				end if;
 			else 
-				NQ  <= "0000";
+				NQ  <= x"0";
 			end if;
 					
 			
@@ -510,7 +518,7 @@ begin
 		when init_precharge_commit =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 if (NQ >= "0011") then
+		 if (NQ >= x"3") then
 		    CQ_D <= init_opcode;  
 		 else
 		    CQ_D <= init_precharge_commit;
@@ -524,7 +532,7 @@ begin
       when init_opcode_wait =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 if (NQ >= "0001") then
+		 if (NQ >= x"1") then
 		    CQ_D <= init_refresh;   --1st refresh
 		 else
 		    CQ_D <= init_opcode_wait;
@@ -538,7 +546,7 @@ begin
       when init_wait =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 if (	NQ >= "1010") then    --wait 60ns here
+		 if (	NQ >= NQ_TIMEOUT) then    --wait 60ns here
 			CQ_D <= refresh_start; --last refresh completes initialzation
 		 else
 		    CQ_D <= init_wait;
@@ -563,7 +571,7 @@ begin
       when refresh_wait =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 if (NQ >= "1010") then			--wait 60ns here
+		 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
 			 if (TRANSFER = '1') then
 				CQ_D <= start_ras;
 			 else
