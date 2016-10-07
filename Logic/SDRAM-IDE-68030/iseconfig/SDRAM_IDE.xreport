@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2016-10-05T19:23:08</DateModified>
+  <DateModified>2016-10-07T16:53:34</DateModified>
   <ModuleName>SDRAM_IDE</ModuleName>
-  <SummaryTimeStamp>2016-10-04T15:10:46</SummaryTimeStamp>
+  <SummaryTimeStamp>2016-10-07T16:53:30</SummaryTimeStamp>
   <SavedFilePath>C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/iseconfig/SDRAM_IDE.xreport</SavedFilePath>
   <ImplementationReportsDirectory>C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030\</ImplementationReportsDirectory>
   <DateInitialized>2016-10-01T00:02:46</DateInitialized>

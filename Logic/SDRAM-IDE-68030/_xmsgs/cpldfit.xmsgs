@@ -80,9 +80,6 @@
 <msg type="warning" file="Cpld" num="310" delta="old" >Cannot apply TIMESPEC <arg fmt="%s" index="1">AUTO_TS_2002</arg> = <arg fmt="%s" index="2">FROM:INT_CLK_CLK:TO:INT_TNM_STERM:20.0</arg> because of one of the following: (a) a signal name was not found; (b) a signal was removed or renamed due to optimization; (c) there is no path between the FROM node and TO node in the TIMESPEC.
 </msg>
 
-<msg type="info" file="Cpld" num="994" delta="new" >Exhaustive fitting is trying <arg fmt="%s" index="1">pterm limit</arg>: <arg fmt="%d" index="2">20</arg> and <arg fmt="%s" index="3">input limit</arg>: <arg fmt="%d" index="4">54</arg>
-</msg>
-
 <msg type="warning" file="Cpld" num="0" delta="new" >Clock &apos;<arg fmt="%s" index="1">PLL_C</arg>&apos; is used in an OFFSET timespec, this clock should be explicitly declared as a global clock input (BUFG) in your design in order for the OFFSET timespec to be properly analyzed. This software may attempt to place this signal on a pin that can drive a BUFG if it does not already have a pin assigned, however if the LOC constraint is not specified by the user then the OFFSET timespec will not be applied. OFFSET constraints on clocks that do not drive a BUFG will be ignored. In this case a FROM:TO constraint should be used instead.
 </msg>
 

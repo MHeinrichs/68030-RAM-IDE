@@ -1,3 +1,311 @@
+Reading design: SDRAM_IDE.prj
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE.vhd" in Library work.
+Entity <sdram_ide> compiled.
+Entity <sdram_ide> (Architecture <behavioral>) compiled.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <SDRAM_IDE> in library <work> (architecture <behavioral>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <SDRAM_IDE> in library <work> (Architecture <behavioral>).
+INFO:Xst:2679 - Register <AUTO_CONFIG_PAUSE> in unit <SDRAM_IDE> has a constant value of 0 during circuit operation. The register is replaced by logic.
+Entity <SDRAM_IDE> analyzed. Unit <SDRAM_IDE> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <SDRAM_IDE>.
+    Related source file is "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE.vhd".
+WARNING:Xst:647 - Input <ECS> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <CBREQ> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <PLL_C_HALF> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <RANGER_ACCESS> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <CLRREFC> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <AUTO_CONFIG_FINISH> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+INFO:Xst:1799 - State data_wait2 is never reached in FSM <CQ>.
+    Found finite state machine <FSM_0> for signal <CQ>.
+    -----------------------------------------------------------------------
+    | States             | 17                                             |
+    | Transitions        | 25                                             |
+    | Inputs             | 6                                              |
+    | Outputs            | 20                                             |
+    | Clock              | PLL_C                     (rising_edge)        |
+    | Reset              | RESET                     (negative)           |
+    | Reset type         | synchronous                                    |
+    | Reset State        | powerup                                        |
+    | Power Up State     | powerup                                        |
+    | Encoding           | one-hot                                        |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 7x2-bit ROM for signal <SDRAM_OP$rom0000>.
+    Found 4-bit tristate buffer for signal <D>.
+    Found 2-bit tristate buffer for signal <nDSACK>.
+    Found 13-bit register for signal <ARAM>.
+    Found 1-bit register for signal <UDQ0>.
+    Found 1-bit register for signal <LDQ0>.
+    Found 1-bit register for signal <UDQ1>.
+    Found 1-bit register for signal <LDQ1>.
+    Found 1-bit register for signal <RAS>.
+    Found 1-bit register for signal <CAS>.
+    Found 1-bit register for signal <MEM_WE>.
+    Found 2-bit register for signal <BA>.
+    Found 1-bit register for signal <LE_30_RAM>.
+    Found 1-bit register for signal <OE_30_RAM>.
+    Found 1-bit register for signal <LE_RAM_30>.
+    Found 1-bit register for signal <OE_RAM_30>.
+    Found 1-bit tristate buffer for signal <CIIN>.
+    Found 1-bit tristate buffer for signal <STERM>.
+    Found 13-bit register for signal <ARAM_LOW>.
+    Found 1-bit register for signal <AUTO_CONFIG_CYCLE>.
+    Found 1-bit register for signal <AUTO_CONFIG_D0>.
+    Found 1-bit register for signal <AUTO_CONFIG_DONE>.
+    Found 1-bit register for signal <AUTO_CONFIG_DONE_CYCLE>.
+    Found 4-bit register for signal <BYTE>.
+    Found 1-bit register for signal <CLK_D0>.
+    Found 1-bit register for signal <CLK_D1>.
+    Found 4-bit comparator greatequal for signal <CQ$cmp_ge0000> created at line 528.
+    Found 4-bit comparator greatequal for signal <CQ$cmp_ge0001> created at line 542.
+    Found 4-bit comparator greatequal for signal <CQ$cmp_ge0002> created at line 556.
+    Found 4-bit register for signal <Dout2>.
+    Found 1-bit register for signal <DSACK_16BIT>.
+    Found 8-bit register for signal <IDE_BASEADR>.
+    Found 1-bit register for signal <IDE_BUF_S>.
+    Found 1-bit register for signal <IDE_CYCLE>.
+    Found 1-bit register for signal <IDE_DSACK_D0>.
+    Found 1-bit register for signal <IDE_DSACK_D1>.
+    Found 1-bit register for signal <IDE_DSACK_D2>.
+    Found 1-bit register for signal <IDE_DSACK_D3>.
+    Found 1-bit register for signal <IDE_ENABLE>.
+    Found 1-bit register for signal <IDE_R_S>.
+    Found 16-bit comparator equal for signal <IDE_SPACE$cmp_eq0000> created at line 222.
+    Found 1-bit register for signal <IDE_W_S>.
+    Found 1-bit register for signal <nAS_D0>.
+    Found 4-bit up counter for signal <NQ>.
+    Found 4-bit comparator less for signal <NQ$cmp_lt0000> created at line 432.
+    Found 1-bit register for signal <RAM_ACCESS>.
+    Found 8-bit comparator greatequal for signal <RAM_SPACE$cmp_ge0000> created at line 212.
+    Found 8-bit comparator lessequal for signal <RAM_SPACE$cmp_le0000> created at line 212.
+    Found 1-bit register for signal <REFRESH>.
+    Found 8-bit comparator greatequal for signal <REFRESH$cmp_ge0000> created at line 411.
+    Found 1-bit register for signal <ROM_OE_S>.
+    Found 8-bit up counter for signal <RQ>.
+    Found 8-bit comparator less for signal <RQ$cmp_lt0000> created at line 420.
+    Found 1-bit register for signal <SHUT_UP>.
+    Found 1-bit register for signal <STERM_S>.
+    Found 1-bit register for signal <TRANSFER>.
+    Found 1-bit register for signal <TRANSFER_IN_PROGRES>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 ROM(s).
+	inferred   2 Counter(s).
+	inferred  33 D-type flip-flop(s).
+	inferred   9 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <SDRAM_IDE> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# ROMs                                                 : 1
+ 7x2-bit ROM                                           : 1
+# Counters                                             : 2
+ 4-bit up counter                                      : 1
+ 8-bit up counter                                      : 1
+# Registers                                            : 51
+ 1-bit register                                        : 47
+ 13-bit register                                       : 2
+ 2-bit register                                        : 1
+ 4-bit register                                        : 1
+# Comparators                                          : 9
+ 16-bit comparator equal                               : 1
+ 4-bit comparator greatequal                           : 3
+ 4-bit comparator less                                 : 1
+ 8-bit comparator greatequal                           : 2
+ 8-bit comparator less                                 : 1
+ 8-bit comparator lessequal                            : 1
+# Tristates                                            : 4
+ 1-bit tristate buffer                                 : 2
+ 2-bit tristate buffer                                 : 1
+ 4-bit tristate buffer                                 : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Optimizing FSM <CQ/FSM> on signal <CQ[1:17]> with one-hot encoding.
+--------------------------------------------
+ State                 | Encoding
+--------------------------------------------
+ powerup               | 00000000000000001
+ init_precharge        | 00000000000000010
+ init_precharge_commit | 00000000000000100
+ init_opcode           | 00000000000001000
+ init_opcode_wait      | 00000000000010000
+ init_refresh          | 00000000000100000
+ init_wait             | 00000000001000000
+ start_state           | 00000001000000000
+ refresh_start         | 00000000010000000
+ refresh_wait          | 00000010000000000
+ start_ras             | 00000000100000000
+ commit_ras            | 00000100000000000
+ start_cas             | 00001000000000000
+ commit_cas            | 00010000000000000
+ data_wait             | 00100000000000000
+ data_wait2            | unreached
+ precharge             | 01000000000000000
+ precharge_wait        | 10000000000000000
+--------------------------------------------
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <9>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <10>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <11>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <12>. This FF/Latch will be trimmed during the optimization process.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# ROMs                                                 : 1
+ 7x2-bit ROM                                           : 1
+# Counters                                             : 2
+ 4-bit up counter                                      : 1
+ 8-bit up counter                                      : 1
+# Registers                                            : 33
+ Flip-Flops                                            : 33
+# Comparators                                          : 1
+ 16-bit comparator equal                               : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <ARAM_LOW_12> (without init value) has a constant value of 0 in block <SDRAM_IDE>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ARAM_LOW_11> (without init value) has a constant value of 0 in block <SDRAM_IDE>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ARAM_LOW_10> (without init value) has a constant value of 0 in block <SDRAM_IDE>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <ARAM_LOW_9> (without init value) has a constant value of 0 in block <SDRAM_IDE>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <SDRAM_IDE> ...
+  implementation constraint: INIT=r	 : CQ_FSM_FFd10
+  implementation constraint: INIT=r	 : CQ_FSM_FFd11
+  implementation constraint: INIT=r	 : CQ_FSM_FFd13
+  implementation constraint: INIT=s	 : TRANSFER
+  implementation constraint: INIT=s	 : TRANSFER_IN_PROGRES
+  implementation constraint: INIT=r	 : CQ_FSM_FFd12
+  implementation constraint: INIT=r	 : CQ_FSM_FFd2
+  implementation constraint: INIT=s	 : CQ_FSM_FFd17
+  implementation constraint: INIT=r	 : CQ_FSM_FFd3
+  implementation constraint: INIT=r	 : CQ_FSM_FFd4
+  implementation constraint: INIT=r	 : CQ_FSM_FFd5
+  implementation constraint: INIT=r	 : CQ_FSM_FFd6
+  implementation constraint: INIT=s	 : REFRESH
+  implementation constraint: INIT=r	 : CQ_FSM_FFd9
+  implementation constraint: INIT=r	 : CQ_FSM_FFd14
+  implementation constraint: INIT=r	 : CQ_FSM_FFd15
+  implementation constraint: INIT=r	 : CQ_FSM_FFd16
+  implementation constraint: INIT=r	 : CQ_FSM_FFd8
+  implementation constraint: INIT=r	 : CQ_FSM_FFd1
+  implementation constraint: INIT=r	 : CQ_FSM_FFd7
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+Command Line: c:\Xilinx\14.6\ISE_DS\ISE\bin\nt64\unwrapped\ngdbuild.exe
+-intstyle ise -dd _ngo -uc pinlist.ucf -p xc95288xl-TQ144-10 SDRAM_IDE.ngc
+SDRAM_IDE.ngd
+
+Reading NGO file
+"C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_ID
+E.ngc" ...
+Gathering constraint information from source properties...
+Done.
+
+Annotating constraints to design from ucf file "pinlist.ucf" ...
+Resolving constraint associations...
+Checking Constraint Associations...
+Done...
+
+Checking expanded design ...
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+NGDBUILD Design Results Summary:
+  Number of errors:     0
+  Number of warnings:   0
+
+Writing NGD file "SDRAM_IDE.ngd" ...
+Total REAL time to NGDBUILD completion:  5 sec
+Total CPU time to NGDBUILD completion:   5 sec
+
+Writing NGDBUILD log file "SDRAM_IDE.bld"...
+
+NGDBUILD done.
+
+Command Line: C:\Xilinx\14.6\ISE_DS\ISE\bin\nt64\unwrapped\ngdbuild.exe
+-intstyle ise -dd _ngo -uc pinlist.ucf -p xc95288xl-TQ144-10 SDRAM_IDE.ngc
+SDRAM_IDE.ngd
+
+Reading NGO file
+"C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_ID
+E.ngc" ...
+Gathering constraint information from source properties...
+Done.
+
+Annotating constraints to design from ucf file "pinlist.ucf" ...
+Resolving constraint associations...
+Checking Constraint Associations...
+Done...
+
+Checking expanded design ...
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+NGDBUILD Design Results Summary:
+  Number of errors:     0
+  Number of warnings:   0
+
+Writing NGD file "SDRAM_IDE.ngd" ...
+Total REAL time to NGDBUILD completion:  5 sec
+Total CPU time to NGDBUILD completion:   5 sec
+
+Writing NGDBUILD log file "SDRAM_IDE.bld"...
+
+NGDBUILD done.
 WARNING:Cpld - Unable to retrieve the path to the iSE Project Repository. Will
    use the default filename of 'SDRAM_IDE.ise'.
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/XST_GND prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "GND"
@@ -882,6 +1190,18 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/RQ_0\/X
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/RAM_ACCESS\/Q\/FDCP prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "FDCP"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/RAM_ACCESS\/Q\/X_ONE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "FDCP"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/RAM_ACCESS\/$1I43 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "GND"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ROM_OE_S\/Q\/FDCP prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "FDCP"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -1424,6 +1744,18 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/MY_CYCL
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/REFRESH_or00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/REFRESH_or00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/REFRESH_or00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/TRANSFER_or00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -1733,18 +2065,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/NQ_Madd
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/NQ_Madd__add0000__and00011 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/CQ_FSM_Out201 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/CQ_FSM_Out202 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/CQ_FSM_Out203 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -2944,6 +3264,102 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/MY_CYCL
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>2 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>3 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>6 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>7 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>8 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>9 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>10 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>11 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>12 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>13 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>14 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>15 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>16 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>17 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>18 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>19 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>20 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>21 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>22 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>23 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>24 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<0>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -3049,102 +3465,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_m
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<0>27 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>2 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>3 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>6 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>7 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>8 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>9 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>10 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>11 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>12 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>13 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>14 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>15 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>16 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>17 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>18 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>19 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>20 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>21 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>22 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>23 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>24 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -3372,6 +3692,22 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/DSACK_1
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00004 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -3397,22 +3733,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CO
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00007 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LE_30_RAM_or00004 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -5293,7 +5613,6 @@ WARNING:Cpld:310 - Cannot apply TIMESPEC AUTO_TS_2002 =
    signal name was not found; (b) a signal was removed or renamed due to
    optimization; (c) there is no path between the FROM node and TO node in the
    TIMESPEC.
-INFO:Cpld:994 - Exhaustive fitting is trying pterm limit: 20 and input limit: 54
 Considering device XC95288XL-10-TQ144.
 WARNING:Cpld - Clock 'PLL_C' is used in an OFFSET timespec, this clock should be
    explicitly declared as a global clock input (BUFG) in your design in order
@@ -5426,7 +5745,7 @@ WARNING:Cpld - Clock 'PLL_C' is used in an OFFSET timespec, this clock should be
 Flattening design..
 Multi-level logic optimization...
 Timespec optimization............
-Timing optimization...........................
+Timing optimization.............................
 Timespec driven global resource optimizationAll paths with TIMESPECs have been optimized.
 
 Timing driven global resource optimization
@@ -5560,7 +5879,7 @@ WARNING:Cpld - Clock 'PLL_C' is used in an OFFSET timespec, this clock should be
    then the OFFSET timespec will not be applied. OFFSET constraints on clocks
    that do not drive a BUFG will be ignored. In this case a FROM:TO constraint
    should be used instead.
-Mapping a total of 127 equations into 16 function blocks...........................................................
+Mapping a total of 128 equations into 16 function blocks...........................................................
 WARNING:Cpld - Clock 'PLL_C' is used in an OFFSET timespec, this clock should be
    explicitly declared as a global clock input (BUFG) in your design in order
    for the OFFSET timespec to be properly analyzed. This software may attempt to
@@ -5691,3 +6010,5 @@ WARNING:Cpld - Clock 'PLL_C' is used in an OFFSET timespec, this clock should be
    should be used instead.
 
 Design SDRAM_IDE has been optimized and fit into device XC95288XL-10-TQ144.
+Creating NGA for simulation.
+Speed File: Version 3.0
