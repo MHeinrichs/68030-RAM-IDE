@@ -131,8 +131,6 @@ signal	ROM_OE_S:STD_LOGIC;
 signal	IDE_R_S:STD_LOGIC;
 signal	IDE_W_S:STD_LOGIC;
 signal	IDE_BUF_S:STD_LOGIC;
-signal	nDS_D0:STD_LOGIC;
-signal	nDS_D1:STD_LOGIC;
 signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
@@ -206,7 +204,8 @@ begin
 	
 	
 	--values for the 570A
-	--S<="Z0"; --double the clock - FB is CLK/2 
+	--S<="ZZ"; --double the clock - FB is CLK 
+	--S<="0Z"; --Quarduple the clock - FB is CLK 
 	S<="01"; --triple the clock - FB is CLK 
 
 	--RAM_SPACE   <= '0';
@@ -289,7 +288,7 @@ begin
 				OE_30_RAM <= '1';
 				OE_RAM_30 <= '1';			
 		elsif(rising_edge(clk))then
-			if(RAM_SPACE = '1' or RANGER_SPACE = '1') then
+			if((RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS = '0') then
 				OE_30_RAM <= RW;
 				OE_RAM_30 <= not RW;
 			else
@@ -306,19 +305,25 @@ begin
    process (CQ,RESET,TRANSFER_CLK) begin
 		if(CQ = start_ras or RESET = '0')then
 			TRANSFER <= '0';
-			RANGER_ACCESS <= '0';
-			RAM_ACCESS <= '0';
 		elsif rising_edge(TRANSFER_CLK) then
 			TRANSFER <= '1';
+		end if;
+	end process;
+
+   process (nAS,TRANSFER_CLK) begin
+		if rising_edge(TRANSFER_CLK) then
 			if(RAM_SPACE = '1')then
 				RAM_ACCESS <= '1';
+				RANGER_ACCESS <= '0';
 			else
+				RAM_ACCESS <= '0';
 				RANGER_ACCESS <= '1';
 			end if;
 		end if;
 	end process;
- 
-	STERM_CLK <= '1' when CQ=data_wait else '0';
+	
+	STERM_CLK <= '1' when CQ = data_wait else					 
+					 '0';
  
 	sterm_gen:process(nAS, STERM_CLK)
 	begin
@@ -345,7 +350,7 @@ begin
 		elsif(rising_edge(PLL_C)) then
 			if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 				TRANSFER_IN_PROGRES <= '1';
-				if(RAM_SPACE = '1') then--mux for ranger
+				if(RAM_ACCESS = '1') then--mux for ranger
 					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
 				else
 					ARAM_LOW  <=  "0000111111" & A(4 downto 2);
@@ -401,7 +406,8 @@ begin
 	--puls one cycle for safety :(
    process (PLL_C) begin
       if rising_edge(PLL_C) then
-			if(CLRREFC ='1')then
+			if(CQ = init_refresh or 
+				CQ = refresh_start)then
 				REFRESH <= '0';
 			elsif(RQ >= RQ_TIMEOUT) then 
 				REFRESH <= '1';
@@ -409,7 +415,8 @@ begin
 
 			CLK_D0 <= CLK;
 			CLK_D1 <= CLK_D0;
-			if CLRREFC='1' then
+			if CQ = init_refresh or 
+				CQ = refresh_start then
 				RQ<=	x"00";
 			elsif(CLK_D1='1' and CLK_D0 ='0' and RQ <RQ_TIMEOUT) then --count on falling edges
 				RQ <= RQ + 1;
