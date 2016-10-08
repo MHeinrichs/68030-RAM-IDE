@@ -288,7 +288,9 @@ begin
 				OE_30_RAM <= '1';
 				OE_RAM_30 <= '1';			
 		elsif(rising_edge(clk))then
-			if((RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS = '0') then
+			if((RAM_SPACE = '1' or RANGER_SPACE = '1') 
+				--and nAS = '0'
+				) then
 				OE_30_RAM <= RW;
 				OE_RAM_30 <= not RW;
 			else
@@ -406,6 +408,9 @@ begin
 	--puls one cycle for safety :(
    process (PLL_C) begin
       if rising_edge(PLL_C) then
+			CLK_D0 <= CLK;
+			CLK_D1 <= CLK_D0;
+			--if(CLRREFC ='1')then
 			if(CQ = init_refresh or 
 				CQ = refresh_start)then
 				REFRESH <= '0';
@@ -413,8 +418,7 @@ begin
 				REFRESH <= '1';
 			end if;
 
-			CLK_D0 <= CLK;
-			CLK_D1 <= CLK_D0;
+			--if(CLRREFC ='1')then
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
