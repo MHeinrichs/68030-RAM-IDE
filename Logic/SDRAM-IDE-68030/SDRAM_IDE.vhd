@@ -137,9 +137,9 @@ signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	AUTO_CONFIG_CYCLE:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
-signal TRANSFER_CLK:STD_LOGIC:= '1';
+--signal TRANSFER_CLK:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
-signal CLRREFC: std_logic:= '1';
+--signal CLRREFC: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
 signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
 signal NQ_TIMEOUT :  STD_LOGIC_VECTOR (3 downto 0);
@@ -157,12 +157,12 @@ signal CLK_D0 : STD_LOGIC;
 signal CLK_D1 : STD_LOGIC;
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
-signal STERM_CLK : STD_LOGIC;
+--signal STERM_CLK : STD_LOGIC;
 signal LATCH_CLK : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
-signal LE_30_RAM_S : STD_LOGIC;   
-signal LE_RAM_30_S : STD_LOGIC;   
+--signal LE_30_RAM_S : STD_LOGIC;   
+--signal LE_RAM_30_S : STD_LOGIC;   
 	
 	
 
@@ -323,7 +323,7 @@ begin
 	end process buffer_oe;
 
 
-   process (CQ,RESET,TRANSFER_CLK) begin
+   process (CQ,RESET,nAS) begin
 		if(CQ = precharge_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
@@ -343,7 +343,7 @@ begin
  
  	TRANSFER <= RAM_ACCESS or RANGER_ACCESS;
  
-	STERM_CLK <= '1' when CQ=data_wait else '0';
+	--STERM_CLK <= '1' when CQ=data_wait else '0';
  
 	--sterm_gen:process(nAS, PLL_C)
 	--begin
@@ -367,9 +367,9 @@ begin
 	end process sterm_gen;
  
 	--decoder signals
-	CLRREFC <= '1' when 	CQ = init_refresh or 
-								CQ = refresh_start 								
-						else '0';
+	--CLRREFC <= '1' when 	CQ = init_refresh or 
+	--							CQ = refresh_start 								
+	--					else '0';
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
