@@ -345,26 +345,26 @@ begin
  
 	STERM_CLK <= '1' when CQ=data_wait else '0';
  
-	sterm_gen:process(nAS, PLL_C)
-	begin
-		if(nAS = '1')then
-			STERM_S <= '1';
-		elsif(rising_edge(STERM_CLK))then
-			STERM_S <= '0' ;
-		end if;
-	end process sterm_gen; 
- 
- 
 	--sterm_gen:process(nAS, PLL_C)
 	--begin
 	--	if(nAS = '1')then
 	--		STERM_S <= '1';
-	--	elsif(rising_edge(PLL_C))then
-	--		if(CQ=data_wait)then
-	--			STERM_S <= '0' ;
-	--		end if;
+	--	elsif(rising_edge(STERM_CLK))then
+	--		STERM_S <= '0' ;
 	--	end if;
-	--end process sterm_gen;
+	--end process sterm_gen; 
+ 
+ 
+	sterm_gen:process(nAS, PLL_C)
+	begin
+		if(nAS = '1')then
+			STERM_S <= '1';
+		elsif(falling_edge(PLL_C))then
+			if(CQ=commit_cas)then
+				STERM_S <= '0' ;
+			end if;
+		end if;
+	end process sterm_gen;
  
 	--decoder signals
 	CLRREFC <= '1' when 	CQ = init_refresh or 
