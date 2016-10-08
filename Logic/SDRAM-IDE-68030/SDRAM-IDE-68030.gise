@@ -77,11 +77,11 @@
       <outfile xil_pn:name="webtalk_pn.xml"/>
       <outfile xil_pn:name="xst"/>
     </transform>
-    <transform xil_pn:end_ts="1475942221" xil_pn:in_ck="176569500195729039" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="-1787009425631663328" xil_pn:start_ts="1475942221">
+    <transform xil_pn:end_ts="1475942376" xil_pn:in_ck="176569500195729039" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="-1787009425631663328" xil_pn:start_ts="1475942376">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1475942229" xil_pn:in_ck="4201451181389721853" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="6932115226421322529" xil_pn:start_ts="1475942221">
+    <transform xil_pn:end_ts="1475942383" xil_pn:in_ck="4201451181389721853" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="6932115226421322529" xil_pn:start_ts="1475942376">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="SDRAM_IDE.bld"/>
@@ -90,13 +90,11 @@
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
     </transform>
-    <transform xil_pn:end_ts="1475941745" xil_pn:in_ck="-5573540943129765073" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="7312011709315620126" xil_pn:start_ts="1475941722">
+    <transform xil_pn:end_ts="1475942402" xil_pn:in_ck="-5573540943129765073" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="7312011709315620126" xil_pn:start_ts="1475942383">
       <status xil_pn:value="FailedRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="InputChanged"/>
       <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="SDRAM_IDE.rpt"/>
       <outfile xil_pn:name="SDRAM_IDE.tspec"/>
@@ -120,7 +118,7 @@
       <status xil_pn:value="InputAdded"/>
       <status xil_pn:value="InputChanged"/>
     </transform>
-    <transform xil_pn:end_ts="1475942229" xil_pn:in_ck="4251993287903448670" xil_pn:name="TRAN_createTimingConstraints" xil_pn:start_ts="1475942229">
+    <transform xil_pn:end_ts="1475947394" xil_pn:in_ck="4251993287903448670" xil_pn:name="TRAN_createTimingConstraints" xil_pn:start_ts="1475947394">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>

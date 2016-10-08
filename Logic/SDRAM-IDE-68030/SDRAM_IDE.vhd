@@ -161,7 +161,8 @@ signal STERM_CLK : STD_LOGIC;
 signal LATCH_CLK : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
-   
+signal LE_30_RAM_S : STD_LOGIC;   
+signal LE_RAM_30_S : STD_LOGIC;   
 	
 	
 
@@ -254,6 +255,7 @@ begin
 
 	LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
 
+
 	latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
 	begin 
 		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
@@ -264,6 +266,26 @@ begin
 			LE_RAM_30<= not RW;
 		end if;			
 	end process latch_states;
+
+
+	--latch_states: process(PLL_C,RESET)
+	--begin 
+	--	if(RESET = '0')then
+	--		LE_30_RAM_S<= '1';
+	--		LE_RAM_30_S<= '1';
+	--	elsif(falling_edge(PLL_C))then
+	--		if(CQ=start_ras)then
+	--			LE_30_RAM_S<= RW;
+	--			LE_RAM_30_S<= not RW;
+	--		elsif(CQ=data_wait)then
+	--			LE_30_RAM_S<= '1';
+	--			LE_RAM_30_S<= '1';				
+	--		end if;
+	--	end if;			
+	--end process latch_states;
+	--
+	--LE_30_RAM <= '1' when nDS = '1' else LE_30_RAM_S;
+	--LE_RAM_30 <= '1' when nDS = '1' else LE_RAM_30_S;
 
 	--latch_states: process(PLL_C,nAS)
 	--begin 
@@ -301,40 +323,48 @@ begin
 	end process buffer_oe;
 
 
-	TRANSFER_CLK <= '1' when 	(RAM_SPACE = '1' or RANGER_SPACE = '1') and nAS='0'								
-						else '0';
-
    process (CQ,RESET,TRANSFER_CLK) begin
-		if(CQ = start_ras or RESET = '0')then
-			TRANSFER <= '0';
-		elsif rising_edge(TRANSFER_CLK) then
-			TRANSFER <= '1';
-		end if;
-	end process;
-
-   process (nAS,TRANSFER_CLK) begin
-		if rising_edge(TRANSFER_CLK) then
+		if(CQ = precharge_wait or RESET = '0')then
+			--TRANSFER <= '0';
+			RANGER_ACCESS <= '0';
+			RAM_ACCESS <= '0';
+		elsif falling_edge(nAS) then
+			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
+			--	TRANSFER <= '1';
+			--end if;
 			if(RAM_SPACE = '1')then
-				RAM_ACCESS <= '1';
-				RANGER_ACCESS <= '0';
-			else
-				RAM_ACCESS <= '0';
+					RAM_ACCESS <= '1';
+			end if;
+			if(RANGER_SPACE = '1')then
 				RANGER_ACCESS <= '1';
 			end if;
 		end if;
 	end process;
-	
-	STERM_CLK <= '1' when CQ = data_wait else					 
-					 '0';
  
-	sterm_gen:process(nAS, STERM_CLK)
+ 	TRANSFER <= RAM_ACCESS or RANGER_ACCESS;
+ 
+	STERM_CLK <= '1' when CQ=data_wait else '0';
+ 
+	sterm_gen:process(nAS, PLL_C)
 	begin
 		if(nAS = '1')then
 			STERM_S <= '1';
 		elsif(rising_edge(STERM_CLK))then
 			STERM_S <= '0' ;
 		end if;
-	end process sterm_gen;
+	end process sterm_gen; 
+ 
+ 
+	--sterm_gen:process(nAS, PLL_C)
+	--begin
+	--	if(nAS = '1')then
+	--		STERM_S <= '1';
+	--	elsif(rising_edge(PLL_C))then
+	--		if(CQ=data_wait)then
+	--			STERM_S <= '0' ;
+	--		end if;
+	--	end if;
+	--end process sterm_gen;
  
 	--decoder signals
 	CLRREFC <= '1' when 	CQ = init_refresh or 
@@ -350,7 +380,7 @@ begin
 			TRANSFER_IN_PROGRES <= '0';
 			BYTE	<= "1111";
 		elsif(rising_edge(PLL_C)) then
-			if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
+			if (TRANSFER ='1' or TRANSFER_IN_PROGRES = '1')then
 				TRANSFER_IN_PROGRES <= '1';
 				if(RAM_ACCESS = '1') then--mux for ranger
 					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
