@@ -138,9 +138,7 @@ signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	AUTO_CONFIG_CYCLE:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
---signal TRANSFER_CLK:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
---signal CLRREFC: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
 signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
 signal NQ_TIMEOUT :  STD_LOGIC_VECTOR (3 downto 0);
@@ -158,14 +156,12 @@ signal CLK_D0 : STD_LOGIC;
 signal CLK_D1 : STD_LOGIC;
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
---signal STERM_CLK : STD_LOGIC;
-signal LATCH_CLK : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
---signal LE_30_RAM_S : STD_LOGIC;   
---signal LE_RAM_30_S : STD_LOGIC;   
-	
-	
+--signal TRANSFER_CLK:STD_LOGIC:= '1';
+--signal CLRREFC: std_logic:= '1';
+--signal STERM_CLK : STD_LOGIC;
+--signal LATCH_CLK : STD_LOGIC;
 
    Function to_std_logic(X: in Boolean) return Std_Logic is
    variable ret : std_logic;
@@ -254,56 +250,22 @@ begin
 	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
-	LATCH_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE = '1') and nDS='0' else '0';
+	--LATCH_CLK <= '1' when (RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') and nDS='0' else '0';
 
 
-	latch_states: process(CQ,PLL_C,RESET, LATCH_CLK)
+	latch_states: process(CQ,PLL_C,RESET, nAS)
 	begin 
 		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
 			LE_30_RAM<= '1';
 			LE_RAM_30<= '1';
-		elsif(rising_edge(LATCH_CLK))then
+		elsif(falling_edge(nAS))then
 			LE_30_RAM<= RW;
 			LE_RAM_30<= not RW;
 		end if;			
 	end process latch_states;
 
+	--LE_30_RAM<= '0';
 
-	--latch_states: process(PLL_C,RESET)
-	--begin 
-	--	if(RESET = '0')then
-	--		LE_30_RAM_S<= '1';
-	--		LE_RAM_30_S<= '1';
-	--	elsif(falling_edge(PLL_C))then
-	--		if(CQ=start_ras)then
-	--			LE_30_RAM_S<= RW;
-	--			LE_RAM_30_S<= not RW;
-	--		elsif(CQ=data_wait)then
-	--			LE_30_RAM_S<= '1';
-	--			LE_RAM_30_S<= '1';				
-	--		end if;
-	--	end if;			
-	--end process latch_states;
-	--
-	--LE_30_RAM <= '1' when nDS = '1' else LE_30_RAM_S;
-	--LE_RAM_30 <= '1' when nDS = '1' else LE_RAM_30_S;
-
-	--latch_states: process(PLL_C,nAS)
-	--begin 
-	--	if( nAS = '1')then
-	--		LE_30_RAM<= '1';
-	--		LE_RAM_30<= '1';
-	--	elsif(falling_edge(PLL_C))then
-	--		if(CQ=data_wait and RW='0') then
-	--			LE_30_RAM<= '1';
-	--		elsif(CQ=data_wait and RW='1') then
-	--			LE_RAM_30<= '1';
-	--		elsif(CQ=start_ras )then
-	--			LE_30_RAM<= RW;
-	--			LE_RAM_30<= not RW;
-	--		end if;
-	--	end if;			
-	--end process latch_states;
 
 
 	buffer_oe: process(CLK, nAS) begin
@@ -311,7 +273,7 @@ begin
 				OE_30_RAM <= '1';
 				OE_RAM_30 <= '1';			
 		elsif(rising_edge(clk))then
-			if((RAM_SPACE = '1' or RANGER_SPACE = '1') 
+			if((RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') 
 				--and nAS = '0'
 				) then
 				OE_30_RAM <= RW;
@@ -325,7 +287,7 @@ begin
 
 
    process (PLL_C) begin
-		if rising_edge(PLL_C) then
+		if falling_edge(PLL_C) then
 			nAS_PLL_C_N	<= nAS;
 		end if;
 	end process;
@@ -352,6 +314,7 @@ begin
 	end process;
  
  	TRANSFER <= RAM_ACCESS or RANGER_ACCESS;
+ 	--TRANSFER <= (RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS ='0';
  
 	--STERM_CLK <= '1' when CQ=data_wait else '0';
  
@@ -481,20 +444,21 @@ begin
 			end if;
 					
 			
-			if(	CQ_D = start_cas or
-					CQ_D = commit_cas or
-					CQ_D = data_wait 
-				)then
+			--if(	CQ = commit_ras or 
+			--		CQ = start_cas or
+			--		CQ = commit_cas or
+			--		CQ = data_wait 
+			--	)then
 				UDQ1 <= BYTE(3);
 				LDQ1 <= BYTE(2);
 				UDQ0 <= BYTE(1);
 				LDQ0 <= BYTE(0);
-			else
-				UDQ1 <= '1';
-				LDQ1 <= '1';
-				UDQ0 <= '1';
-				LDQ0 <= '1';
-			end if;
+			--else
+			--	UDQ1 <= '1';
+			--	LDQ1 <= '1';
+			--	UDQ0 <= '1';
+			--	LDQ0 <= '1';
+			--end if;
 			
 			
 			case SDRAM_OP is
