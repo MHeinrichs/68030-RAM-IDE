@@ -133,6 +133,7 @@ signal	IDE_W_S:STD_LOGIC;
 signal	IDE_BUF_S:STD_LOGIC;
 signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
+signal	nAS_PLL_C_N:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	AUTO_CONFIG_CYCLE:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
@@ -323,20 +324,29 @@ begin
 	end process buffer_oe;
 
 
-   process (CQ,RESET,nAS) begin
-		if(CQ = precharge_wait or RESET = '0')then
+   process (PLL_C) begin
+		if rising_edge(PLL_C) then
+			nAS_PLL_C_N	<= nAS;
+		end if;
+	end process;
+
+
+   process (CQ,RESET,nAS_PLL_C_N) begin
+		if(CQ = data_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS) then
+		elsif falling_edge(nAS_PLL_C_N) then
 			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 			--	TRANSFER <= '1';
 			--end if;
 			if(RAM_SPACE = '1')then
 					RAM_ACCESS <= '1';
+					RANGER_ACCESS <= '0';
 			end if;
 			if(RANGER_SPACE = '1')then
 				RANGER_ACCESS <= '1';
+				RAM_ACCESS <= '0';
 			end if;
 		end if;
 	end process;
