@@ -14,9 +14,6 @@
 <msg type="info" file="Cpld" num="0" delta="new" >Inferring BUFG constraint for signal &apos;<arg fmt="%s" index="1">CLK</arg>&apos; based upon the LOC constraint &apos;<arg fmt="%s" index="2">P32</arg>&apos;. It is recommended that you declare this BUFG explicitedly in your design. Note that for certain device families the output of a BUFG constraint can not drive a gated clock, and the BUFG constraint will be ignored.
 </msg>
 
-<msg type="warning" file="Cpld" num="43" delta="old" >Ignoring <arg fmt="%s" index="1">PERIOD:nAS_PLL_C_N:TS_PLL_C*1:PHASE:+:3.333nS:HIGH:1.666nS</arg> specification.  This construct does not apply to cpld designs.
-</msg>
-
 <msg type="warning" file="Cpld" num="43" delta="old" >Ignoring <arg fmt="%s" index="1">PERIOD:nAS:TS_CLK*1:PHASE:-:3.000nS:HIGH:1.500nS</arg> specification.  This construct does not apply to cpld designs.
 </msg>
 
@@ -30,6 +27,198 @@
 </msg>
 
 <msg type="warning" file="Cpld" num="1239" delta="old" >The global <arg fmt="%s" index="1">clock</arg> designation (BUFG) on signal &apos;<arg fmt="%s" index="2">A_31_IBUF</arg>&apos; is ignored. Most likely the signal is gated and therefore cannot be used as a global control signal.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:FALLING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
 </msg>
 
 </messages>

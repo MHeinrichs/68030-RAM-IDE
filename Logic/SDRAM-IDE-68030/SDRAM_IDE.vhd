@@ -96,9 +96,9 @@ architecture Behavioral of SDRAM_IDE is
 				start_cas,			--001010
 				commit_cas,			--001011
 				data_wait,			--001001
-				data_wait2,			--001001
 				precharge,			--110011
-				precharge_wait			--001001
+				precharge_wait,			--001001
+				precharge_wait2			--001001
 				);
 	TYPE sdram_control IS (
 				c_nop,
@@ -158,6 +158,12 @@ signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
+signal NIBBLE0ZERO :  STD_LOGIC;
+signal NIBBLE1RAM :  STD_LOGIC;
+signal NIBBLE1ZERO :  STD_LOGIC;
+signal NIBBLE2RANGER :  STD_LOGIC;
+signal ADR_AC_HIT :  STD_LOGIC;
+signal ADR_IDE_HIT :  STD_LOGIC;
 --signal TRANSFER_CLK:STD_LOGIC:= '1';
 --signal CLRREFC: std_logic:= '1';
 --signal STERM_CLK : STD_LOGIC;
@@ -207,43 +213,77 @@ begin
 	S<="01"; --triple the clock - FB is CLK 
 
 	--RAM_SPACE   <= '0';
-	RAM_SPACE   <= '1'	when 
-									A(31 downto 24) >= x"08"  
-									--AND A(31 downto 20) < (x"0BF")  
-									AND A(31 downto 24) <= x"0B"  
-						else '0'; -- Access to RAM-Space
-	RANGER_SPACE   <= '1'	when 
-									A(31 downto 20) = (x"00C")  
-						else '0'; -- Access to RANGER-Space
+	--RAM_SPACE   <= '1'	when 
+	--								A(31 downto 24) >= x"08"  
+	--								--AND A(31 downto 20) < (x"0BF")  
+	--								AND A(31 downto 24) <= x"0B"  
+	--					else '0'; -- Access to RAM-Space
+	--RANGER_SPACE   <= '1'	when 
+	--								A(31 downto 20) = (x"00C")  
+	--					else '0'; -- Access to RANGER-Space
 	--RANGER_SPACE   <= '0';
 
-	IDE_SPACE   <= '1'	when 
-									A(31 downto 16) = (x"00" & IDE_BASEADR)  
-									AND SHUT_UP = '0' 
-						else '0'; -- Access to IDE-Space
-	AUTO_CONFIG	<= '1'	when 
-									A(31 downto 16) = x"00E8"
-									AND AUTO_CONFIG_DONE ='0'
-						else '0'; -- Access to Autoconfig space and internal autoconfig not complete
+	--IDE_SPACE   <= '1'	when 
+	--								A(31 downto 16) = (x"00" & IDE_BASEADR)  
+	--								AND SHUT_UP = '0' 
+	--					else '0'; -- Access to IDE-Space
+	--AUTO_CONFIG	<= '1'	when 
+	--								A(31 downto 16) = x"00E8"
+	--								AND AUTO_CONFIG_DONE ='0'
+	--					else '0'; -- Access to Autoconfig space and internal autoconfig not complete
 
---	adr_decode: process(PLL_C) --only for the "slow" adresses
---	begin 
---		if(rising_edge(PLL_C))then		
---			if(	A(31 downto 16) = (x"00" & IDE_BASEADR)  
---					AND SHUT_UP = '0')then
---				IDE_SPACE   <= '1';
---			else
---				IDE_SPACE   <= '0';
---			end if;
---			
---			if(	A(31 downto 16) = x"00E8"
---					AND AUTO_CONFIG_DONE ='0')then
---				AUTO_CONFIG	<= '1';
---			else
---				AUTO_CONFIG	<= '0';
---			end if;
---		end if;
---	end process adr_decode;
+	-- this reduces the complexity of the adressdecode drastically!
+	IDE_SPACE 	<= NIBBLE0ZERO and NIBBLE1ZERO and ADR_IDE_HIT;	
+	AUTO_CONFIG <= NIBBLE0ZERO and NIBBLE1ZERO and ADR_AC_HIT;
+	RAM_SPACE   	<= NIBBLE0ZERO and NIBBLE1RAM;
+	RANGER_SPACE   <= NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER;
+                
+--  NIBBLE0ZERO   <= '1' when A(31 downto 28) = x"0" else '0'; 
+--  NIBBLE1ZERO   <= '1' when A(27 downto 24) = x"0" else '0'; 
+--  NIBBLE1RAM    <= '1' when A(27 downto 26) = "10" else '0'; 
+--  NIBBLE2RANGER <= '1' when A(23 downto 20) = x"C" else '0'; 
+--  NIBBLE2AUTOC0 <= '1' when A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
+--  ADR_IDE_HIT   <= '1' when A(23 downto 16) = IDE_BASEADR AND SHUT_UP ='0'  else '0';
+   adr_decode:process (PLL_C) begin
+		if falling_edge(PLL_C) then
+			--nAS_PLL_C_N	<= nAS;
+			if(A(31 downto 28) =x"0") then
+				NIBBLE0ZERO <= '1';
+			else
+				NIBBLE0ZERO <= '0';
+			end if;
+			
+			if(A(27 downto 24) =x"0") then
+				NIBBLE1ZERO <= '1';
+			else
+				NIBBLE1ZERO <= '0';
+			end if;
+
+			if(A(27 downto 26) = "10")then
+				NIBBLE1RAM <= '1';
+			else
+				NIBBLE1RAM <= '0';
+			end if;
+
+			if(A(23 downto 20) =x"C") then
+				NIBBLE2RANGER <= '1';
+			else
+				NIBBLE2RANGER <= '0';
+			end if;
+			
+			if(A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0') then
+				ADR_AC_HIT <= '1';
+			else
+				ADR_AC_HIT <= '0';
+			end if;
+
+			if(A(23 downto 16) = IDE_BASEADR AND SHUT_UP ='0') then
+				ADR_IDE_HIT <= '1';
+			else
+				ADR_IDE_HIT <= '0';
+			end if;			
+		end if;
+	end process adr_decode;
 
 
 	--SD-RAM stuff
@@ -286,34 +326,37 @@ begin
 	end process buffer_oe;
 
 
-   process (PLL_C) begin
-		if falling_edge(PLL_C) then
+   as_sample:process (PLL_C) begin
+		if rising_edge(PLL_C) then
 			nAS_PLL_C_N	<= nAS;
 		end if;
-	end process;
+	end process as_sample;
 
-
-   process (CQ,RESET,nAS_PLL_C_N) begin
+   process (CQ,RESET,nAS) begin
 		if(CQ = data_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS_PLL_C_N) then
+		elsif falling_edge(nAS) then
 			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 			--	TRANSFER <= '1';
 			--end if;
-			if(RAM_SPACE = '1')then
-					RAM_ACCESS <= '1';
-					RANGER_ACCESS <= '0';
-			end if;
-			if(RANGER_SPACE = '1')then
-				RANGER_ACCESS <= '1';
-				RAM_ACCESS <= '0';
-			end if;
+			--if(nAS='0' and nAS_PLL_C_N='1')then
+				if(A(31 downto 26) = "000010")then
+						RAM_ACCESS <= '1';
+						RANGER_ACCESS <= '0';
+				end if;
+				if(A(31 downto 20) = x"00C")then
+					RANGER_ACCESS <= '1';
+					RAM_ACCESS <= '0';
+				end if;
+			--end if;
 		end if;
 	end process;
  
  	TRANSFER <= RAM_ACCESS or RANGER_ACCESS;
+	
+	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
  	--TRANSFER <= (RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS ='0';
  
 	--STERM_CLK <= '1' when CQ=data_wait else '0';
@@ -356,9 +399,9 @@ begin
 			if (TRANSFER ='1' or TRANSFER_IN_PROGRES = '1')then
 				TRANSFER_IN_PROGRES <= '1';
 				if(RAM_ACCESS = '1') then--mux for ranger
-					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
+					ARAM_LOW  <=  "0010" & A(25 downto 20) & A(4 downto 2);
 				else
-					ARAM_LOW  <=  "0000111111" & A(4 downto 2);
+					ARAM_LOW  <=  "0010111111" & A(4 downto 2);
 				end if;
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
 				
@@ -443,23 +486,10 @@ begin
 				NQ  <= x"0";
 			end if;
 					
-			
-			--if(	CQ = commit_ras or 
-			--		CQ = start_cas or
-			--		CQ = commit_cas or
-			--		CQ = data_wait 
-			--	)then
-				UDQ1 <= BYTE(3);
-				LDQ1 <= BYTE(2);
-				UDQ0 <= BYTE(1);
-				LDQ0 <= BYTE(0);
-			--else
-			--	UDQ1 <= '1';
-			--	LDQ1 <= '1';
-			--	UDQ0 <= '1';
-			--	LDQ0 <= '1';
-			--end if;
-			
+			UDQ1 <= BYTE(3);
+			LDQ1 <= BYTE(2);
+			UDQ0 <= BYTE(1);
+			LDQ0 <= BYTE(0);
 			
 			case SDRAM_OP is
 			when c_nop=>
@@ -623,26 +653,28 @@ begin
       when data_wait =>
 		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
-		 --if(RW = '1')then
-		 --	CQ_D <= data_wait2;
-		 --else
-			CQ_D <= precharge;
-		 --end if;
-      
-		when data_wait2 =>
-		 ENACLK_PRE <= '1'; 
-		 SDRAM_OP <= c_nop;
 		 CQ_D <= precharge;
+		 if(RW ='1') then
+			CQ_D <= precharge_wait2;
+		 else
+			CQ_D <= precharge_wait;
+		 end if;
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';
+		 --SDRAM_OP<= c_nop;
 		 SDRAM_OP <= c_precharge;
-		 CQ_D <= precharge_wait;
+ 		 CQ_D <= precharge_wait;
 
       when precharge_wait =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP <= c_nop;
-		 CQ_D <= start_state; 
+		 CQ_D <= precharge_wait2; 
+		 
+      when precharge_wait2 =>
+		 ENACLK_PRE <= '1';
+		 SDRAM_OP <= c_nop;
+		 CQ_D <= start_state; 		 
 		end case;
    end process;
 
