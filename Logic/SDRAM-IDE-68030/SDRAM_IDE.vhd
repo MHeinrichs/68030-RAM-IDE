@@ -96,6 +96,8 @@ architecture Behavioral of SDRAM_IDE is
 				start_cas,			--001010
 				commit_cas,			--001011
 				data_wait,			--001001
+				data_wait2,			--001001
+				data_wait3,			--001001
 				precharge,			--110011
 				precharge_wait,			--001001
 				precharge_wait2			--001001
@@ -164,6 +166,9 @@ signal NIBBLE1ZERO :  STD_LOGIC;
 signal NIBBLE2RANGER :  STD_LOGIC;
 signal ADR_AC_HIT :  STD_LOGIC;
 signal ADR_IDE_HIT :  STD_LOGIC;
+signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
+signal LATCH_RAM_030 :  STD_LOGIC;
+signal LATCH_RAM_030_D0 :  STD_LOGIC;
 --signal TRANSFER_CLK:STD_LOGIC:= '1';
 --signal CLRREFC: std_logic:= '1';
 --signal STERM_CLK : STD_LOGIC;
@@ -197,7 +202,6 @@ begin
 	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
 				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
 				'Z';
-	CBACK <= '1';
 	
 	--very tricky: a 5V device thinks 3,3v = 1 is floating! 
 	--So if the pll is a 570A (5V) all 1 must be replaced with Z and all Ms with 1.
@@ -293,18 +297,34 @@ begin
 	--LATCH_CLK <= '1' when (RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') and nDS='0' else '0';
 
 
-	latch_states: process(CQ,PLL_C,RESET, nAS)
+	--latch_states: process(CQ,PLL_C,RESET, nAS)
+	--begin 
+	--	if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
+	--		LE_30_RAM<= '1';
+	--		LE_RAM_30<= '1';
+	--	elsif(falling_edge(nAS))then
+	--		LE_30_RAM<= RW;
+	--		LE_RAM_30<= not RW;
+	--	end if;			
+	--end process latch_states;
+
+	latch_states: process(RESET,PLL_C)
 	begin 
-		if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
-			LE_30_RAM<= '1';
-			LE_RAM_30<= '1';
-		elsif(falling_edge(nAS))then
-			LE_30_RAM<= RW;
-			LE_RAM_30<= not RW;
+		if(RESET ='0')then
+			LATCH_RAM_030 <='1';
+			LATCH_RAM_030_D0 <='1';
+		elsif(rising_edge(PLL_C))then
+			LATCH_RAM_030_D0 <= LATCH_RAM_030;
+			if(CQ=start_ras or CQ=data_wait3)then
+				LATCH_RAM_030<= '0';
+			elsif(CQ=data_wait)then
+				LATCH_RAM_030<= '1';
+			end if;
 		end if;			
 	end process latch_states;
 
-	--LE_30_RAM<= '0';
+	LE_RAM_30 <= LATCH_RAM_030;
+	LE_30_RAM <= '0';
 
 
 
@@ -327,17 +347,17 @@ begin
 
 
    as_sample:process (PLL_C) begin
-		if rising_edge(PLL_C) then
+		if falling_edge(PLL_C) then
 			nAS_PLL_C_N	<= nAS;
 		end if;
 	end process as_sample;
 
-   process (CQ,RESET,nAS) begin
+   process (CQ,RESET,nAS_PLL_C_N) begin
 		if(CQ = data_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS) then
+		elsif falling_edge(nAS_PLL_C_N) then
 			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 			--	TRANSFER <= '1';
 			--end if;
@@ -345,8 +365,7 @@ begin
 				if(A(31 downto 26) = "000010")then
 						RAM_ACCESS <= '1';
 						RANGER_ACCESS <= '0';
-				end if;
-				if(A(31 downto 20) = x"00C")then
+				elsif(A(31 downto 20) = x"00C")then
 					RANGER_ACCESS <= '1';
 					RAM_ACCESS <= '0';
 				end if;
@@ -389,19 +408,35 @@ begin
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
-	ARAM_OPTCODE <= "0001000100000";
+	ARAM_OPTCODE <= "0001000100010";
 
 	ram_sizing: process(nAS,PLL_C) begin
 		if(nAS= '1')then
 			TRANSFER_IN_PROGRES <= '0';
 			BYTE	<= "1111";
+			CBACK <= '1';
+			burst_counter <= "11";
 		elsif(rising_edge(PLL_C)) then
 			if (TRANSFER ='1' or TRANSFER_IN_PROGRES = '1')then
 				TRANSFER_IN_PROGRES <= '1';
+
+				--cache burst logic
+				if(CBREQ = '0' and CQ=start_ras and RAM_ACCESS='1')then
+					CBACK <='0';
+					burst_counter <= A(3 downto 2);
+				elsif(burst_counter ="11")then
+					CBACK <= '1';
+				end if;
+				--burst increment
+				--if(CLK = '0' and CLK_D0 ='1' and burst_counter < "11")then --wait for a falling edge
+				if(CQ=data_wait2 and burst_counter < "11")then
+					burst_counter <= burst_counter+1;
+				end if;
+
 				if(RAM_ACCESS = '1') then--mux for ranger
-					ARAM_LOW  <=  "0010" & A(25 downto 20) & A(4 downto 2);
+					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
 				else
-					ARAM_LOW  <=  "0010111111" & A(4 downto 2);
+					ARAM_LOW  <=  "0000111111" & A(4 downto 2);
 				end if;
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
 				
@@ -496,7 +531,7 @@ begin
 				RAS <= '1';
 				CAS <= '1';
 				MEM_WE <= '1';
-				ARAM <= "0000000000000";
+				--ARAM <= "0000000000000";
 				BA <= A(19 downto 18);
 			when c_ras=>
 				RAS <= '0';
@@ -520,7 +555,7 @@ begin
 				RAS <= '0';
 				CAS <= '0';
 				MEM_WE <= '1';
-				ARAM <= "0000000000000";								
+				--ARAM <= "0000000000000";								
 				BA <= A(19 downto 18);
 			when c_opt_code=>
 				RAS <= '0';
@@ -532,7 +567,7 @@ begin
 				RAS <= '1';
 				CAS <= '1';
 				MEM_WE <= '0';
-				ARAM <= "0000000000000";								
+				--ARAM <= "0000000000000";								
 				BA <= A(19 downto 18);
 			end case;
 									
@@ -618,7 +653,7 @@ begin
 		 SDRAM_OP<= c_nop;
 		 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
 			 if (TRANSFER = '1') then
-				CQ_D <= start_ras;
+			 	CQ_D <= start_ras;
 			 else
 		      CQ_D <= start_state;
 			 end if;
@@ -646,25 +681,45 @@ begin
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
-		 ENACLK_PRE <= '1';
+		if(burst_counter = "11")then
+			ENACLK_PRE <= '1';
+		 else
+			ENACLK_PRE <= '0';
+		 end if;
+ 		 --ENACLK_PRE <= '1';
 		 SDRAM_OP <= c_nop;
  		 CQ_D <= data_wait;
 
       when data_wait =>
-		 ENACLK_PRE <= '1'; 
-		 SDRAM_OP<= c_nop;
-		 CQ_D <= precharge;
-		 if(RW ='1') then
-			CQ_D <= precharge_wait2;
+ 		 
+		 if(burst_counter = "11")then
+			ENACLK_PRE <= '1';
+			CQ_D <= precharge;
 		 else
-			CQ_D <= precharge_wait;
+			CQ_D <= data_wait2;
+			ENACLK_PRE <= '0';
 		 end if;
+		 SDRAM_OP<= c_nop;
+
+      when data_wait2 =>
+ 		 ENACLK_PRE <= '1'; 
+		 --if(CLK = '0' and CLK_D0 ='1')then --wait for a falling edge
+			CQ_D <= data_wait3;
+		 --else
+		--	CQ_D <= data_wait2;
+		-- end if;
+		 SDRAM_OP<= c_nop;
+		 --CQ_D <= data_wait3;
+
+      when data_wait3 =>
+		 ENACLK_PRE <= '0'; 
+		 SDRAM_OP<= c_nop;
+		 CQ_D <= data_wait;
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';
-		 --SDRAM_OP<= c_nop;
 		 SDRAM_OP <= c_precharge;
- 		 CQ_D <= precharge_wait;
+ 		 CQ_D <= precharge_wait2;
 
       when precharge_wait =>
 		 ENACLK_PRE <= '1';
