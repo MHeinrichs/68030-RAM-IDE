@@ -158,6 +158,7 @@ signal CLK_D : STD_LOGIC_VECTOR(3 downto 0);
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
+signal CLK_EN_S : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
 signal NIBBLE0ZERO :  STD_LOGIC;
@@ -293,7 +294,7 @@ begin
 
 	--SD-RAM stuff
 	CLK_RAM 	<= not PLL_C;
-	CLK_EN 	<= ENACLK_PRE;
+	CLK_EN 	<= CLK_EN_S;
 
 	--LATCH_CLK <= '1' when (RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') and nDS='0' else '0';
 
@@ -422,12 +423,12 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				--if(CBREQ = '0' and CQ=start_ras and RANGER_ACCESS='1' and A(3 downto 2) /= "11")then
-				--	CBACK_S <='0';
-				--	burst_counter <= A(3 downto 2);
-				--elsif(burst_counter = "11")then
-				--	CBACK_S <= '1';
-				--end if;
+				if(CBREQ = '0' and CQ=start_ras and RAM_ACCESS='1' and A(3 downto 2) /= "11")then
+					CBACK_S <='0';
+					burst_counter <= A(3 downto 2);
+				elsif(burst_counter = "11")then
+					CBACK_S <= '1';
+				end if;
 				--burst increment
 				--if(CLK = '0' and CLK_D(0) ='1' and burst_counter < "11")then --wait for a falling edge
 				if(CQ=data_wait2 and burst_counter < "11")then
@@ -488,6 +489,11 @@ begin
 	--wait this number of cycles for a refresh
 	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
 	--puls one cycle for safety :(
+   process (PLL_C) begin
+      if falling_edge(PLL_C) then
+			CLK_EN_S <= ENACLK_PRE;
+		end if;
+	end process;
    process (PLL_C) begin
       if rising_edge(PLL_C) then
 			CLK_D(0) <= CLK;
@@ -668,22 +674,22 @@ begin
 		 CQ_D <= commit_ras;
 
 	  when commit_ras =>
-		 ENACLK_PRE <= '1';
+		 ENACLK_PRE <= CBACK_S; --delay comes three clocks later!
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= start_cas;
 
       when start_cas =>
- 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+ 		 ENACLK_PRE <= CBACK_S; --delay comes three clocks later!
 		 SDRAM_OP <= c_cas;
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
- 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+ 		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP <= c_nop;
  		 CQ_D <= data_wait;
 
       when data_wait => 
-		 ENACLK_PRE <= '1';
+		 ENACLK_PRE <= CBACK_S;
 		 if(CBACK_S = '1')then
 			CQ_D <= precharge;
 		 else
@@ -697,7 +703,7 @@ begin
 		 CQ_D <= data_wait3;
 
       when data_wait3 =>
- 		 ENACLK_PRE <= '0'; 
+ 		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= data_wait;
 		 
