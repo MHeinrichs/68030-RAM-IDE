@@ -422,14 +422,13 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				--if(CBREQ = '0' and CQ=start_ras and RANGER_ACCESS='1' and A(3 downto 2) /= "11")then
-				--	CBACK_S <='0';
-				--	burst_counter <= A(3 downto 2);
-				--elsif(burst_counter = "11")then
-				--	CBACK_S <= '1';
-				--end if;
+				if(CBREQ = '0' and CQ=start_ras and RAM_ACCESS='1' and A(3 downto 2) /= "11")then
+					CBACK_S <='0';
+					burst_counter <= A(3 downto 2);
+				elsif(burst_counter = "11")then
+					CBACK_S <= '1';
+				end if;
 				--burst increment
-				--if(CLK = '0' and CLK_D(0) ='1' and burst_counter < "11")then --wait for a falling edge
 				if(CQ=data_wait2 and burst_counter < "11")then
 					burst_counter <= burst_counter+1;
 				end if;
