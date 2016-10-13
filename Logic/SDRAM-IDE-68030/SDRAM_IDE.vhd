@@ -353,12 +353,12 @@ begin
 		end if;
 	end process as_sample;
 
-   process (CQ,RESET,nAS) begin
+   process (CQ,RESET,nAS_PLL_C_N) begin
 		if(CQ = data_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS) then
+		elsif falling_edge(nAS_PLL_C_N) then
 			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 			--	TRANSFER <= '1';
 			--end if;
@@ -424,7 +424,7 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				if(CBREQ = '0' and (CQ=start_ras or CQ= start_state) and (RAM_ACCESS = '1' or RANGER_ACCESS = '1') and A(3 downto 2) /= "11")then
+				if(CBREQ = '0' and (CQ=commit_ras) and (RAM_ACCESS = '1') and A(3 downto 2) < "11")then
 					CBACK_S <='0';
 					burst_counter <= A(3 downto 2);
 				elsif(burst_counter = "10" and CQ=data_wait)then
@@ -707,7 +707,12 @@ begin
       when data_wait3 =>
  		 ENACLK_PRE <= '0'; 
 		 SDRAM_OP<= c_nop;
-		 CQ_D <= data_wait;
+		 --if(CBACK_S = '1')then
+		--	CQ_D <= precharge;
+		 --else
+			CQ_D <= data_wait;			
+		 --end if;
+
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';

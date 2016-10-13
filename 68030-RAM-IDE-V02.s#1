@@ -10383,9 +10383,6 @@ nc	1	x20
 <part name="R12" library="rcl" deviceset="R-EU_" device="R0603"/>
 <part name="R13" library="rcl" deviceset="R-EU_" device="R0603"/>
 <part name="SJ2" library="jumper" deviceset="SJ2W" device=""/>
-<part name="C37" library="rcl" deviceset="C-EU" device="C0603K" value="100pF"/>
-<part name="C38" library="rcl" deviceset="C-EU" device="C0603K" value="100pF"/>
-<part name="GND35" library="SUPPLY1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -13981,9 +13978,6 @@ nc	1	x20
 <instance part="R12" gate="G$1" x="185.42" y="160.02" rot="R90"/>
 <instance part="R13" gate="G$1" x="180.34" y="160.02" rot="R90"/>
 <instance part="SJ2" gate="G$1" x="193.04" y="134.62"/>
-<instance part="C37" gate="G$1" x="198.12" y="40.64"/>
-<instance part="C38" gate="G$1" x="208.28" y="40.64"/>
-<instance part="GND35" gate="1" x="203.2" y="30.48"/>
 </instances>
 <busses>
 </busses>
@@ -14112,16 +14106,6 @@ nc	1	x20
 <wire x1="215.9" y1="109.22" x2="226.06" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="226.06" y1="109.22" x2="226.06" y2="114.3" width="0.1524" layer="91"/>
 <junction x="215.9" y="109.22"/>
-</segment>
-<segment>
-<pinref part="C37" gate="G$1" pin="2"/>
-<wire x1="198.12" y1="35.56" x2="198.12" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="C38" gate="G$1" pin="2"/>
-<wire x1="198.12" y1="33.02" x2="203.2" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="203.2" y1="33.02" x2="208.28" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="208.28" y1="33.02" x2="208.28" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="GND35" gate="1" pin="GND"/>
-<junction x="203.2" y="33.02"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
@@ -14778,11 +14762,6 @@ nc	1	x20
 <wire x1="96.52" y1="20.32" x2="96.52" y2="17.78" width="0.1524" layer="91"/>
 <label x="96.52" y="17.78" size="1.27" layer="95" rot="R270"/>
 </segment>
-<segment>
-<pinref part="C37" gate="G$1" pin="1"/>
-<wire x1="198.12" y1="43.18" x2="198.12" y2="48.26" width="0.1524" layer="91"/>
-<label x="198.12" y="48.26" size="1.778" layer="95" rot="R90"/>
-</segment>
 </net>
 <net name="OE_30_RAM" class="0">
 <segment>
@@ -14815,11 +14794,6 @@ nc	1	x20
 <pinref part="IC7" gate="G$1" pin="P$46-FB7MC05"/>
 <wire x1="76.2" y1="20.32" x2="76.2" y2="17.78" width="0.1524" layer="91"/>
 <label x="76.2" y="17.78" size="1.27" layer="95" rot="R270"/>
-</segment>
-<segment>
-<pinref part="C38" gate="G$1" pin="1"/>
-<wire x1="208.28" y1="43.18" x2="208.28" y2="48.26" width="0.1524" layer="91"/>
-<label x="208.28" y="48.26" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="CIIN" class="0">
