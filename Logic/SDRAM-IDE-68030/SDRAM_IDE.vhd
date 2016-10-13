@@ -95,12 +95,12 @@ architecture Behavioral of SDRAM_IDE is
 				commit_ras,			--001110
 				start_cas,			--001010
 				commit_cas,			--001011
+				commit_cas2,			--001001
 				data_wait,			--001001
 				data_wait2,			--001001
 				data_wait3,			--001001
 				precharge,			--110011
-				precharge_wait,			--001001
-				precharge_wait2			--001001
+				precharge_wait			--001001
 				);
 	TYPE sdram_control IS (
 				c_nop,
@@ -199,7 +199,7 @@ begin
 	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
 
 	--enable caching for RAM
-	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
+	CIIN	<= '1' when RAM_SPACE = '1' or RANGER_SPACE = '1' or TRANSFER_IN_PROGRES = '1' else 
 				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
 				'Z';
 	CBACK <= CBACK_S;
@@ -353,12 +353,12 @@ begin
 		end if;
 	end process as_sample;
 
-   process (CQ,RESET,nAS_PLL_C_N) begin
+   process (CQ,RESET,nAS) begin
 		if(CQ = data_wait or RESET = '0')then
 			--TRANSFER <= '0';
 			RANGER_ACCESS <= '0';
 			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS_PLL_C_N) then
+		elsif falling_edge(nAS) then
 			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
 			--	TRANSFER <= '1';
 			--end if;
@@ -396,7 +396,8 @@ begin
 		if(nAS = '1')then
 			STERM_S <= '1';
 		elsif(falling_edge(PLL_C))then
-			if(CQ=commit_cas)then
+			if(CQ=commit_cas2)then --cl=3
+			--if(CQ=commit_cas)then --cl=2
 				STERM_S <= '0' ;
 			end if;
 		end if;
@@ -409,7 +410,8 @@ begin
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
-	ARAM_OPTCODE <= "0001000100010";
+	ARAM_OPTCODE <= "0001000110010"; --cl=3
+	--ARAM_OPTCODE <= "0001000100010"; --cl=2
 
 	ram_sizing: process(nAS,PLL_C) begin
 		if(nAS= '1')then
@@ -422,14 +424,14 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				if(CBREQ = '0' and CQ=start_ras and RAM_ACCESS='1' and A(3 downto 2) /= "11")then
+				if(CBREQ = '0' and (CQ=start_ras or CQ= start_state) and (RAM_ACCESS = '1' or RANGER_ACCESS = '1') and A(3 downto 2) /= "11")then
 					CBACK_S <='0';
 					burst_counter <= A(3 downto 2);
-				elsif(burst_counter = "11")then
+				elsif(burst_counter = "10" and CQ=data_wait)then
 					CBACK_S <= '1';
 				end if;
 				--burst increment
-				if(CQ=data_wait2 and burst_counter < "11")then
+				if(CQ=data_wait and burst_counter < "11")then
 					burst_counter <= burst_counter+1;
 				end if;
 
@@ -672,11 +674,18 @@ begin
 		 CQ_D <= start_cas;
 
       when start_cas =>
- 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+ 		 ENACLK_PRE <= '1'; --cl=3
+		 --ENACLK_PRE <= CBACK_S; --cl=2
 		 SDRAM_OP <= c_cas;
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
+ 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+		 SDRAM_OP <= c_nop;
+ 		 CQ_D <= commit_cas2; --cl=3
+		 --CQ_D <= data_wait; --cl=2
+
+      when commit_cas2 =>
  		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
 		 SDRAM_OP <= c_nop;
  		 CQ_D <= data_wait;
@@ -703,14 +712,9 @@ begin
       when precharge =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP <= c_precharge;
- 		 CQ_D <= precharge_wait2;
+ 		 CQ_D <= precharge_wait;
 
       when precharge_wait =>
-		 ENACLK_PRE <= '1';
-		 SDRAM_OP <= c_nop;
-		 CQ_D <= precharge_wait2; 
-		 
-      when precharge_wait2 =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP <= c_nop;
 		 CQ_D <= start_state; 		 
@@ -758,7 +762,7 @@ begin
 					IDE_R_S		<= '0';
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
-						DSACK_16BIT		<=	IDE_DSACK_D0;
+						DSACK_16BIT		<=	IDE_DSACK_D1;
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '0')then
 					DSACK_16BIT		<= IDE_DSACK_D3;
