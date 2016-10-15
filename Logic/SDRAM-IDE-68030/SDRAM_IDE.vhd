@@ -216,25 +216,6 @@ begin
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
 	S<="01"; --triple the clock - FB is CLK 
 
-	--RAM_SPACE   <= '0';
-	--RAM_SPACE   <= '1'	when 
-	--								A(31 downto 24) >= x"08"  
-	--								--AND A(31 downto 20) < (x"0BF")  
-	--								AND A(31 downto 24) <= x"0B"  
-	--					else '0'; -- Access to RAM-Space
-	--RANGER_SPACE   <= '1'	when 
-	--								A(31 downto 20) = (x"00C")  
-	--					else '0'; -- Access to RANGER-Space
-	--RANGER_SPACE   <= '0';
-
-	--IDE_SPACE   <= '1'	when 
-	--								A(31 downto 16) = (x"00" & IDE_BASEADR)  
-	--								AND SHUT_UP = '0' 
-	--					else '0'; -- Access to IDE-Space
-	--AUTO_CONFIG	<= '1'	when 
-	--								A(31 downto 16) = x"00E8"
-	--								AND AUTO_CONFIG_DONE ='0'
-	--					else '0'; -- Access to Autoconfig space and internal autoconfig not complete
 
 	-- this reduces the complexity of the adressdecode drastically!
 	IDE_SPACE 	<= NIBBLE0ZERO and NIBBLE1ZERO and ADR_IDE_HIT;	
@@ -294,19 +275,8 @@ begin
 	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
-	--LATCH_CLK <= '1' when (RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') and nDS='0' else '0';
-
-
-	--latch_states: process(CQ,PLL_C,RESET, nAS)
-	--begin 
-	--	if((CQ=data_wait and PLL_C = '0') or RESET = '0')then
-	--		LE_30_RAM<= '1';
-	--		LE_RAM_30<= '1';
-	--	elsif(falling_edge(nAS))then
-	--		LE_30_RAM<= RW;
-	--		LE_RAM_30<= not RW;
-	--	end if;			
-	--end process latch_states;
+	LE_RAM_30 <= LATCH_RAM_030;
+	LE_30_RAM <= '0';
 
 	latch_states: process(RESET,PLL_C)
 	begin 
@@ -322,9 +292,6 @@ begin
 			end if;
 		end if;			
 	end process latch_states;
-
-	LE_RAM_30 <= LATCH_RAM_030;
-	LE_30_RAM <= '0';
 
 
 
@@ -343,51 +310,18 @@ begin
 	end process buffer_oe;
 
 
-   as_sample:process (PLL_C) begin
-		if falling_edge(PLL_C) then
-			nAS_PLL_C_N	<= nAS;
-		end if;
-	end process as_sample;
 
-   process (CQ,RESET,nAS_PLL_C_N) begin
-		if(CQ = data_wait or RESET = '0')then
-			--TRANSFER <= '0';
-			RANGER_ACCESS <= '0';
-			RAM_ACCESS <= '0';
-		elsif falling_edge(nAS_PLL_C_N) then
-			--if (RAM_SPACE ='1' or RANGER_SPACE = '1')then
-			--	TRANSFER <= '1';
-			--end if;
-			--if(nAS='0' and nAS_PLL_C_N='1')then
-				if(A(31 downto 26) = "000010")then
-						RAM_ACCESS <= '1';
-						RANGER_ACCESS <= '0';
-				elsif(A(31 downto 20) = x"00C")then
-					RANGER_ACCESS <= '1';
-					RAM_ACCESS <= '0';
-				end if;
-			--end if;
+   process (PLL_C) begin		
+		if rising_edge(PLL_C) then
 		end if;
 	end process;
  
  	TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
 	
-	--TRANSFER <= '1' when A(31 downto 26) = "000010" or A(31 downto 20) = x"00C" else '0';
+	--TRANSFER <= '1' when nAS='0' and (A(31 downto 26) = "000010" or A(31 downto 20) = x"00C") else '0';
 	
 	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
- 	--TRANSFER <= (RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS ='0';
- 
-	--STERM_CLK <= '1' when CQ=data_wait else '0';
- 
-	--sterm_gen:process(nAS, PLL_C)
-	--begin
-	--	if(nAS = '1')then
-	--		STERM_S <= '1';
-	--	elsif(rising_edge(STERM_CLK))then
-	--		STERM_S <= '0' ;
-	--	end if;
-	--end process sterm_gen; 
- 
+ 	--TRANSFER <= (RAM_SPACE  or RANGER_SPACE ) and not nAS;
  
 	sterm_gen:process(PLL_C)
 	begin
@@ -402,9 +336,7 @@ begin
 	end process sterm_gen;
  
 	--decoder signals
-	--CLRREFC <= '1' when 	CQ = init_refresh or 
-	--							CQ = refresh_start 								
-	--					else '0';
+
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
@@ -413,25 +345,7 @@ begin
 
 	ram_sizing: process(PLL_C) begin
 		if(rising_edge(PLL_C)) then
-			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
-				TRANSFER_IN_PROGRES <= '1';
 
-				--cache burst logic
-				--if(CBREQ = '0' and (CQ=commit_ras) and (RAM_ACCESS = '1') and A(3 downto 2) < "11")then
-				--	CBACK_S <='0';
-				--	burst_counter <= A(3 downto 2);
-				--elsif(burst_counter = "10" and CQ=data_wait)then
-				--	CBACK_S <= '1';
-				--end if;
-				--burst increment
-				--if(CQ=data_wait and burst_counter < "11")then
-				--	burst_counter <= burst_counter+1;
-				--end if;								
-			else
-				TRANSFER_IN_PROGRES <= '0';
-				CBACK_S <= '1';
-				burst_counter <= "11";
-			end if;
 		end if;
 	end process ram_sizing;
 
@@ -444,11 +358,50 @@ begin
 	--wait this number of cycles for a refresh
 	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
 	--puls one cycle for safety :(
-   process (PLL_C) begin
-      if rising_edge(PLL_C) then
+   
+	ram_ctrl:process (PLL_C) begin
+      if rising_edge(PLL_C) then		
 			CLK_D(0) <= CLK;
 			CLK_D(2 downto 1) <= CLK_D(1 downto 0);
-			--if(CLRREFC ='1')then
+
+			--transfer detection and cacheburst acknowledge
+			nAS_PLL_C_N	<= nAS;
+			if(CQ = data_wait or RESET = '0')then
+				--TRANSFER <= '0';
+				RANGER_ACCESS <= '0';
+				RAM_ACCESS <= '0';
+			elsif(nAS = '0' and nAS_PLL_C_N='1')then
+				if(A(31 downto 26) = "000010")then
+						RAM_ACCESS <= '1';
+						RANGER_ACCESS <= '0';
+				elsif(A(31 downto 20) = x"00C")then
+					RANGER_ACCESS <= '1';
+					RAM_ACCESS <= '0';
+				end if;
+			end if;
+
+			
+			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
+				TRANSFER_IN_PROGRES <= '1';
+
+				--cache burst logic
+				if(CBREQ = '0' and (CQ=commit_ras) and (RAM_ACCESS = '1') and A(3 downto 2) < "11")then
+					CBACK_S <='0';
+					burst_counter <= A(3 downto 2);
+				elsif(burst_counter = "10" and CQ=data_wait)then
+					CBACK_S <= '1';
+				end if;
+				--burst increment
+				if(CQ=data_wait and burst_counter < "11")then
+					burst_counter <= burst_counter+1;
+				end if;								
+			else
+				TRANSFER_IN_PROGRES <= '0';
+				CBACK_S <= '1';
+				burst_counter <= "11";
+			end if;
+
+			--refresh struff
 			if(CQ = init_refresh or 
 				CQ = refresh_start)then
 				REFRESH <= '0';
@@ -456,7 +409,6 @@ begin
 				REFRESH <= '1';
 			end if;
 
-			--if(CLRREFC ='1')then
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
@@ -464,7 +416,7 @@ begin
 				RQ <= RQ + 1;
 			end if;
 			
-						
+			--wait counter stuff
 			if(
 				CQ = init_precharge_commit or
 				CQ = init_wait or	
@@ -478,14 +430,14 @@ begin
 				NQ  <= x"0";
 			end if;
 					
-					
-			if(RAM_ACCESS = '1') then--mux for ranger
+			--mux for ranger mem
+			if(RAM_ACCESS = '1') then
 				ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
 			else
 				ARAM_LOW  <=  "0000111111" & A(4 downto 2);
 			end if;
-			--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
-				
+			
+			--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
 			-- bits 0-7
 			if(RW='1' or ( SIZ="00" or 
 								(A(0)='1' and A(1)='1') or 
@@ -522,6 +474,7 @@ begin
 				UDQ1	<= '1';
 			end if;			
 					
+			--sdram command decode
 			case SDRAM_OP is
 			when c_nop=>
 				RAS <= '1';
@@ -567,13 +520,14 @@ begin
 				BA <= A(19 downto 18);
 			end case;
 									
+			--statemachine transit
 	      if reset='0' then
 				CQ	<= powerup;
 			else
 				CQ	<= CQ_D;
 			end if;
 		end if;
-   end process;
+   end process ram_ctrl;
 	
 	-- ram state machine decoder
    process (nDS, CQ, REFRESH, TRANSFER, NQ, RW,CLK_D,CBACK_S)
