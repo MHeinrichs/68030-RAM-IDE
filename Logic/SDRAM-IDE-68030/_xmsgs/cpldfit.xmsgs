@@ -223,5 +223,8 @@ Timing analysis of paths involving this node may be inaccurate or incomplete.
 <msg type="warning" file="Cpld" num="822" delta="old" >Timespec <arg fmt="%s" index="1">OFFSET</arg> = <arg fmt="%s" index="2">IN:5.000nS:VALID:10.000nS:BEFORE:nAS:RISING</arg> is invalid for CPLD designs. This constraint will be ignored.
 </msg>
 
+<msg type="info" file="Cpld" num="994" delta="new" >Exhaustive fitting is trying <arg fmt="%s" index="1">pterm limit</arg>: <arg fmt="%d" index="2">90</arg> and <arg fmt="%s" index="3">input limit</arg>: <arg fmt="%d" index="4">36</arg>
+</msg>
+
 </messages>
 

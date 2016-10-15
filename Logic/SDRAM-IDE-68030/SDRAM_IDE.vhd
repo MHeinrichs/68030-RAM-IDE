@@ -393,6 +393,7 @@ begin
 				elsif(burst_counter = "11" and CQ=data_wait)then
 					CBACK_S <= '1';
 				end if;
+				
 				--burst increment
 				if(CQ=data_wait and burst_counter < "11")then
 					burst_counter <= burst_counter+1;
