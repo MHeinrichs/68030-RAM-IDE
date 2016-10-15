@@ -42,3 +42,4 @@ Logic/SDRAM-IDE-68030/SDRAM_IDE_html/fit/ascii.tmp
 Logic/SDRAM-IDE-68030/SDRAM_IDE_html/fit/style.css
 *.xmsgs
 Logic/SDRAM-IDE-68030/_xmsgs/cpldfit.xmsgs
+Logic/SDRAM-IDE-68030/log.txt
