@@ -137,7 +137,6 @@ signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
 signal	nAS_PLL_C_N:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
-signal	AUTO_CONFIG_CYCLE:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
@@ -200,7 +199,7 @@ begin
 
 	--enable caching for RAM
 	CIIN	<= '1' when RAM_SPACE = '1' or RANGER_SPACE = '1' or TRANSFER_IN_PROGRES = '1' else 
-				'0' when AUTO_CONFIG_CYCLE='0' or IDE_CYCLE ='0' else
+				'0' when AUTO_CONFIG_D0='0' or IDE_CYCLE ='0' else
 				'Z';
 	CBACK <= CBACK_S;
 	
@@ -329,11 +328,8 @@ begin
 
 
 
-	buffer_oe: process(CLK, nAS) begin
-		if(nAS = '1')then
-				OE_30_RAM <= '1';
-				OE_RAM_30 <= '1';			
-		elsif(rising_edge(clk))then
+	buffer_oe: process(CLK) begin
+		if(rising_edge(clk))then
 			if((RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') 
 				--and nAS = '0'
 				) then
@@ -374,7 +370,9 @@ begin
 		end if;
 	end process;
  
- 	TRANSFER <= RAM_ACCESS or RANGER_ACCESS;
+ 	TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
+	
+	--TRANSFER <= '1' when A(31 downto 26) = "000010" or A(31 downto 20) = x"00C" else '0';
 	
 	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
  	--TRANSFER <= (RAM_SPACE ='1' or RANGER_SPACE = '1') and nAS ='0';
@@ -391,14 +389,14 @@ begin
 	--end process sterm_gen; 
  
  
-	sterm_gen:process(nAS, PLL_C)
+	sterm_gen:process(PLL_C)
 	begin
-		if(nAS = '1')then
-			STERM_S <= '1';
-		elsif(falling_edge(PLL_C))then
+		if(falling_edge(PLL_C))then
 			if(CQ=commit_cas2)then --cl=3
 			--if(CQ=commit_cas)then --cl=2
 				STERM_S <= '0' ;
+			elsif(nAS = '1' or RESET='0')then
+				STERM_S <= '1';
 			end if;
 		end if;
 	end process sterm_gen;
@@ -413,14 +411,9 @@ begin
 	ARAM_OPTCODE <= "0001000110010"; --cl=3
 	--ARAM_OPTCODE <= "0001000100010"; --cl=2
 
-	ram_sizing: process(nAS,PLL_C) begin
-		if(nAS= '1')then
-			TRANSFER_IN_PROGRES <= '0';
-			BYTE	<= "1111";
-			CBACK_S <= '1';
-			burst_counter <= "11";
-		elsif(rising_edge(PLL_C)) then
-			if (TRANSFER ='1' or TRANSFER_IN_PROGRES = '1')then
+	ram_sizing: process(PLL_C) begin
+		if(rising_edge(PLL_C)) then
+			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
@@ -433,49 +426,11 @@ begin
 				--burst increment
 				--if(CQ=data_wait and burst_counter < "11")then
 				--	burst_counter <= burst_counter+1;
-				--end if;
-
-				if(RAM_ACCESS = '1') then--mux for ranger
-					ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
-				else
-					ARAM_LOW  <=  "0000111111" & A(4 downto 2);
-				end if;
-				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
-				
-				-- bits 0-7
-				if(RW='1' or ( SIZ="00" or 
-									(A(0)='1' and A(1)='1') or 
-									(A(1)='1' and SIZ(1)='1') or
-									(A(0)='1' and SIZ="11" )))then
-					BYTE(0)	<= '0';
-				else
-					BYTE(0)	<= '1';
-				end if;
-				
-				-- bits 8-15
-				if(RW='1' or (	(A(0)='0' and A(1)='1') or
-									(A(0)='1' and A(1)='0' and SIZ(0)='0') or
-									(A(1)='0' and SIZ="11") or 
-									(A(1)='0' and SIZ="00")))then
-					BYTE(1)	<= '0';
-				else
-					BYTE(1)	<= '1';
-				end if;				
-				
-				--bits 16-23
-				if(RW='1' or (	(A(0)='1' and A(1)='0') or
-									(A(1)='0' and SIZ(0)='0') or 
-									(A(1)='0' and SIZ(1)='1')))then
-					BYTE(2)	<= '0';
-				else
-					BYTE(2)	<= '1';
-				end if;									
-				--bits 24--31
-				if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
-					BYTE(3)	<= '0';
-				else
-					BYTE(3)	<= '1';
-				end if;									
+				--end if;								
+			else
+				TRANSFER_IN_PROGRES <= '0';
+				CBACK_S <= '1';
+				burst_counter <= "11";
 			end if;
 		end if;
 	end process ram_sizing;
@@ -523,11 +478,50 @@ begin
 				NQ  <= x"0";
 			end if;
 					
-			UDQ1 <= BYTE(3);
-			LDQ1 <= BYTE(2);
-			UDQ0 <= BYTE(1);
-			LDQ0 <= BYTE(0);
+					
+			if(RAM_ACCESS = '1') then--mux for ranger
+				ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
+			else
+				ARAM_LOW  <=  "0000111111" & A(4 downto 2);
+			end if;
+			--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write
+				
+			-- bits 0-7
+			if(RW='1' or ( SIZ="00" or 
+								(A(0)='1' and A(1)='1') or 
+								(A(1)='1' and SIZ(1)='1') or
+								(A(0)='1' and SIZ="11" )))then
+				LDQ0	<= '0';
+			else
+				LDQ0	<= '1';
+			end if;
+				
+			-- bits 8-15
+			if(RW='1' or (	(A(0)='0' and A(1)='1') or
+								(A(0)='1' and A(1)='0' and SIZ(0)='0') or
+								(A(1)='0' and SIZ="11") or 
+								(A(1)='0' and SIZ="00")))then
+				UDQ0	<= '0';
+			else
+				UDQ0	<= '1';
+			end if;				
 			
+			--bits 16-23
+			if(RW='1' or (	(A(0)='1' and A(1)='0') or
+								(A(1)='0' and SIZ(0)='0') or 
+								(A(1)='0' and SIZ(1)='1')))then
+				LDQ1	<= '0';
+			else
+				LDQ1	<= '1';
+			end if;									
+			
+			--bits 24--31
+			if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
+				UDQ1	<= '0';
+			else
+				UDQ1	<= '1';
+			end if;			
+					
 			case SDRAM_OP is
 			when c_nop=>
 				RAS <= '1';
@@ -665,7 +659,7 @@ begin
 
       when start_ras =>
 		 ENACLK_PRE <= '1';
-		 SDRAM_OP<= c_ras;
+ 		 SDRAM_OP<= c_ras;
 		 CQ_D <= commit_ras;
 
 	  when commit_ras =>
@@ -752,6 +746,8 @@ begin
 	
 		if rising_edge(clk) then
 			if(IDE_SPACE = '1' and nAS = '0')then
+				IDE_CYCLE <= '0';
+				IDE_BUF_S <= not RW;
 
 				if(RW = '0')then
 					--the write goes to the hdd!
@@ -783,6 +779,8 @@ begin
 				IDE_DSACK_D2		<= IDE_DSACK_D1;
 				IDE_DSACK_D3		<= IDE_DSACK_D2;
 			else
+				IDE_CYCLE <= '1';
+				IDE_BUF_S <= '1';
 				IDE_R_S		<= '1';
 				IDE_W_S		<= '1';
 				ROM_OE_S	<= '1';
@@ -795,19 +793,6 @@ begin
 			end if;				
 		end if;
 	end process ide_rw_gen;
-
-	ide_dsack_gen: process (nAS, clk)
-	begin
-		if	nAS = '1' then
-			IDE_CYCLE <= '1';
-			IDE_BUF_S <= '1';
-		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock, Attention: The memory is triggered at the falling edge, so i can save one register!
-			if(IDE_SPACE = '1')then
-				IDE_CYCLE <= '0';
-				IDE_BUF_S <= not RW;
-			end if;
-		end if;
-	end process ide_dsack_gen;
 
 
 	--map signals
@@ -828,17 +813,6 @@ begin
 	--Autoconfig(tm) stuff
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
 			Dout2;	
-	acack_gen: process (nAS, clk)
-	begin
-		if	nAS = '1' then
-			AUTO_CONFIG_CYCLE <= '1';
-		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock, Attention: The memory is triggered at the falling edge, so i can save one register!
-			if(AUTO_CONFIG = '1')then
-				AUTO_CONFIG_CYCLE <= '0';				
-			end if;
-		end if;
-	end process acack_gen;
-
 	
 	autoconfig: process (reset, clk)
 	begin
