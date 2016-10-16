@@ -80,6 +80,17 @@ end SDRAM_IDE;
 
 architecture Behavioral of SDRAM_IDE is
 
+constant CLOCK_SAMPLE : integer := 3;
+constant NQ_TIMEOUT : integer := 8;
+	--wait this number of cycles for a refresh
+	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
+	--puls one cycle for safety :(
+
+constant RQ_TIMEOUT : integer := 255;
+	--8192 refreshes in 64ms ->8192 refreshes in 3200000 50MHz ticks
+	-- -> Refresh after 390 tics -> 255 is a safe place to be!
+
+
 	TYPE sdram_state_machine_type IS (
 				powerup, 					--000000
 				init_precharge,			--000001 
@@ -142,9 +153,7 @@ signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
 signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
-signal NQ_TIMEOUT :  STD_LOGIC_VECTOR (3 downto 0);
 signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
-signal RQ_TIMEOUT :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
 signal CQ_D :  sdram_state_machine_type;
 signal SDRAM_OP :  sdram_control;
@@ -153,7 +162,7 @@ signal ARAM_HIGH: STD_LOGIC_VECTOR (12 downto 0);
 signal ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ENACLK_PRE : STD_LOGIC;
-signal CLK_D : STD_LOGIC_VECTOR(3 downto 0);
+signal CLK_D : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
@@ -168,10 +177,6 @@ signal ADR_IDE_HIT :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal LATCH_RAM_030 :  STD_LOGIC;
 signal LATCH_RAM_030_D0 :  STD_LOGIC;
---signal TRANSFER_CLK:STD_LOGIC:= '1';
---signal CLRREFC: std_logic:= '1';
---signal STERM_CLK : STD_LOGIC;
---signal LATCH_CLK : STD_LOGIC;
 
    Function to_std_logic(X: in Boolean) return Std_Logic is
    variable ret : std_logic;
@@ -187,7 +192,7 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or RAM_SPACE = '1' or RANGER_SPACE = '1') else '1';
+	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
@@ -198,7 +203,7 @@ begin
 	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
 
 	--enable caching for RAM
-	CIIN	<= '1' when RAM_SPACE = '1' or RANGER_SPACE = '1' or TRANSFER_IN_PROGRES = '1' else 
+	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
 				'0' when AUTO_CONFIG_D0='0' or IDE_CYCLE ='0' else
 				'Z';
 	CBACK <= CBACK_S;
@@ -227,7 +232,7 @@ begin
 --  NIBBLE1ZERO   <= '1' when A(27 downto 24) = x"0" else '0'; 
 --  NIBBLE1RAM    <= '1' when A(27 downto 26) = "10" else '0'; 
 --  NIBBLE2RANGER <= '1' when A(23 downto 20) = x"C" else '0'; 
---  NIBBLE2AUTOC0 <= '1' when A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
+--  ADR_AC_HIT <= '1' when A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
 --  ADR_IDE_HIT   <= '1' when A(23 downto 16) = IDE_BASEADR AND SHUT_UP ='0'  else '0';
    adr_decode:process (PLL_C) begin
 		if falling_edge(PLL_C) then
@@ -349,20 +354,11 @@ begin
 		end if;
 	end process ram_sizing;
 
-	-- ram register Section
-	
-	RQ_TIMEOUT <= x"FF"; 
-	--8192 refreshes in 64ms ->8192 refreshes in 3200000 50MHz ticks
-	-- -> Refresh after 390 tics -> 256 is a safe place to be!
-	NQ_TIMEOUT <= x"9"; 
-	--wait this number of cycles for a refresh
-	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
-	--puls one cycle for safety :(
-   
+	-- ram register Section   
 	ram_ctrl:process (PLL_C) begin
       if rising_edge(PLL_C) then		
-			CLK_D(0) <= CLK;
-			CLK_D(2 downto 1) <= CLK_D(1 downto 0);
+			CLK_D(0) <= CLK and not CLK_D(0); --the edge!			
+			CLK_D(CLOCK_SAMPLE downto 1) <= CLK_D((CLOCK_SAMPLE-1) downto 0);
 
 			--transfer detection and cacheburst acknowledge
 			nAS_PLL_C_N	<= nAS;
@@ -415,7 +411,7 @@ begin
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
-			elsif(CLK_D(1)='1' and CLK_D(0) ='0' and RQ <RQ_TIMEOUT) then --count on falling edges
+			elsif(CLK_D(CLOCK_SAMPLE)='1' and RQ <RQ_TIMEOUT) then --count on edges
 				RQ <= RQ + 1;
 			end if;
 			
@@ -590,7 +586,7 @@ begin
 		 SDRAM_OP<= c_nop;		 
 		 if (REFRESH = '1') then
 		    CQ_D <= refresh_start;
-		 elsif (TRANSFER = '1' and CLK_D(2)='1') then
+		 elsif (TRANSFER = '1' and CLK_D(CLOCK_SAMPLE)='1') then
 		    CQ_D <= start_ras;
 		 else
 		    CQ_D <= start_state;
@@ -605,7 +601,7 @@ begin
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
 		 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
-			 if (TRANSFER = '1'  and CLK_D(2)='1') then
+			 if (TRANSFER = '1'  and CLK_D(CLOCK_SAMPLE)='1') then
 			 	CQ_D <= start_ras;
 			 else
 		      CQ_D <= start_state;
@@ -658,12 +654,7 @@ begin
       when data_wait3 =>
  		 ENACLK_PRE <= '0'; 
 		 SDRAM_OP<= c_nop;
-		 --if(CBACK_S = '1')then
-		--	CQ_D <= precharge;
-		 --else
-			CQ_D <= data_wait;			
-		 --end if;
-
+		 CQ_D <= data_wait;			
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';
