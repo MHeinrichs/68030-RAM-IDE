@@ -186,8 +186,8 @@ signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
-signal NIBBLE1RAM :  STD_LOGIC;
-signal NIBBLE2RANGER :  STD_LOGIC;
+signal TRANSFER_CLK :  STD_LOGIC;
+signal TRANSFER_RESET :  STD_LOGIC;
 signal ADR_AC_HIT :  STD_LOGIC;
 signal ADR_IDE_HIT :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
@@ -232,8 +232,8 @@ begin
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
---	RAM_SPACE    <= '1' when A(27) = '1' and A(25 downto 20) <"111111" else '0'; 
---	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RAM_SPACE    <= '1' when A(27) = '1' and A(25 downto 20) <"111111" else '0'; 
+	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
                 
 --  RAM_SPACE    <= '1' when A(31 downto 26) = "000010" else '0'; 
@@ -298,13 +298,22 @@ begin
 		end if;
 	end process buffer_oe;
  
- 	TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
+ 	--TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
 	
 	--TRANSFER <= '1' when nAS='0' and (A(31 downto 26) = "000010" or A(31 downto 20) = x"00C") else '0';
 	
 	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
- 	--TRANSFER <= (RAM_SPACE  or RANGER_SPACE ) and not nAS;
- 
+ 	TRANSFER_CLK <= (RAM_SPACE  or RANGER_SPACE ) and not nAS;
+	TRANSFER_RESET <= '1' when CQ=commit_ras else '0';
+	
+	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
+		if(TRANSFER_RESET ='1') then
+			TRANSFER <= '0';
+		elsif(rising_edge(TRANSFER_CLK))then
+			TRANSFER <= '1';			
+		end if;
+	end process transfer_latch;
+	
 	sterm_gen:process(PLL_C)
 	begin
 		if(falling_edge(PLL_C))then
@@ -383,11 +392,11 @@ begin
 				end if;			
 			
 			
-				if(A(31 downto 26) = "000010" and
+				if(A(27) = '1' and
 				   A(25 downto 20) <"111111")then
 					RAM_ACCESS <= '1';
 					RANGER_ACCESS <= '0';
-				elsif(A(31 downto 20) = x"00C")then
+				elsif(A(27) = '0' and A(23 downto 20) = x"C")then
 					RANGER_ACCESS <= '1';
 					RAM_ACCESS <= '0';
 				end if;
