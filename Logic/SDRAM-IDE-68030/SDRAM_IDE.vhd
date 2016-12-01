@@ -80,8 +80,28 @@ end SDRAM_IDE;
 
 architecture Behavioral of SDRAM_IDE is
 
-constant CLOCK_SAMPLE : integer := 3;
-constant NQ_TIMEOUT : integer := 8;
+   Function to_std_logic(X: in Boolean) return Std_Logic is
+   variable ret : std_logic;
+   begin
+   if x then ret := '1';  else ret := '0'; end if;
+   return ret;
+   end to_std_logic;
+	
+function MAX(LEFT, RIGHT: INTEGER) return INTEGER is
+begin
+  if LEFT > RIGHT then return LEFT;
+  else return RIGHT;
+    end if;
+  end;
+
+
+constant CLOCK_SAMPLE : integer := 3; --cl3
+--constant CLOCK_SAMPLE : integer := 1; --cl2
+constant NQ_TIMEOUT : integer := 9; --cl3
+--constant NQ_TIMEOUT : integer := 6; --cl2
+constant IDE_WAITS : integer := 2;
+constant ROM_WAITS : integer := 4;
+constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
 	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
 	--puls one cycle for safety :(
@@ -134,10 +154,7 @@ signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC;
 signal	SHUT_UP:STD_LOGIC;
 signal	IDE_BASEADR:STD_LOGIC_VECTOR(7 downto 0);
 signal	Dout2:STD_LOGIC_VECTOR(3 downto 0);
-signal	IDE_DSACK_D0:STD_LOGIC;
-signal	IDE_DSACK_D1:STD_LOGIC;
-signal	IDE_DSACK_D2:STD_LOGIC;
-signal	IDE_DSACK_D3:STD_LOGIC;
+signal	IDE_DSACK_D:STD_LOGIC_VECTOR(IDE_DELAY downto 0);
 signal	DSACK_16BIT:STD_LOGIC;
 signal	IDE_ENABLE:STD_LOGIC;
 signal	ROM_OE_S:STD_LOGIC;
@@ -162,15 +179,14 @@ signal ARAM_HIGH: STD_LOGIC_VECTOR (12 downto 0);
 signal ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ENACLK_PRE : STD_LOGIC;
-signal CLK_D : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
+signal CLK_D : STD_LOGIC;
+signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
 signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
 signal RANGER_ACCESS : STD_LOGIC;
-signal NIBBLE0ZERO :  STD_LOGIC;
 signal NIBBLE1RAM :  STD_LOGIC;
-signal NIBBLE1ZERO :  STD_LOGIC;
 signal NIBBLE2RANGER :  STD_LOGIC;
 signal ADR_AC_HIT :  STD_LOGIC;
 signal ADR_IDE_HIT :  STD_LOGIC;
@@ -178,21 +194,13 @@ signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal LATCH_RAM_030 :  STD_LOGIC;
 signal LATCH_RAM_030_D0 :  STD_LOGIC;
 
-   Function to_std_logic(X: in Boolean) return Std_Logic is
-   variable ret : std_logic;
-   begin
-   if x then ret := '1';  else ret := '0'; end if;
-   return ret;
-   end to_std_logic;
-	
-
-
 begin
 
 
 	--internal signals	
 	--output
 	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	--MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
@@ -204,7 +212,7 @@ begin
 
 	--enable caching for RAM
 	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
-				'0' when AUTO_CONFIG_D0='0' or IDE_CYCLE ='0' else
+				'0' when AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' else
 				'Z';
 	CBACK <= CBACK_S;
 	
@@ -223,51 +231,38 @@ begin
 
 
 	-- this reduces the complexity of the adressdecode drastically!
-	IDE_SPACE 	<= NIBBLE0ZERO and NIBBLE1ZERO and ADR_IDE_HIT;	
-	AUTO_CONFIG <= NIBBLE0ZERO and NIBBLE1ZERO and ADR_AC_HIT;
-	RAM_SPACE   	<= NIBBLE0ZERO and NIBBLE1RAM;
-	RANGER_SPACE   <= NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER;
+	IDE_SPACE 	<= ADR_IDE_HIT;	
+	AUTO_CONFIG <= ADR_AC_HIT;
+	RAM_SPACE   	<= NIBBLE1RAM;
+	RANGER_SPACE   <= NIBBLE2RANGER;
                 
---  NIBBLE0ZERO   <= '1' when A(31 downto 28) = x"0" else '0'; 
---  NIBBLE1ZERO   <= '1' when A(27 downto 24) = x"0" else '0'; 
---  NIBBLE1RAM    <= '1' when A(27 downto 26) = "10" else '0'; 
---  NIBBLE2RANGER <= '1' when A(23 downto 20) = x"C" else '0'; 
---  ADR_AC_HIT <= '1' when A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
---  ADR_IDE_HIT   <= '1' when A(23 downto 16) = IDE_BASEADR AND SHUT_UP ='0'  else '0';
+--  NIBBLE1RAM    <= '1' when A(31 downto 26) = "000010" else '0'; 
+--  NIBBLE2RANGER <= '1' when A(31 downto 20) = x"00C" else '0'; 
+--  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
+--  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
    adr_decode:process (PLL_C) begin
 		if falling_edge(PLL_C) then
-			--nAS_PLL_C_N	<= nAS;
-			if(A(31 downto 28) =x"0") then
-				NIBBLE0ZERO <= '1';
-			else
-				NIBBLE0ZERO <= '0';
-			end if;
-			
-			if(A(27 downto 24) =x"0") then
-				NIBBLE1ZERO <= '1';
-			else
-				NIBBLE1ZERO <= '0';
-			end if;
+--			--nAS_PLL_C_N	<= nAS;
 
-			if(A(27 downto 26) = "10")then
+			if(A(31 downto 26) = "000010")then
 				NIBBLE1RAM <= '1';
 			else
 				NIBBLE1RAM <= '0';
 			end if;
 
-			if(A(23 downto 20) =x"C") then
+			if(A(31 downto 20) =x"00C") then
 				NIBBLE2RANGER <= '1';
 			else
 				NIBBLE2RANGER <= '0';
 			end if;
 			
-			if(A(23 downto 16) =x"E8" AND AUTO_CONFIG_DONE ='0') then
+			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
 				ADR_AC_HIT <= '1';
 			else
 				ADR_AC_HIT <= '0';
 			end if;
 
-			if(A(23 downto 16) = IDE_BASEADR AND SHUT_UP ='0') then
+			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
 				ADR_IDE_HIT <= '1';
 			else
 				ADR_IDE_HIT <= '0';
@@ -290,7 +285,8 @@ begin
 			LATCH_RAM_030_D0 <='1';
 		elsif(rising_edge(PLL_C))then
 			LATCH_RAM_030_D0 <= LATCH_RAM_030;
-			if(CQ=start_ras or CQ=data_wait2)then
+			if(CQ=start_ras or CQ=data_wait2)then --cl2
+			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LATCH_RAM_030<= '0';
 			elsif(CQ=data_wait)then
 				LATCH_RAM_030<= '1';
@@ -331,8 +327,8 @@ begin
 	sterm_gen:process(PLL_C)
 	begin
 		if(falling_edge(PLL_C))then
-			if(CQ=commit_cas2)then --cl=3
-			--if(CQ=commit_cas)then --cl=2
+			if(CQ=commit_cas2)then --cl3
+			--if(CQ=commit_cas)then --cl2
 				STERM_S <= '0' ;
 			elsif(nAS = '1' or RESET='0')then
 				STERM_S <= '1';
@@ -345,8 +341,8 @@ begin
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
-	ARAM_OPTCODE <= "0001000110010"; --cl=3
-	--ARAM_OPTCODE <= "0001000100010"; --cl=2
+	ARAM_OPTCODE <= "0001000110010"; --cl3
+	--ARAM_OPTCODE <= "0001000100010"; --cl2
 
 	ram_sizing: process(PLL_C) begin
 		if(rising_edge(PLL_C)) then
@@ -357,8 +353,9 @@ begin
 	-- ram register Section   
 	ram_ctrl:process (PLL_C) begin
       if rising_edge(PLL_C) then		
-			CLK_D(0) <= CLK and not CLK_D(0); --the edge!			
-			CLK_D(CLOCK_SAMPLE downto 1) <= CLK_D((CLOCK_SAMPLE-1) downto 0);
+			CLK_D	<= CLK;
+			CLK_PE(0) <= CLK and not CLK_D; --the edge!			
+			CLK_PE(CLOCK_SAMPLE downto 1) <= CLK_PE((CLOCK_SAMPLE-1) downto 0);
 
 			--transfer detection and cacheburst acknowledge
 			nAS_PLL_C_N	<= nAS;
@@ -366,10 +363,49 @@ begin
 				--TRANSFER <= '0';
 				RANGER_ACCESS <= '0';
 				RAM_ACCESS <= '0';
-			elsif(nAS = '0' and nAS_PLL_C_N='1')then
-				if(A(31 downto 26) = "000010")then
-						RAM_ACCESS <= '1';
-						RANGER_ACCESS <= '0';
+			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
+				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
+				-- bits 0-7
+				if(RW='1' or ( SIZ="00" or 
+									(A(0)='1' and A(1)='1') or 
+									(A(1)='1' and SIZ(1)='1') or
+									(A(0)='1' and SIZ="11" )))then
+					LDQ0	<= '0';
+				else
+					LDQ0	<= '1';
+				end if;
+					
+				-- bits 8-15
+				if(RW='1' or (	(A(0)='0' and A(1)='1') or
+									(A(0)='1' and A(1)='0' and SIZ(0)='0') or
+									(A(1)='0' and SIZ="11") or 
+									(A(1)='0' and SIZ="00")))then
+					UDQ0	<= '0';
+				else
+					UDQ0	<= '1';
+				end if;				
+				
+				--bits 16-23
+				if(RW='1' or (	(A(0)='1' and A(1)='0') or
+									(A(1)='0' and SIZ(0)='0') or 
+									(A(1)='0' and SIZ(1)='1')))then
+					LDQ1	<= '0';
+				else
+					LDQ1	<= '1';
+				end if;									
+				
+				--bits 24--31
+				if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
+					UDQ1	<= '0';
+				else
+					UDQ1	<= '1';
+				end if;			
+			
+			
+				if(A(31 downto 26) = "000010" and
+				   A(25 downto 20) /=x"111111")then
+					RAM_ACCESS <= '1';
+					RANGER_ACCESS <= '0';
 				elsif(A(31 downto 20) = x"00C")then
 					RANGER_ACCESS <= '1';
 					RAM_ACCESS <= '0';
@@ -381,8 +417,8 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				if(CBREQ = '0' and (CQ=commit_ras) 
-					--and (RAM_ACCESS = '1') 
+				if(CBREQ = '0' and (CQ=start_ras) 
+					and (RAM_ACCESS = '1') 
 					and A(3 downto 2) < "11")then
 					CBACK_S <='0';
 					burst_counter <= A(3 downto 2);
@@ -411,7 +447,7 @@ begin
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
-			elsif(CLK_D(CLOCK_SAMPLE)='1' and RQ <RQ_TIMEOUT) then --count on edges
+			elsif(CLK_PE(CLOCK_SAMPLE)='1' and RQ <RQ_TIMEOUT) then --count on edges
 				RQ <= RQ + 1;
 			end if;
 			
@@ -436,42 +472,6 @@ begin
 				ARAM_LOW  <=  "0000111111" & A(4 downto 2);
 			end if;
 			
-			--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
-			-- bits 0-7
-			if(RW='1' or ( SIZ="00" or 
-								(A(0)='1' and A(1)='1') or 
-								(A(1)='1' and SIZ(1)='1') or
-								(A(0)='1' and SIZ="11" )))then
-				LDQ0	<= '0';
-			else
-				LDQ0	<= '1';
-			end if;
-				
-			-- bits 8-15
-			if(RW='1' or (	(A(0)='0' and A(1)='1') or
-								(A(0)='1' and A(1)='0' and SIZ(0)='0') or
-								(A(1)='0' and SIZ="11") or 
-								(A(1)='0' and SIZ="00")))then
-				UDQ0	<= '0';
-			else
-				UDQ0	<= '1';
-			end if;				
-			
-			--bits 16-23
-			if(RW='1' or (	(A(0)='1' and A(1)='0') or
-								(A(1)='0' and SIZ(0)='0') or 
-								(A(1)='0' and SIZ(1)='1')))then
-				LDQ1	<= '0';
-			else
-				LDQ1	<= '1';
-			end if;									
-			
-			--bits 24--31
-			if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
-				UDQ1	<= '0';
-			else
-				UDQ1	<= '1';
-			end if;			
 					
 			--sdram command decode
 			case SDRAM_OP is
@@ -529,7 +529,7 @@ begin
    end process ram_ctrl;
 	
 	-- ram state machine decoder
-   process (nDS, CQ, REFRESH, TRANSFER, NQ, RW,CLK_D,CBACK_S)
+   process (nDS, CQ, REFRESH, TRANSFER, NQ, RW,CLK_PE,CBACK_S)
    begin
       
       case CQ is
@@ -586,7 +586,7 @@ begin
 		 SDRAM_OP<= c_nop;		 
 		 if (REFRESH = '1') then
 		    CQ_D <= refresh_start;
-		 elsif (TRANSFER = '1' and CLK_D(CLOCK_SAMPLE)='1') then
+		 elsif (TRANSFER = '1' and CLK_PE(CLOCK_SAMPLE)='1') then
 		    CQ_D <= start_ras;
 		 else
 		    CQ_D <= start_state;
@@ -601,7 +601,7 @@ begin
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
 		 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
-			 if (TRANSFER = '1'  and CLK_D(CLOCK_SAMPLE)='1') then
+			 if (TRANSFER = '1'  and CLK_PE(CLOCK_SAMPLE)='1') then
 			 	CQ_D <= start_ras;
 			 else
 		      CQ_D <= start_state;
@@ -621,33 +621,33 @@ begin
 		 CQ_D <= start_cas;
 
       when start_cas =>
- 		 ENACLK_PRE <= '1'; --cl=3
-		 --ENACLK_PRE <= CBACK_S; --cl=2
+ 		 ENACLK_PRE <= '1'; --cl3
 		 SDRAM_OP <= c_cas;
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
- 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
 		 SDRAM_OP <= c_nop;
- 		 CQ_D <= commit_cas2; --cl=3
-		 --CQ_D <= data_wait; --cl=2
+ 		 CQ_D <= commit_cas2; --cl3
+		 --CQ_D <= data_wait; --cl2
 
       when commit_cas2 =>
- 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+		 ENACLK_PRE <= '1'; --delay comes one clock later!
 		 SDRAM_OP <= c_nop;
  		 CQ_D <= data_wait;
 
       when data_wait => 
-		 ENACLK_PRE <= '1';
+		 ENACLK_PRE <= CBACK_S;
 		 if(CBACK_S = '1')then
 			CQ_D <= precharge;
 		 else
-			CQ_D <= data_wait2;			
+			--CQ_D <= data_wait3;	--cl2		
+			CQ_D <= data_wait2;	--cl3		
 		 end if;
 		 SDRAM_OP<= c_nop;
 
       when data_wait2 =>
- 		 ENACLK_PRE <= '0'; 
+ 		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= data_wait3;
 
@@ -703,7 +703,7 @@ begin
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
-						DSACK_16BIT		<=	IDE_DSACK_D0;
+						DSACK_16BIT		<=	IDE_DSACK_D(0);
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '1')then
 						--read from IDE instead from ROM
@@ -711,10 +711,10 @@ begin
 					IDE_R_S		<= '0';
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
-						DSACK_16BIT		<=	IDE_DSACK_D1;
+						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '0')then
-					DSACK_16BIT		<= IDE_DSACK_D3;
+					DSACK_16BIT		<= IDE_DSACK_D(ROM_WAITS);
 					--ROM_EN_S			<=	'0';						
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '1';
@@ -722,10 +722,8 @@ begin
 				end if;
 
 				--generate IO-delay
-				IDE_DSACK_D0		<=	'0';
-				IDE_DSACK_D1		<= IDE_DSACK_D0;
-				IDE_DSACK_D2		<= IDE_DSACK_D1;
-				IDE_DSACK_D3		<= IDE_DSACK_D2;
+				IDE_DSACK_D(0)		<=	'0';
+				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
 				IDE_CYCLE <= '1';
 				IDE_BUF_S <= '1';
@@ -733,10 +731,7 @@ begin
 				IDE_W_S		<= '1';
 				ROM_OE_S	<= '1';
 				--ROM_EN_S	<= '1';
-				IDE_DSACK_D0		<= '1';
-				IDE_DSACK_D1		<= '1';
-				IDE_DSACK_D2		<= '1';
-				IDE_DSACK_D3		<= '1';
+				IDE_DSACK_D		<= (others => '1');
 				DSACK_16BIT			<= '1';		
 			end if;				
 		end if;
