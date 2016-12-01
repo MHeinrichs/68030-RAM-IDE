@@ -230,32 +230,20 @@ begin
 	S<="01"; --triple the clock - FB is CLK 
 
 
-	-- this reduces the complexity of the adressdecode drastically!
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
-	RAM_SPACE   	<= NIBBLE1RAM;
-	RANGER_SPACE   <= NIBBLE2RANGER;
+--	RAM_SPACE    <= '1' when A(27) = '1' and A(25 downto 20) <"111111" else '0'; 
+--	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+
                 
---  NIBBLE1RAM    <= '1' when A(31 downto 26) = "000010" else '0'; 
---  NIBBLE2RANGER <= '1' when A(31 downto 20) = x"00C" else '0'; 
+--  RAM_SPACE    <= '1' when A(31 downto 26) = "000010" else '0'; 
+--  RANGER_SPACE <= '1' when A(31 downto 20) = x"00C" else '0'; 
 --  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
 --  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
    adr_decode:process (PLL_C) begin
 		if falling_edge(PLL_C) then
 --			--nAS_PLL_C_N	<= nAS;
-
-			if(A(31 downto 26) = "000010")then
-				NIBBLE1RAM <= '1';
-			else
-				NIBBLE1RAM <= '0';
-			end if;
-
-			if(A(31 downto 20) =x"00C") then
-				NIBBLE2RANGER <= '1';
-			else
-				NIBBLE2RANGER <= '0';
-			end if;
-			
+		
 			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
 				ADR_AC_HIT <= '1';
 			else
@@ -309,13 +297,6 @@ begin
 			end if;
 		end if;
 	end process buffer_oe;
-
-
-
-   process (PLL_C) begin		
-		if rising_edge(PLL_C) then
-		end if;
-	end process;
  
  	TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
 	
@@ -403,7 +384,7 @@ begin
 			
 			
 				if(A(31 downto 26) = "000010" and
-				   A(25 downto 20) /=x"111111")then
+				   A(25 downto 20) <"111111")then
 					RAM_ACCESS <= '1';
 					RANGER_ACCESS <= '0';
 				elsif(A(31 downto 20) = x"00C")then
@@ -416,20 +397,20 @@ begin
 			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
-				--cache burst logic
-				if(CBREQ = '0' and (CQ=start_ras) 
-					and (RAM_ACCESS = '1') 
-					and A(3 downto 2) < "11")then
-					CBACK_S <='0';
-					burst_counter <= A(3 downto 2);
-				elsif(burst_counter = "11" and CQ=data_wait)then
-					CBACK_S <= '1';
-				end if;
-				
-				--burst increment
-				if(CQ=data_wait and burst_counter < "11")then
-					burst_counter <= burst_counter+1;
-				end if;								
+--				--cache burst logic
+--				if(CBREQ = '0' and (CQ=start_ras) 
+--					and (RAM_ACCESS = '1') 
+--					and A(3 downto 2) < "11")then
+--					CBACK_S <='0';
+--					burst_counter <= A(3 downto 2);
+--				elsif(burst_counter = "11" and CQ=data_wait)then
+--					CBACK_S <= '1';
+--				end if;
+--				
+--				--burst increment
+--				if(CQ=data_wait and burst_counter < "11")then
+--					burst_counter <= burst_counter+1;
+--				end if;								
 			else
 				TRANSFER_IN_PROGRES <= '0';
 				CBACK_S <= '1';
