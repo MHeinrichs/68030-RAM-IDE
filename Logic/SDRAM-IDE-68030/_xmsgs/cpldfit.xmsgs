@@ -17,9 +17,6 @@
 <msg type="warning" file="Cpld" num="43" delta="old" >Ignoring <arg fmt="%s" index="1">PERIOD:nAS:TS_CLK*1:PHASE:-:3.000nS:HIGH:1.500nS</arg> specification.  This construct does not apply to cpld designs.
 </msg>
 
-<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">CBREQ</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
-</msg>
-
 <msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">ECS</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
 </msg>
 

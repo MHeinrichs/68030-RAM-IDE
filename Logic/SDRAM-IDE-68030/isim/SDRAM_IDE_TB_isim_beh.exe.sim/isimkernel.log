@@ -1,0 +1,10 @@
+Command line:
+   SDRAM_IDE_TB_isim_beh.exe
+     -simmode  gui
+     -simrunnum  0
+     -socket  58263
+
+Sun Jan 29 11:43:01 2017
+
+
+ Elaboration Time: 0.9375 sec

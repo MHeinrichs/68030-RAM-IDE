@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -o "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe" -prj "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_beh.prj" "work.SDRAM_IDE_TB" 

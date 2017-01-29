@@ -1,0 +1,396 @@
+<!DOCTYPE FTML SYSTEM "ftml.dtd">
+<FTML><HEAD><TITLE>FMF Timing for mt48lc16m16a2 Parts</TITLE>
+<REVISION.HISTORY>
+version: |  author:     |  mod date: | changes made:
+  V1.0     M.Marinkovic   05 Jan 11    Initial release
+  V1.1     S.Petrovic     10 Apr 24    Corrected refresh period, tdevice_REF
+</REVISION.HISTORY>
+</HEAD>
+<BODY>
+<TIMESCALE>1ns</TIMESCALE>
+<MODEL>MT48LC16M16A2
+<FMFTIME>
+MT48LC16M16A2TG-75<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2P-75<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2FB-75<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2BB-75<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:6.0) (1.0:4.0:6.0) (1.0:5.0:6.0) (1.0:5.0:6.0) (1.0:5.0:6.0) (1.0:5.0:6.0))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7.5))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (44) (120000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (66) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (66) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+MT48LC16M16A2TG-7E<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2P-7E<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2FB-7E<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+MT48LC16M16A2BB-7E<SOURCE>Micron 256mSDRAM_G.p65  Rev. G; Pub. 9/03, ©2003 Micron Technology, Inc.</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:5.4) (1.0:4.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (37) (120000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (66) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (14) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+HYB39S256160DT-6<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DTL-6<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DC-6<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DCL-6<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:4.5:6) (1.0:5.0:5.4) (3:4.5:6) (1.0:5.0:5.4))
+     (IOPATH CLK DQ3 (0.8:3.5:5) (0.8:3.5:5) (3:4.5:6) (0.8:3.5:5) (3:4.5:6) (0.8:3.5:5))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2))
+    (WIDTH  (negedge CLK) (2))
+    (PERIOD (posedge CLK) (6))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (36) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (12) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+AS4C16M16SA-6TCN<SOURCE>Alliance Memory Document ASC16M16SA-C&I (Rev. 3.0)</SOURCE>
+AS4C16M16SA-6TIN<SOURCE>Alliance Memory Document ASC16M16SA-C&I (Rev. 3.0)</SOURCE>
+AS4C16M16SA-6BIN<SOURCE>Alliance Memory Document ASC16M16SA-C&I (Rev. 3.0)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:6) (1.0:4.0:6) (3:4.5:6) (1.0:5.0:6) (3:4.5:6) (1.0:5.0:6))
+     (IOPATH CLK DQ3 (0.8:3.5:5) (0.8:3.5:5) (3:4.5:6) (0.8:3.5:5) (3:4.5:6) (0.8:3.5:5))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2))
+    (WIDTH  (negedge CLK) (2))
+    (PERIOD (posedge CLK) (6))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (42) (120000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (18) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (12) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+HYB39S256160DT-7<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DTL-7<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DC-7<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DCL-7<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (37) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (63) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (14) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+HYB39S256160DT-7.5<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DTL-7.5<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DC-7.5<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DCL-7.5<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.5:4.5:6) (1.5:4.5:6) (3:5:7) (1.5:4.5:6) (3:5:7) (1.5:4.5:6))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7.5))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (45) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (67) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (67) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+HYB39S256160DT-8<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DTL-8<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DC-8<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+HYB39S256160DCL-8<SOURCE>Infineon Document No. INF0402(Ver. 1.02)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.5:4.5:6) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6))
+     (IOPATH CLK DQ3 (1.5:4.5:6) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (1))
+    (SETUP DQ0 CLK (2))
+    (WIDTH  (posedge CLK) (3))
+    (WIDTH  (negedge CLK) (3))
+    (PERIOD (posedge CLK) (8))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (48) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (70) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (70) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) )
+</TIMING></FMFTIME>
+<FMFTIME>
+
+V54C3256164VALT-6<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLT-6<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VALB-6<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLS-6<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:4.5:6) (1.0:5.0:5.4) (3:4.5:6) (1.0:5.0:5.4))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:4.5:6) (1.0:5.0:5.4) (3:4.5:6) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (6))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (40) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (12) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (12) ) ) )
+</TIMING></FMFTIME>
+</BODY></FTML>
+
+V54C3256164VALT-7<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLT-7<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VALB-7<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLS-7<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (42) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) )
+</TIMING></FMFTIME>
+</BODY></FTML>
+
+V54C3256164VALT-7PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLT-7PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VALB-7PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLS-7PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.5:4.5:6) (1.5:4.5:6) (3:5:7) (1.5:4.5:6) (3:5:7) (1.5:4.5:6))
+     (IOPATH CLK DQ3 (1.0:4.0:5.4) (1.0:4.0:5.4) (3:5:7) (1.0:5.0:5.4) (3:5:7) (1.0:5.0:5.4))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (0.8))
+    (SETUP DQ0 CLK (1.5))
+    (WIDTH  (posedge CLK) (2.5))
+    (WIDTH  (negedge CLK) (2.5))
+    (PERIOD (posedge CLK) (7))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (42) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (14) ) ) )
+</TIMING></FMFTIME>
+</BODY></FTML>
+
+V54C3256164VALT-8PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLT-8PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VALB-8PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+V54C3256164VBLS-8PC<SOURCE>Mosel Vitelic 256mb SDRAM, Document No. MSL0209(Ver. Preliminary)</SOURCE>
+<COMMENT> The values listed are for VDD=3V to 3.6V, CL=50pF, Ta=0 to +70 Celsius</COMMENT>
+<COMMENT> Typical values are derived</COMMENT>
+<TIMING>
+  (DELAY (ABSOLUTE
+     (IOPATH CLK DQ2 (1.5:4.5:6) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6))
+     (IOPATH CLK DQ2 (1.5:4.5:6) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6) (3:5.5:8) (1.5:4.5:6))
+  ))
+  (TIMINGCHECK
+    (HOLD DQ0 CLK (1))
+    (SETUP DQ0 CLK (2))
+    (WIDTH  (posedge CLK) (3))
+    (WIDTH  (negedge CLK) (3))
+    (PERIOD (posedge CLK) (8))
+ ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRAS) (DELAY  (ABSOLUTE ( DEVICE  (45) (100000) ) ) ) )
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRC) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCAR) (DELAY  (ABSOLUTE ( DEVICE  (60) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRCD) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/REF) (DELAY  (ABSOLUTE ( DEVICE  (7810) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TRP) (DELAY  (ABSOLUTE ( DEVICE  (20) ) ) ))
+ (CELL (CELLTYPE "VITALbuf" )
+     (INSTANCE %LABEL%/TWR) (DELAY  (ABSOLUTE ( DEVICE  (15) ) ) )
+</TIMING></FMFTIME>
+</BODY></FTML>
+

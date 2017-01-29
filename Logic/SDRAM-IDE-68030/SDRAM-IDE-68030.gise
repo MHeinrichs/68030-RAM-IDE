@@ -43,6 +43,9 @@
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_VM6" xil_pn:name="SDRAM_IDE.vm6"/>
     <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="SDRAM_IDE.xml"/>
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="SDRAM_IDE.xst"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="SDRAM_IDE_TB_beh.prj"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="SDRAM_IDE_TB_isim_beh.exe"/>
+    <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="SDRAM_IDE_TB_isim_beh.wdb"/>
     <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="SDRAM_IDE_build.xml"/>
     <file xil_pn:fileType="FILE_HTML" xil_pn:name="SDRAM_IDE_envsettings.html"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="SDRAM_IDE_html"/>
@@ -54,12 +57,78 @@
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
     <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
+    <file xil_pn:fileType="FILE_LOG" xil_pn:name="fuse.log"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="isim"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_CMD" xil_pn:name="isim.cmd"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_LOG" xil_pn:name="isim.log"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="netgen"/>
+    <file xil_pn:branch="PostRouteSimulation" xil_pn:fileType="FILE_NETGEN_REPORT" xil_pn:name="netgen/fit/SDRAM_IDE_timesim.nlf"/>
+    <file xil_pn:branch="PostRouteSimulation" xil_pn:fileType="FILE_SDF" xil_pn:name="netgen/fit/SDRAM_IDE_timesim.sdf"/>
+    <file xil_pn:branch="PostRouteSimulation" xil_pn:fileType="FILE_VHDL" xil_pn:name="netgen/fit/SDRAM_IDE_timesim.vhd"/>
     <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
+    <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_INI" xil_pn:name="xilinxsim.ini"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
     <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
   </files>
 
   <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1485631284" xil_pn:name="TRAN_copyInitialToAbstractSimulation" xil_pn:start_ts="1485631284">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1485686546" xil_pn:in_ck="7898156902216546281" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1485686546">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../../../FMF/conversions.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ecl_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ecl_utils.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ff_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/gen_utils.vhd"/>
+      <outfile xil_pn:name="../../../FMF/memory.vhd"/>
+      <outfile xil_pn:name="../../../FMF/state_tab_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/switch_pkg.vhd"/>
+      <outfile xil_pn:name="SDRAM_IDE.vhd"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB.vhd"/>
+      <outfile xil_pn:name="mt48lc16m16a2.vhd"/>
+      <outfile xil_pn:name="std543.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1485638862" xil_pn:name="TRAN_schematicsToHdlSim" xil_pn:prop_ck="1254684109314848003" xil_pn:start_ts="1485638862">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1485686546" xil_pn:in_ck="7898156902216546281" xil_pn:name="TRAN_copyPostAbstractToPreSimulation" xil_pn:start_ts="1485686546">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="../../../FMF/conversions.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ecl_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ecl_utils.vhd"/>
+      <outfile xil_pn:name="../../../FMF/ff_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/gen_utils.vhd"/>
+      <outfile xil_pn:name="../../../FMF/memory.vhd"/>
+      <outfile xil_pn:name="../../../FMF/state_tab_package.vhd"/>
+      <outfile xil_pn:name="../../../FMF/switch_pkg.vhd"/>
+      <outfile xil_pn:name="SDRAM_IDE.vhd"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB.vhd"/>
+      <outfile xil_pn:name="mt48lc16m16a2.vhd"/>
+      <outfile xil_pn:name="std543.vhd"/>
+    </transform>
+    <transform xil_pn:end_ts="1485686578" xil_pn:in_ck="7898156902216546281" xil_pn:name="TRAN_ISimulateBehavioralModelRunFuse" xil_pn:prop_ck="8601538567553290052" xil_pn:start_ts="1485686546">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB_beh.prj"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB_isim_beh.exe"/>
+      <outfile xil_pn:name="fuse.log"/>
+      <outfile xil_pn:name="isim"/>
+      <outfile xil_pn:name="isim.log"/>
+      <outfile xil_pn:name="xilinxsim.ini"/>
+    </transform>
+    <transform xil_pn:end_ts="1485686578" xil_pn:in_ck="4172013762103083404" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-8360638074986936463" xil_pn:start_ts="1485686578">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB_isim_beh.wdb"/>
+      <outfile xil_pn:name="isim.cmd"/>
+      <outfile xil_pn:name="isim.log"/>
+    </transform>
     <transform xil_pn:end_ts="1476620697" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1476620697">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -68,10 +137,12 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1477519784" xil_pn:in_ck="-5573540943129756328" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="-4281054687079624411" xil_pn:start_ts="1477519773">
+    <transform xil_pn:end_ts="1485686495" xil_pn:in_ck="4145160102032195629" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="-4281054687079624411" xil_pn:start_ts="1485686484">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="SDRAM_IDE.lso"/>
       <outfile xil_pn:name="SDRAM_IDE.ngc"/>
       <outfile xil_pn:name="SDRAM_IDE.ngr"/>
@@ -79,6 +150,7 @@
       <outfile xil_pn:name="SDRAM_IDE.stx"/>
       <outfile xil_pn:name="SDRAM_IDE.syr"/>
       <outfile xil_pn:name="SDRAM_IDE.xst"/>
+      <outfile xil_pn:name="SDRAM_IDE_TB_beh.prj"/>
       <outfile xil_pn:name="SDRAM_IDE_vhdl.prj"/>
       <outfile xil_pn:name="SDRAM_IDE_xst.xrpt"/>
       <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
@@ -89,7 +161,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1477519792" xil_pn:in_ck="4201451181389721853" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="6932115226421322529" xil_pn:start_ts="1477519784">
+    <transform xil_pn:end_ts="1485686502" xil_pn:in_ck="4201451181389721853" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="6932115226421322529" xil_pn:start_ts="1485686495">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="SDRAM_IDE.bld"/>
@@ -98,7 +170,7 @@
       <outfile xil_pn:name="_ngo"/>
       <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
     </transform>
-    <transform xil_pn:end_ts="1477519814" xil_pn:in_ck="-5573540943129765073" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="7312011709315620126" xil_pn:start_ts="1477519792">
+    <transform xil_pn:end_ts="1485686522" xil_pn:in_ck="-5573540943129765073" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="7312011709315620126" xil_pn:start_ts="1485686502">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -116,17 +188,27 @@
       <outfile xil_pn:name="SDRAM_IDE_html"/>
       <outfile xil_pn:name="SDRAM_IDE_pad.csv"/>
     </transform>
-    <transform xil_pn:end_ts="1477519817" xil_pn:in_ck="-5573540943129756209" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1477519814">
+    <transform xil_pn:end_ts="1485686524" xil_pn:in_ck="-5573540943129756209" xil_pn:name="TRANEXT_crtProg_xc9500" xil_pn:prop_ck="-6294026017969277533" xil_pn:start_ts="1485686522">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="SDRAM_IDE.jed"/>
     </transform>
-    <transform xil_pn:end_ts="1476567831" xil_pn:in_ck="-5573540943129756209" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1476567828">
+    <transform xil_pn:end_ts="1485639527" xil_pn:in_ck="-5573540943129756209" xil_pn:name="TRAN_timRpt" xil_pn:prop_ck="111903974446" xil_pn:start_ts="1485639525">
       <status xil_pn:value="AbortedRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
       <status xil_pn:value="InputChanged"/>
+    </transform>
+    <transform xil_pn:end_ts="1485639946" xil_pn:in_ck="-5573540943129765076" xil_pn:name="TRAN_postFitSimModel" xil_pn:prop_ck="2017698256865254635" xil_pn:start_ts="1485639942">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="InputChanged"/>
+      <outfile xil_pn:name="netgen"/>
+      <outfile xil_pn:name="netgen/fit/SDRAM_IDE_timesim.nlf"/>
+      <outfile xil_pn:name="netgen/fit/SDRAM_IDE_timesim.sdf"/>
+      <outfile xil_pn:name="netgen/fit/SDRAM_IDE_timesim.vhd"/>
     </transform>
   </transforms>
 

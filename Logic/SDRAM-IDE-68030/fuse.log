@@ -1,0 +1,34 @@
+Running: C:\Xilinx\14.6\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -o C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe -prj C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_beh.prj work.SDRAM_IDE_TB 
+ISim P.68d (signature 0x7708f090)
+Number of CPUs detected in this system: 6
+Turning on mult-threading, number of parallel sub-compilation jobs: 12 
+Determining compilation order of HDL files
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/../../../FMF/gen_utils.vhd" into library FMF
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/../../../FMF/ff_package.vhd" into library FMF
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/../../../FMF/conversions.vhd" into library FMF
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/std543.vhd" into library work
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE.vhd" into library work
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/mt48lc16m16a2.vhd" into library work
+Parsing VHDL file "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package textio
+Compiling package vital_timing
+Compiling package vital_primitives
+Compiling package gen_utils
+Compiling package ff_package
+Compiling package conversions
+Compiling architecture behavioral of entity SDRAM_IDE [sdram_ide_default]
+Compiling architecture vhdl_behavioral of entity std543 [\std543((0,0),(0,0),(0,0),(0,0),...]
+Compiling architecture vhdl_behavioral of entity mt48lc16m16a2 [\mt48lc16m16a2((0,0),(0,0),(0,0)...]
+Compiling architecture behavior of entity sdram_ide_tb
+Time Resolution for simulation is 1ps.
+Waiting for 1 sub-compilation(s) to finish...
+Compiled 17 VHDL Units
+Built simulation executable C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe
+Fuse Memory Usage: 504732 KB
+Fuse CPU Usage: 28843 ms
