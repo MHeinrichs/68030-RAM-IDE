@@ -130,6 +130,7 @@ constant RQ_TIMEOUT : integer := 255;
 				data_wait,			--001001
 				data_wait2,			--001001
 				data_wait3,			--001001
+				--pre_precharge,		--110011
 				precharge,			--110011
 				precharge_wait			--001001
 				);
@@ -167,6 +168,8 @@ signal	nAS_PLL_C_N:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
+signal TRANSFER_IN_PROGRES_D0:STD_LOGIC:= '1';
+signal TRANSFER_IN_PROGRES_D1:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
 signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
@@ -193,6 +196,8 @@ signal ADR_IDE_HIT :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal LATCH_RAM_030 :  STD_LOGIC;
 signal LATCH_RAM_030_D0 :  STD_LOGIC;
+signal OE_30_RAM_S : STD_LOGIC;
+signal OE_RAM_30_S : STD_LOGIC;
 
 begin
 
@@ -232,7 +237,7 @@ begin
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
-	RAM_SPACE    <= '1' when A(27) = '1' and A(25 downto 20) <"111111" else '0'; 
+	RAM_SPACE    <= '1' when A(27) = '1' and A(26 downto 20) <"1111111" else '0'; 
 	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
                 
@@ -271,12 +276,13 @@ begin
 		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
 			LATCH_RAM_030_D0 <='1';
-		elsif(rising_edge(PLL_C))then
+		elsif(falling_edge(PLL_C))then
 			LATCH_RAM_030_D0 <= LATCH_RAM_030;
 			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
-				LATCH_RAM_030<= '0';
+				LATCH_RAM_030<= not RW;
 			elsif(CQ=data_wait)then
+			--elsif(CQ=data_wait2 or CQ=precharge)then
 				LATCH_RAM_030<= '1';
 			end if;
 		end if;			
@@ -286,25 +292,31 @@ begin
 
 	buffer_oe: process(CLK) begin
 		if(rising_edge(clk))then
-			if((RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1') 
+			if((RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1' 
+					--or TRANSFER_IN_PROGRES_D0 ='1' 
+					--or TRANSFER_IN_PROGRES_D1 ='1'
+				) 
 				--and nAS = '0'
 				) then
-				OE_30_RAM <= RW;
-				OE_RAM_30 <= not RW;
+				OE_30_RAM_S <= RW;
+				OE_RAM_30_S <= not RW;
 			else
-				OE_30_RAM <= '1';
-				OE_RAM_30 <= '1';
+				OE_30_RAM_S <= '1';
+				OE_RAM_30_S <= '1';
 			end if;
 		end if;
 	end process buffer_oe;
+ 
+	OE_30_RAM <= OE_30_RAM_S;-- when nAS_PLL_C_N='0' else '1';
+	OE_RAM_30 <= OE_RAM_30_S;-- when nAS_PLL_C_N='0' else '1';
  
  	--TRANSFER <= (RAM_ACCESS or RANGER_ACCESS);
 	
 	--TRANSFER <= '1' when nAS='0' and (A(31 downto 26) = "000010" or A(31 downto 20) = x"00C") else '0';
 	
 	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
- 	TRANSFER_CLK <= (RAM_SPACE  or RANGER_SPACE ) and not nAS;
-	TRANSFER_RESET <= '1' when CQ=commit_ras else '0';
+ 	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
+	TRANSFER_RESET <= '1' when CQ=commit_ras or RESET ='0' else '0';
 	
 	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
 		if(TRANSFER_RESET ='1') then
@@ -349,10 +361,13 @@ begin
 
 			--transfer detection and cacheburst acknowledge
 			nAS_PLL_C_N	<= nAS;
-			if(CQ = data_wait or RESET = '0')then
-				--TRANSFER <= '0';
-				RANGER_ACCESS <= '0';
-				RAM_ACCESS <= '0';
+			
+			
+			if(RESET = '0')then
+				LDQ0	<= '1';
+				UDQ0	<= '1';
+				LDQ1	<= '1';
+				UDQ1	<= '1';
 			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
 				-- bits 0-7
@@ -389,9 +404,16 @@ begin
 					UDQ1	<= '0';
 				else
 					UDQ1	<= '1';
-				end if;			
+				end if;
+			end if;
 			
 			
+			
+			if(CQ = data_wait or RESET = '0')then
+				--TRANSFER <= '0';
+				RANGER_ACCESS <= '0';
+				RAM_ACCESS <= '0';
+			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
 				if(A(27) = '1' and
 				   A(25 downto 20) <"111111")then
 					RAM_ACCESS <= '1';
@@ -402,7 +424,8 @@ begin
 				end if;
 			end if;
 
-			
+			TRANSFER_IN_PROGRES_D0 <= TRANSFER_IN_PROGRES;
+			TRANSFER_IN_PROGRES_D1 <= TRANSFER_IN_PROGRES_D0;
 			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
@@ -576,7 +599,9 @@ begin
 		 SDRAM_OP<= c_nop;		 
 		 if (REFRESH = '1') then
 		    CQ_D <= refresh_start;
-		 elsif (TRANSFER = '1' and CLK_PE(CLOCK_SAMPLE)='1') then
+		 elsif (TRANSFER = '1'
+					 and CLK_PE(CLOCK_SAMPLE)='1'
+					) then
 		    CQ_D <= start_ras;
 		 else
 		    CQ_D <= start_state;
@@ -591,7 +616,9 @@ begin
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
 		 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
-			 if (TRANSFER = '1'  and CLK_PE(CLOCK_SAMPLE)='1') then
+			 if (TRANSFER = '1'  
+					and CLK_PE(CLOCK_SAMPLE)='1'
+					) then
 			 	CQ_D <= start_ras;
 			 else
 		      CQ_D <= start_state;
@@ -629,6 +656,7 @@ begin
       when data_wait => 
 		 ENACLK_PRE <= CBACK_S;
 		 if(CBACK_S = '1')then
+			--CQ_D <= pre_precharge;
 			CQ_D <= precharge;
 		 else
 			--CQ_D <= data_wait3;	--cl2		
@@ -645,6 +673,12 @@ begin
  		 ENACLK_PRE <= '0'; 
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= data_wait;			
+		 
+		 
+--      when pre_precharge =>
+--		 ENACLK_PRE <= '1';
+--		 SDRAM_OP <= c_nop;
+--		 CQ_D <= precharge; 		 
 		 
       when precharge =>
 		 ENACLK_PRE <= '1';
@@ -735,8 +769,8 @@ begin
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
 	IDE_BUFFER_DIR	<= IDE_BUF_S;
-	IDE_R		<= IDE_R_S;
-	IDE_W		<= IDE_W_S;
+	IDE_R		<= IDE_R_S when nAS='0' else '1';
+	IDE_W		<= IDE_W_S when nAS='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
 	ROM_WE	<= '1';
