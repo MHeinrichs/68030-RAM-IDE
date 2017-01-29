@@ -9,7 +9,3 @@ Time resolution is 1 ps
 Simulator is doing circuit initialization process.
 Finished circuit initialization process.
 at 3333 ps(1), Instance /sdram_ide_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
-# run all
-at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
-at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
-Stopped at time : 2780 ns : File "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" Line 812

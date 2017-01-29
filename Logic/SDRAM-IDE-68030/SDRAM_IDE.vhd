@@ -204,7 +204,7 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_SPACE ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	--MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
@@ -237,7 +237,7 @@ begin
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
-	RAM_SPACE    <= '1' when A(27) = '1' and A(26 downto 20) <"1111111" else '0'; 
+	RAM_SPACE    <= '1' when A(27 downto 26) = "10" and A(25 downto 20) /="111111" else '0'; 
 	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
                 
@@ -329,7 +329,7 @@ begin
 	sterm_gen:process(PLL_C)
 	begin
 		if(falling_edge(PLL_C))then
-			if(CQ=commit_cas2)then --cl3
+			if(CQ=commit_cas)then --cl3
 			--if(CQ=commit_cas)then --cl2
 				STERM_S <= '0' ;
 			elsif(nAS = '1' or RESET='0')then
