@@ -332,7 +332,7 @@ begin
 			if(CQ=commit_cas)then --cl3
 			--if(CQ=commit_cas)then --cl2
 				STERM_S <= '0' ;
-			elsif(nAS = '1' or RESET='0')then
+			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
 			end if;
 		end if;
@@ -429,20 +429,20 @@ begin
 			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
---				--cache burst logic
---				if(CBREQ = '0' and (CQ=start_ras) 
---					and (RAM_ACCESS = '1') 
---					and A(3 downto 2) < "11")then
---					CBACK_S <='0';
---					burst_counter <= A(3 downto 2);
---				elsif(burst_counter = "11" and CQ=data_wait)then
---					CBACK_S <= '1';
---				end if;
---				
---				--burst increment
---				if(CQ=data_wait and burst_counter < "11")then
---					burst_counter <= burst_counter+1;
---				end if;								
+				--cache burst logic
+				if(CBREQ = '0' and (CQ=start_ras) 
+					and (RAM_ACCESS = '1') 
+					and A(3 downto 2) < "11")then
+					CBACK_S <='0';
+					burst_counter <= A(3 downto 2);
+				elsif(burst_counter = "11" and CQ=data_wait)then
+					CBACK_S <= '1';
+				end if;
+				
+				--burst increment
+				if(CQ=data_wait and burst_counter < "11")then
+					burst_counter <= burst_counter+1;
+				end if;								
 			else
 				TRANSFER_IN_PROGRES <= '0';
 				CBACK_S <= '1';
@@ -768,9 +768,9 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S;
-	IDE_R		<= IDE_R_S when nAS='0' else '1';
-	IDE_W		<= IDE_W_S when nAS='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_R		<= IDE_R_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_W		<= IDE_W_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
 	ROM_WE	<= '1';
