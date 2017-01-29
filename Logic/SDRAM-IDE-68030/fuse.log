@@ -1,4 +1,4 @@
-Running: C:\Xilinx\14.6\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -o C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe -prj C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_beh.prj work.SDRAM_IDE_TB 
+Running: fuse.exe -relaunch -intstyle "ise" -incremental -o "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe" -prj "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_beh.prj" "work.SDRAM_IDE_TB" 
 ISim P.68d (signature 0x7708f090)
 Number of CPUs detected in this system: 6
 Turning on mult-threading, number of parallel sub-compilation jobs: 12 
@@ -25,10 +25,3 @@ Compiling package conversions
 Compiling architecture behavioral of entity SDRAM_IDE [sdram_ide_default]
 Compiling architecture vhdl_behavioral of entity std543 [\std543((0,0),(0,0),(0,0),(0,0),...]
 Compiling architecture vhdl_behavioral of entity mt48lc16m16a2 [\mt48lc16m16a2((0,0),(0,0),(0,0)...]
-Compiling architecture behavior of entity sdram_ide_tb
-Time Resolution for simulation is 1ps.
-Waiting for 1 sub-compilation(s) to finish...
-Compiled 17 VHDL Units
-Built simulation executable C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe
-Fuse Memory Usage: 504732 KB
-Fuse CPU Usage: 28843 ms

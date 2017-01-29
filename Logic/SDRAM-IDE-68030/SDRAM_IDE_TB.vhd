@@ -698,10 +698,10 @@ BEGIN
       wait for 10 ns;	
 		RESET  <='1';
       wait for CLK_period*100;
+		SIZ <="00";
 	
 		A <= x"08000000";
-		SIZ <="00";
-
+		wait until rising_edge(CLK);
 		D <= x"12345678";
 		RW <='0';
 		wait until falling_edge(CLK);
@@ -717,8 +717,11 @@ BEGIN
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 		
-		D <= (others => 'Z');
-		RW <='1';
+
+		A <= x"08000004";
+		wait until rising_edge(CLK);
+		D <= x"12345679";
+		RW <='0';
 		wait until falling_edge(CLK);
 		nAS  <='0';
 		wait until falling_edge(CLK);
@@ -729,6 +732,79 @@ BEGIN
 		wait until falling_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+
+
+		A <= x"08000008";
+		wait until rising_edge(CLK);
+		D <= x"1234567A";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
+		wait until falling_edge(CLK);
+		nDS  <='0';
+		
+		wait until STERM='0';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		nAS  <='1';
+		nDS  <='1';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+
+		A <= x"0800000C";
+		wait until rising_edge(CLK);
+		D <= x"1234567B";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
+		wait until falling_edge(CLK);
+		nDS  <='0';
+		
+		wait until STERM='0';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		nAS  <='1';
+		nDS  <='1';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+
+		A <= x"08000010";
+		wait until rising_edge(CLK);
+		D <= x"1234567C";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
+		wait until falling_edge(CLK);
+		nDS  <='0';
+		
+		wait until STERM='0';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		nAS  <='1';
+		nDS  <='1';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+
+		A <= x"08000000";
+		D <= (others => 'Z');
+		RW <='1';
+		CBREQ <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
+		wait until falling_edge(CLK);
+		nDS  <='0';
+		
+		wait until STERM='0';
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		wait until falling_edge(CLK);
+		nAS  <='1';
+		nDS  <='1';
+		CBREQ <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 
