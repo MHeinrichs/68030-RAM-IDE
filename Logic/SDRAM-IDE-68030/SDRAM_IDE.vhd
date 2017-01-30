@@ -99,7 +99,7 @@ constant CLOCK_SAMPLE : integer := 3; --cl3
 --constant CLOCK_SAMPLE : integer := 1; --cl2
 constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 2;
+constant IDE_WAITS : integer := 1;
 constant ROM_WAITS : integer := 4;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
@@ -177,14 +177,13 @@ signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
 signal CQ_D :  sdram_state_machine_type;
 signal SDRAM_OP :  sdram_control;
-signal ARAM_LOW: STD_LOGIC_VECTOR (12 downto 0);      
+signal ARAM_LOW: STD_LOGIC_VECTOR (8 downto 0);      
 signal ARAM_HIGH: STD_LOGIC_VECTOR (12 downto 0);      
 signal ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0);   
 signal ENACLK_PRE : STD_LOGIC;
 signal CLK_D : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
-signal BYTE :  STD_LOGIC_VECTOR (3 downto 0);
 signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
 signal RAM_ACCESS : STD_LOGIC;
@@ -204,7 +203,7 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_SPACE ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	--MY_CYCLE		<= '0' 	when (AUTO_CONFIG='1' or IDE_SPACE ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
@@ -216,8 +215,8 @@ begin
 	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
 
 	--enable caching for RAM
-	CIIN	<= '1' when TRANSFER_IN_PROGRES = '1' else 
-				'0' when AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' else
+	CIIN	<= '1' when RAM_ACCESS = '1' else 
+				'0' when AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or RANGER_ACCESS = '1' else
 				'Z';
 	CBACK <= CBACK_S;
 	
@@ -292,7 +291,7 @@ begin
 
 	buffer_oe: process(CLK) begin
 		if(rising_edge(clk))then
-			if((RAM_ACCESS = '1' or RANGER_ACCESS = '1' or TRANSFER_IN_PROGRES ='1' 
+			if((TRANSFER_IN_PROGRES ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
 				) 
@@ -409,12 +408,12 @@ begin
 			
 			
 			
-			if(CQ = data_wait or RESET = '0')then
+			if(nAS = '1' or RESET = '0')then
 				--TRANSFER <= '0';
 				RANGER_ACCESS <= '0';
 				RAM_ACCESS <= '0';
 			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
-				if(A(27) = '1' and
+				if(A(27 downto 26) = "10" and
 				   A(25 downto 20) <"111111")then
 					RAM_ACCESS <= '1';
 					RANGER_ACCESS <= '0';
@@ -480,9 +479,9 @@ begin
 					
 			--mux for ranger mem
 			if(RAM_ACCESS = '1') then
-				ARAM_LOW  <=  "0000" & A(25 downto 20) & A(4 downto 2);
+				ARAM_LOW  <=  A(25 downto 20) & A(4 downto 2);
 			else
-				ARAM_LOW  <=  "0000111111" & A(4 downto 2);
+				ARAM_LOW  <=  "111111" & A(4 downto 2);
 			end if;
 			
 					
@@ -504,7 +503,7 @@ begin
 				RAS <= '1';
 				CAS <= '0';
 				MEM_WE <= RW;
-				ARAM <= ARAM_LOW;
+				ARAM <= "0000" & ARAM_LOW;
 				BA <= A(19 downto 18);
 			when c_precharge=>
 				RAS <= '0';
@@ -727,7 +726,7 @@ begin
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
-						DSACK_16BIT		<=	IDE_DSACK_D(0);
+						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '1')then
 						--read from IDE instead from ROM
@@ -749,8 +748,8 @@ begin
 				IDE_DSACK_D(0)		<=	'0';
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
-				IDE_CYCLE <= '1';
 				IDE_BUF_S <= '1';
+				IDE_CYCLE <= '1';
 				IDE_R_S		<= '1';
 				IDE_W_S		<= '1';
 				ROM_OE_S	<= '1';
@@ -768,9 +767,9 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS_PLL_C_N ='0' else '1';
 	IDE_R		<= IDE_R_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
-	IDE_W		<= IDE_W_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_W		<= IDE_W_S when nAS='0' else '1';--or nAS_PLL_C_N ='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
 	ROM_WE	<= '1';
