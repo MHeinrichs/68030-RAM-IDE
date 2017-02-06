@@ -30,5 +30,5 @@ Time Resolution for simulation is 1ps.
 Waiting for 1 sub-compilation(s) to finish...
 Compiled 17 VHDL Units
 Built simulation executable C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.exe
-Fuse Memory Usage: 505416 KB
-Fuse CPU Usage: 27233 ms
+Fuse Memory Usage: 505128 KB
+Fuse CPU Usage: 29515 ms

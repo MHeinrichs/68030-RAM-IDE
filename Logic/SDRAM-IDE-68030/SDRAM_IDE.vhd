@@ -95,11 +95,11 @@ begin
   end;
 
 
-constant CLOCK_SAMPLE : integer := 3; --cl3
+constant CLOCK_SAMPLE : integer := 1; --cl3
 --constant CLOCK_SAMPLE : integer := 1; --cl2
-constant NQ_TIMEOUT : integer := 9; --cl3
+constant NQ_TIMEOUT : integer := 6; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 1;
+constant IDE_WAITS : integer := 2;
 constant ROM_WAITS : integer := 4;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
@@ -124,6 +124,7 @@ constant RQ_TIMEOUT : integer := 255;
 				refresh_wait,				--001101
 				start_ras,			--001111
 				commit_ras,			--001110
+				commit_ras2,			--001110
 				start_cas,			--001010
 				commit_cas,			--001011
 				commit_cas2,			--001001
@@ -229,38 +230,38 @@ begin
 	
 	
 	--values for the 570A
-	--S<="ZZ"; --double the clock - FB is CLK 
+	S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	S<="01"; --triple the clock - FB is CLK 
+	--S<="01"; --triple the clock - FB is CLK 
 
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" and A(25 downto 20) /="111111" else '0'; 
-	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
-
+	--RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RANGER_SPACE <= '0';
                 
 --  RAM_SPACE    <= '1' when A(31 downto 26) = "000010" else '0'; 
 --  RANGER_SPACE <= '1' when A(31 downto 20) = x"00C" else '0'; 
---  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
---  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
-   adr_decode:process (PLL_C) begin
-		if falling_edge(PLL_C) then
---			--nAS_PLL_C_N	<= nAS;
-		
-			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
-				ADR_AC_HIT <= '1';
-			else
-				ADR_AC_HIT <= '0';
-			end if;
-
-			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
-				ADR_IDE_HIT <= '1';
-			else
-				ADR_IDE_HIT <= '0';
-			end if;			
-		end if;
-	end process adr_decode;
+  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
+  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
+--   adr_decode:process (PLL_C) begin
+--		if falling_edge(PLL_C) then
+----			--nAS_PLL_C_N	<= nAS;
+--		
+--			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
+--				ADR_AC_HIT <= '1';
+--			else
+--				ADR_AC_HIT <= '0';
+--			end if;
+--
+--			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
+--				ADR_IDE_HIT <= '1';
+--			else
+--				ADR_IDE_HIT <= '0';
+--			end if;			
+--		end if;
+--	end process adr_decode;
 
 
 	--SD-RAM stuff
@@ -270,18 +271,18 @@ begin
 	LE_RAM_30 <= LATCH_RAM_030;
 	LE_30_RAM <= '0';
 
-	latch_states: process(RESET,PLL_C)
+	latch_states: process(RESET,PLL_C,nAS)
 	begin 
-		if(RESET ='0')then
+		if(RESET ='0' or nAS= '1')then
 			LATCH_RAM_030 <='1';
 			LATCH_RAM_030_D0 <='1';
-		elsif(falling_edge(PLL_C))then
+		elsif(falling_edge(PLL_C))then --tricky! because of the hold times of the latch, we have to trigger the latch half a clock BEFORE the data arrives on the bus
 			LATCH_RAM_030_D0 <= LATCH_RAM_030;
-			if(CQ=start_ras or CQ=data_wait2)then --cl2
-			--if(CQ=start_ras or CQ=data_wait2)then --cl3
+			--if(CQ=start_ras or CQ=data_wait)then --cl2
+			if(CQ=start_ras or CQ=data_wait3)then --cl3
 				LATCH_RAM_030<= not RW;
+			--elsif(CQ=data_wait3 or CQ=commit_cas)then
 			elsif(CQ=data_wait)then
-			--elsif(CQ=data_wait2 or CQ=precharge)then
 				LATCH_RAM_030<= '1';
 			end if;
 		end if;			
@@ -327,9 +328,9 @@ begin
 	
 	sterm_gen:process(PLL_C)
 	begin
-		if(falling_edge(PLL_C))then
-			if(CQ=commit_cas)then --cl3
-			--if(CQ=commit_cas)then --cl2
+		if(rising_edge(PLL_C))then
+			if(CQ=commit_cas)then --cl2
+			--if(CQ=commit_cas)then --cl3
 				STERM_S <= '0' ;
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
@@ -342,8 +343,8 @@ begin
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
-	ARAM_OPTCODE <= "0001000110010"; --cl3
-	--ARAM_OPTCODE <= "0001000100010"; --cl2
+	--ARAM_OPTCODE <= "0001000110010"; --cl3
+	ARAM_OPTCODE <= "0001000100010"; --cl2
 
 	ram_sizing: process(PLL_C) begin
 		if(rising_edge(PLL_C)) then
@@ -428,20 +429,20 @@ begin
 			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
-				--cache burst logic
-				if(CBREQ = '0' and (CQ=start_ras) 
-					and (RAM_ACCESS = '1') 
-					and A(3 downto 2) < "11")then
-					CBACK_S <='0';
-					burst_counter <= A(3 downto 2);
-				elsif(burst_counter = "11" and CQ=data_wait)then
-					CBACK_S <= '1';
-				end if;
-				
-				--burst increment
-				if(CQ=data_wait and burst_counter < "11")then
-					burst_counter <= burst_counter+1;
-				end if;								
+--				--cache burst logic
+--				if(CBREQ = '0' and (CQ=start_ras) 
+--					and (RAM_ACCESS = '1') 
+--					and A(3 downto 2) < "11")then
+--					CBACK_S <='0';
+--					burst_counter <= A(3 downto 2);
+--				elsif(burst_counter = "11" and CQ=data_wait)then
+--					CBACK_S <= '1';
+--				end if;
+--				
+--				--burst increment
+--				if(CQ=data_wait and burst_counter < "11")then
+--					burst_counter <= burst_counter+1;
+--				end if;								
 			else
 				TRANSFER_IN_PROGRES <= '0';
 				CBACK_S <= '1';
@@ -478,7 +479,7 @@ begin
 			end if;
 					
 			--mux for ranger mem
-			if(RAM_ACCESS = '1') then
+			if(A(27) = '1') then
 				ARAM_LOW  <=  A(25 downto 20) & A(4 downto 2);
 			else
 				ARAM_LOW  <=  "111111" & A(4 downto 2);
@@ -634,6 +635,11 @@ begin
 	  when commit_ras =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
+		 CQ_D <= commit_ras2;
+
+	  when commit_ras2 =>
+		 ENACLK_PRE <= '1';
+		 SDRAM_OP<= c_nop;
 		 CQ_D <= start_cas;
 
       when start_cas =>
@@ -642,10 +648,11 @@ begin
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
-		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+ 		 ENACLK_PRE <= '1'; --cl2
+		 --ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
 		 SDRAM_OP <= c_nop;
- 		 CQ_D <= commit_cas2; --cl3
-		 --CQ_D <= data_wait; --cl2
+ 		 --CQ_D <= commit_cas2; --cl3
+		 CQ_D <= data_wait; --cl2
 
       when commit_cas2 =>
 		 ENACLK_PRE <= '1'; --delay comes one clock later!
@@ -658,8 +665,8 @@ begin
 			--CQ_D <= pre_precharge;
 			CQ_D <= precharge;
 		 else
-			--CQ_D <= data_wait3;	--cl2		
-			CQ_D <= data_wait2;	--cl3		
+			CQ_D <= data_wait3;	--cl2		
+			--CQ_D <= data_wait2;	--cl3		
 		 end if;
 		 SDRAM_OP<= c_nop;
 
@@ -669,7 +676,8 @@ begin
 		 CQ_D <= data_wait3;
 
       when data_wait3 =>
- 		 ENACLK_PRE <= '0'; 
+ 		 ENACLK_PRE <= '1'; --cl2
+ 		 --ENACLK_PRE <= '0'; --cl3
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= data_wait;			
 		 
@@ -720,7 +728,8 @@ begin
 				IDE_CYCLE <= '0';
 				IDE_BUF_S <= not RW;
 
-				if(RW = '0')then
+				if(RW = '0' and IDE_WAIT = '1')then
+					IDE_DSACK_D(0)		<=	'0';
 					--the write goes to the hdd!
 					IDE_W_S		<= '0';
 					IDE_R_S		<= '1';
@@ -728,8 +737,9 @@ begin
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
-				elsif(RW = '1' and IDE_ENABLE = '1')then
-						--read from IDE instead from ROM
+				elsif(RW = '1' and IDE_ENABLE = '1' and IDE_WAIT = '1')then
+					IDE_DSACK_D(0)		<=	'0';
+					--read from IDE instead from ROM
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '0';
 					ROM_OE_S		<=	'1';
@@ -737,6 +747,7 @@ begin
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '0')then
+					IDE_DSACK_D(0)		<=	'0';
 					DSACK_16BIT		<= IDE_DSACK_D(ROM_WAITS);
 					--ROM_EN_S			<=	'0';						
 					IDE_W_S		<= '1';
@@ -745,7 +756,6 @@ begin
 				end if;
 
 				--generate IO-delay
-				IDE_DSACK_D(0)		<=	'0';
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
 				IDE_BUF_S <= '1';
@@ -767,8 +777,8 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS_PLL_C_N ='0' else '1';
-	IDE_R		<= IDE_R_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S;-- when nAS_PLL_C_N ='0' else '1';
+	IDE_R		<= IDE_R_S when nAS='0' else '1';
 	IDE_W		<= IDE_W_S when nAS='0' else '1';--or nAS_PLL_C_N ='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
@@ -785,8 +795,8 @@ begin
 		if	reset = '0' then
 			-- reset active ...
 			AUTO_CONFIG_PAUSE <= '0';
-			AUTO_CONFIG_DONE_CYCLE	<= '0';
-			AUTO_CONFIG_DONE	<= '0';
+			AUTO_CONFIG_DONE_CYCLE	<= '1';
+			AUTO_CONFIG_DONE	<= '1';
 			
 			--use these presets for CDTV: This makes the DMAC config first!
 			--AUTO_CONFIG_PAUSE <='1';
