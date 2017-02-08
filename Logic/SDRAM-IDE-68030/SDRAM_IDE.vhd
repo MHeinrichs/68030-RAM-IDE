@@ -95,11 +95,11 @@ begin
   end;
 
 
-constant CLOCK_SAMPLE : integer := 1; --cl3
+constant CLOCK_SAMPLE : integer := 2; --cl3
 --constant CLOCK_SAMPLE : integer := 1; --cl2
-constant NQ_TIMEOUT : integer := 6; --cl3
+constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 2;
+constant IDE_WAITS : integer := 1;
 constant ROM_WAITS : integer := 4;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
@@ -166,6 +166,7 @@ signal	IDE_BUF_S:STD_LOGIC;
 signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
 signal	nAS_PLL_C_N:STD_LOGIC;
+signal	nAS_PLL_C_N1:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
@@ -230,38 +231,38 @@ begin
 	
 	
 	--values for the 570A
-	S<="ZZ"; --double the clock - FB is CLK 
+	--S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	--S<="01"; --triple the clock - FB is CLK 
+	S<="01"; --triple the clock - FB is CLK 
 
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" and A(25 downto 20) /="111111" else '0'; 
-	--RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
-	RANGER_SPACE <= '0';
+	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+
                 
 --  RAM_SPACE    <= '1' when A(31 downto 26) = "000010" else '0'; 
 --  RANGER_SPACE <= '1' when A(31 downto 20) = x"00C" else '0'; 
-  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
-  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
---   adr_decode:process (PLL_C) begin
---		if falling_edge(PLL_C) then
-----			--nAS_PLL_C_N	<= nAS;
---		
---			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
---				ADR_AC_HIT <= '1';
---			else
---				ADR_AC_HIT <= '0';
---			end if;
---
---			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
---				ADR_IDE_HIT <= '1';
---			else
---				ADR_IDE_HIT <= '0';
---			end if;			
---		end if;
---	end process adr_decode;
+--  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
+--  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
+   adr_decode:process (PLL_C) begin
+		if falling_edge(PLL_C) then
+--			--nAS_PLL_C_N	<= nAS;
+		
+			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
+				ADR_AC_HIT <= '1';
+			else
+				ADR_AC_HIT <= '0';
+			end if;
+
+			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
+				ADR_IDE_HIT <= '1';
+			else
+				ADR_IDE_HIT <= '0';
+			end if;			
+		end if;
+	end process adr_decode;
 
 
 	--SD-RAM stuff
@@ -271,18 +272,18 @@ begin
 	LE_RAM_30 <= LATCH_RAM_030;
 	LE_30_RAM <= '0';
 
-	latch_states: process(RESET,PLL_C,nAS)
+	latch_states: process(RESET,PLL_C)
 	begin 
-		if(RESET ='0' or nAS= '1')then
+		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
 			LATCH_RAM_030_D0 <='1';
-		elsif(falling_edge(PLL_C))then --tricky! because of the hold times of the latch, we have to trigger the latch half a clock BEFORE the data arrives on the bus
+		elsif(falling_edge(PLL_C))then
 			LATCH_RAM_030_D0 <= LATCH_RAM_030;
-			--if(CQ=start_ras or CQ=data_wait)then --cl2
-			if(CQ=start_ras or CQ=data_wait3)then --cl3
+			if(CQ=start_ras or CQ=data_wait2)then --cl2
+			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LATCH_RAM_030<= not RW;
-			--elsif(CQ=data_wait3 or CQ=commit_cas)then
 			elsif(CQ=data_wait)then
+			--elsif(CQ=data_wait2 or CQ=precharge)then
 				LATCH_RAM_030<= '1';
 			end if;
 		end if;			
@@ -290,8 +291,8 @@ begin
 
 
 
-	buffer_oe: process(CLK) begin
-		if(rising_edge(clk))then
+	buffer_oe: process(PLL_C) begin
+		if(rising_edge(PLL_C))then
 			if((TRANSFER_IN_PROGRES ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
@@ -316,7 +317,7 @@ begin
 	
 	--TRANSFER <= not nAS and ((NIBBLE0ZERO and NIBBLE1RAM) or (NIBBLE0ZERO and NIBBLE1ZERO and NIBBLE2RANGER));
  	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
-	TRANSFER_RESET <= '1' when CQ=commit_ras or RESET ='0' else '0';
+	TRANSFER_RESET <= '1' when CQ=precharge or RESET ='0' else '0';
 	
 	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
 		if(TRANSFER_RESET ='1') then
@@ -328,9 +329,9 @@ begin
 	
 	sterm_gen:process(PLL_C)
 	begin
-		if(rising_edge(PLL_C))then
-			if(CQ=commit_cas)then --cl2
-			--if(CQ=commit_cas)then --cl3
+		if(falling_edge(PLL_C))then
+			if(CQ=commit_cas)then --cl3
+			--if(CQ=commit_cas)then --cl2
 				STERM_S <= '0' ;
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
@@ -343,8 +344,8 @@ begin
 
 	ARAM_HIGH <= A(17 downto 5);
 	ARAM_PRECHARGE <= "0010000000000";
-	--ARAM_OPTCODE <= "0001000110010"; --cl3
-	ARAM_OPTCODE <= "0001000100010"; --cl2
+	ARAM_OPTCODE <= "0001000110010"; --cl3
+	--ARAM_OPTCODE <= "0001000100010"; --cl2
 
 	ram_sizing: process(PLL_C) begin
 		if(rising_edge(PLL_C)) then
@@ -361,14 +362,14 @@ begin
 
 			--transfer detection and cacheburst acknowledge
 			nAS_PLL_C_N	<= nAS;
+			nAS_PLL_C_N1 <= nAS_PLL_C_N;
 			
-			
-			if(RESET = '0')then
+			if(RESET = '0' or nAS='1')then
 				LDQ0	<= '1';
 				UDQ0	<= '1';
 				LDQ1	<= '1';
 				UDQ1	<= '1';
-			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
+			else --if(nAS_PLL_C_N = '0' and nAS_PLL_C_N1='1')then			
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
 				-- bits 0-7
 				if(RW='1' or ( SIZ="00" or 
@@ -409,11 +410,11 @@ begin
 			
 			
 			
-			if(nAS = '1' or RESET = '0')then
+			if(CQ = precharge or RESET = '0')then
 				--TRANSFER <= '0';
 				RANGER_ACCESS <= '0';
 				RAM_ACCESS <= '0';
-			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
+			elsif(nAS_PLL_C_N = '0' and nAS_PLL_C_N1='1')then			
 				if(A(27 downto 26) = "10" and
 				   A(25 downto 20) <"111111")then
 					RAM_ACCESS <= '1';
@@ -460,7 +461,7 @@ begin
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
-			elsif(CLK_PE(CLOCK_SAMPLE)='1' and RQ <RQ_TIMEOUT) then --count on edges
+			elsif(CLK_PE(0)='1' and RQ <RQ_TIMEOUT) then --count on edges
 				RQ <= RQ + 1;
 			end if;
 			
@@ -635,7 +636,8 @@ begin
 	  when commit_ras =>
 		 ENACLK_PRE <= '1';
 		 SDRAM_OP<= c_nop;
-		 CQ_D <= commit_ras2;
+		 CQ_D <= commit_ras2; --150Mhz
+		 --CQ_D <= start_cas; --100MHz
 
 	  when commit_ras2 =>
 		 ENACLK_PRE <= '1';
@@ -643,16 +645,15 @@ begin
 		 CQ_D <= start_cas;
 
       when start_cas =>
- 		 ENACLK_PRE <= '1'; --cl3
+ 		 ENACLK_PRE <= '1';
 		 SDRAM_OP <= c_cas;
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
- 		 ENACLK_PRE <= '1'; --cl2
-		 --ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+		 ENACLK_PRE <= '1'; --delay comes two clocks later!
 		 SDRAM_OP <= c_nop;
- 		 --CQ_D <= commit_cas2; --cl3
-		 CQ_D <= data_wait; --cl2
+ 		 CQ_D <= commit_cas2; --cl3
+		 --CQ_D <= data_wait; --cl2
 
       when commit_cas2 =>
 		 ENACLK_PRE <= '1'; --delay comes one clock later!
@@ -665,8 +666,8 @@ begin
 			--CQ_D <= pre_precharge;
 			CQ_D <= precharge;
 		 else
-			CQ_D <= data_wait3;	--cl2		
-			--CQ_D <= data_wait2;	--cl3		
+			--CQ_D <= data_wait3;	--100Mhz		
+			CQ_D <= data_wait2;	--150Mhz		
 		 end if;
 		 SDRAM_OP<= c_nop;
 
@@ -676,8 +677,7 @@ begin
 		 CQ_D <= data_wait3;
 
       when data_wait3 =>
- 		 ENACLK_PRE <= '1'; --cl2
- 		 --ENACLK_PRE <= '0'; --cl3
+ 		 ENACLK_PRE <= '0'; 
 		 SDRAM_OP<= c_nop;
 		 CQ_D <= data_wait;			
 		 
@@ -777,8 +777,8 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S;-- when nAS_PLL_C_N ='0' else '1';
-	IDE_R		<= IDE_R_S when nAS='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS_PLL_C_N ='0' else '1';
+	IDE_R		<= IDE_R_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
 	IDE_W		<= IDE_W_S when nAS='0' else '1';--or nAS_PLL_C_N ='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
@@ -795,8 +795,8 @@ begin
 		if	reset = '0' then
 			-- reset active ...
 			AUTO_CONFIG_PAUSE <= '0';
-			AUTO_CONFIG_DONE_CYCLE	<= '1';
-			AUTO_CONFIG_DONE	<= '1';
+			AUTO_CONFIG_DONE_CYCLE	<= '0';
+			AUTO_CONFIG_DONE	<= '0';
 			
 			--use these presets for CDTV: This makes the DMAC config first!
 			--AUTO_CONFIG_PAUSE <='1';
