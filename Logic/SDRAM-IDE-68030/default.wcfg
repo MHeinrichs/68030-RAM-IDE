@@ -60,6 +60,10 @@
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/sterm" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sterm</obj_property>
+      <obj_property name="ObjectShortName">sterm</obj_property>
+   </wvobject>
    <wvobject fp_name="/sdram_ide_tb/nas" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">nas</obj_property>
       <obj_property name="ObjectShortName">nas</obj_property>
@@ -67,10 +71,6 @@
    <wvobject fp_name="/sdram_ide_tb/nds" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">nds</obj_property>
       <obj_property name="ObjectShortName">nds</obj_property>
-   </wvobject>
-   <wvobject fp_name="/sdram_ide_tb/sterm" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">sterm</obj_property>
-      <obj_property name="ObjectShortName">sterm</obj_property>
    </wvobject>
    <wvobject fp_name="/sdram_ide_tb/d" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">d[31:0]</obj_property>

@@ -668,17 +668,17 @@ BEGIN
    PLL_CLK_process :process
    begin
 		PLL_C <= '0';
-		wait for CLK_period/4;
+		wait for CLK_period/6;
 		PLL_C <= '1';
-		wait for CLK_period/4;
+		wait for CLK_period/6;
    end process;
 
    PLL_H_CLK_process :process
    begin
 		PLL_C_HALF <= '0';
-		wait for CLK_period/2;
+		wait for CLK_period/3;
 		PLL_C_HALF <= '1';
-		wait for CLK_period/2;
+		wait for CLK_period/3;
    end process;
 
    -- Stimulus process
@@ -698,95 +698,92 @@ BEGIN
       wait for 10 ns;	
 		RESET  <='1';
       wait for CLK_period*100;
-		SIZ <="00";
-	
+		wait until rising_edge(CLK);
+		SIZ <="00";	
 		A <= x"08000000";
+		wait until falling_edge(CLK);
+		nAS  <='0';
 		wait until rising_edge(CLK);
 		D <= x"12345678";
 		RW <='0';
 		wait until falling_edge(CLK);
-		nAS  <='0';
-		wait until falling_edge(CLK);
 		nDS  <='0';
 		
 		wait until STERM='0';
-		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
-		
 
+
+		wait until rising_edge(CLK);
 		A <= x"08000004";
+		wait until falling_edge(CLK);
+		nAS  <='0';
 		wait until rising_edge(CLK);
 		D <= x"12345679";
 		RW <='0';
 		wait until falling_edge(CLK);
-		nAS  <='0';
-		wait until falling_edge(CLK);
 		nDS  <='0';
 		
 		wait until STERM='0';
-		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 
 
+		wait until rising_edge(CLK);
 		A <= x"08000008";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
 		wait until rising_edge(CLK);
 		D <= x"1234567A";
-		RW <='0';
 		wait until falling_edge(CLK);
-		nAS  <='0';
-		wait until falling_edge(CLK);
-		nDS  <='0';
-		
+		nDS  <='0';		
 		wait until STERM='0';
-		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 
+		wait until rising_edge(CLK);
 		A <= x"0800000C";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
 		wait until rising_edge(CLK);
 		D <= x"1234567B";
-		RW <='0';
-		wait until falling_edge(CLK);
-		nAS  <='0';
 		wait until falling_edge(CLK);
 		nDS  <='0';
-		
 		wait until STERM='0';
-		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 
+		wait until rising_edge(CLK);
 		A <= x"08000010";
+		RW <='0';
+		wait until falling_edge(CLK);
+		nAS  <='0';
 		wait until rising_edge(CLK);
 		D <= x"1234567C";
-		RW <='0';
-		wait until falling_edge(CLK);
-		nAS  <='0';
 		wait until falling_edge(CLK);
 		nDS  <='0';
-		
 		wait until STERM='0';
-		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 
+		wait until rising_edge(CLK);
 		A <= x"08000000";
 		D <= (others => 'Z');
 		RW <='1';
@@ -794,13 +791,12 @@ BEGIN
 		wait until falling_edge(CLK);
 		nAS  <='0';
 		nDS  <='0';
-		wait until falling_edge(CLK);		
 		wait until STERM='0';
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
 		wait until falling_edge(CLK);
-		wait until falling_edge(CLK);
+		wait until rising_edge(CLK);
 		nAS  <='1';
 		nDS  <='1';
 		CBREQ <='1';
