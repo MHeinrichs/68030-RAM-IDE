@@ -1532,6 +1532,14 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/IDE_CYC
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_and00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_and00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_and00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -1633,14 +1641,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ROM_OE_
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ROM_OE_S_and00012 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_D0_and00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_D0_and00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -1952,11 +1952,19 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR4"
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE6 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/ENACLK_PRE7 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -2508,102 +2516,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_m
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>2 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>3 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>6 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>7 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>8 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>9 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>10 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>11 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>12 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>13 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>14 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>15 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>16 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>17 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>18 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>19 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>20 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>21 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>22 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>23 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>24 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<0>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -2709,6 +2621,102 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_m
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<0>27 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>1 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>2 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>3 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>4 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>5 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>6 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>7 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>8 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>9 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>10 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>11 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>12 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>13 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>14 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>15 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>16 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>17 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>18 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>19 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>20 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>21 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>22 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>23 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_mux0001<2>24 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -3748,38 +3756,6 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/TRANSFE
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_not00011 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_not00012 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/Dout2_not00013 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_not00011 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_not00012 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_not00013 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_not00014 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_not00015 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND5"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/LATCH_RAM_030_mux00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
@@ -3820,31 +3796,15 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/IDE_ENA
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/D_Dout2_not00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/D_Dout2_not00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00004 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00005 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00006 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
-
-CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00007 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/D_Dout2_not00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
@@ -3861,6 +3821,50 @@ CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/CIIN_an
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/CIIN_and00004 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND4"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00001 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00002 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00003 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00004 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00005 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00006 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00007 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "INV"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00008 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND2"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux00009 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND4"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux000010 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "AND3"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
+
+CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE/AUTO_CONFIG_DONE_CYCLE_mux000011 prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "OR2"
 
 CS: block property: block_name=/SDRAM_IDE/EXPANDED_FlattenFull/SDRAM_IDE prop_name=TYPE prop_terse=XDM_PROPERTY_STRING "TYPE" "SDRAM_IDE"
 

@@ -206,5 +206,3 @@ INST "A<28>" TNM = Address-Timing;
 INST "A<29>" TNM = Address-Timing;
 INST "A<30>" TNM = Address-Timing;
 INST "A<31>" TNM = Address-Timing;
-TIMEGRP "Address-Timing" OFFSET = IN 5 ns VALID 10 ns BEFORE "nAS" RISING;
-TIMEGRP "Address-Timing" OFFSET = IN 5 ns VALID 10 ns BEFORE "nAS" FALLING;
