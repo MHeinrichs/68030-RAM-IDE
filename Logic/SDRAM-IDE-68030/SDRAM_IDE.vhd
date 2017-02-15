@@ -95,7 +95,7 @@ begin
   end;
 
 
-constant CLOCK_SAMPLE : integer := 3; --cl3
+constant CLOCK_SAMPLE : integer := 2; --cl3
 --constant CLOCK_SAMPLE : integer := 1; --cl2
 constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
@@ -178,8 +178,8 @@ signal SDRAM_OP :  sdram_control;
 signal ARAM_LOW: STD_LOGIC_VECTOR (8 downto 0);      
 signal ARAM_HIGH: STD_LOGIC_VECTOR (12 downto 0);      
 constant ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0) := "0010000000000";   
-constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
---"0001000100010"; --cl2
+--constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
+constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
 signal ENACLK_PRE : STD_LOGIC;
 signal CLK_D : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
@@ -227,21 +227,21 @@ begin
 	
 	
 	--values for the 570A
-	--S<="ZZ"; --double the clock - FB is CLK 
+	S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	S<="01"; --triple the clock - FB is CLK 
+	--S<="01"; --triple the clock - FB is CLK 
 
 
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" and A(25 downto 20) /="111111" else '0'; 
-	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
                 
 --  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
 --  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
    adr_decode:process (PLL_C) begin
-		if falling_edge(PLL_C) then
+		if rising_edge(PLL_C) then
 --			--nAS_PLL_C_N	<= nAS;
 		
 			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
@@ -271,7 +271,7 @@ begin
 		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
 			LATCH_RAM_030_D0 <='1';
-		elsif(falling_edge(PLL_C))then
+		elsif(rising_edge(PLL_C))then
 			LATCH_RAM_030_D0 <= LATCH_RAM_030;
 			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
@@ -625,8 +625,8 @@ begin
       when commit_cas =>
 		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
 		 SDRAM_OP <= c_nop;
- 		 CQ_D <= commit_cas2; --cl3
-		 --CQ_D <= data_wait; --cl2
+ 		 --CQ_D <= commit_cas2; --cl3
+		 CQ_D <= data_wait; --cl2
 
       when commit_cas2 =>
 		 ENACLK_PRE <= '1'; --delay comes one clock later!
@@ -639,8 +639,8 @@ begin
 			--CQ_D <= pre_precharge;
 			CQ_D <= precharge;
 		 else
-			--CQ_D <= data_wait3;	--cl2		
-			CQ_D <= data_wait2;	--cl3		
+			CQ_D <= data_wait3;	--cl2		
+			--CQ_D <= data_wait2;	--cl3		
 		 end if;
 		 SDRAM_OP<= c_nop;
 
