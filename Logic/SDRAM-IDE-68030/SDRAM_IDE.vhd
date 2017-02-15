@@ -95,12 +95,12 @@ begin
   end;
 
 
-constant CLOCK_SAMPLE : integer := 2; --cl3
---constant CLOCK_SAMPLE : integer := 1; --cl2
-constant NQ_TIMEOUT : integer := 9; --cl3
---constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 1;
-constant ROM_WAITS : integer := 4;
+--constant CLOCK_SAMPLE : integer := 3; --cl3
+constant CLOCK_SAMPLE : integer := 2; --cl2
+--constant NQ_TIMEOUT : integer := 9; --cl3
+constant NQ_TIMEOUT : integer := 6; --cl2
+constant IDE_WAITS : integer := 2;
+constant ROM_WAITS : integer := 8;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
 	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
@@ -202,7 +202,7 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= '0' 	when (AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	MY_CYCLE		<= '0' 	when (ADR_IDE_HIT='1' or ADR_AC_HIT ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
@@ -214,7 +214,7 @@ begin
 
 	--enable caching for RAM
 	CIIN	<= '1' when RAM_ACCESS = '1' else 
-				'0' when AUTO_CONFIG_D0='1' or IDE_CYCLE ='0' or RANGER_ACCESS = '1' else
+				'0' when ((ADR_IDE_HIT='1' or ADR_AC_HIT ='0') and nAS='0') or RANGER_ACCESS = '1' else
 				'Z';
 	CBACK <= CBACK_S;
 	
@@ -285,8 +285,8 @@ begin
 
 
 
-	buffer_oe: process(CLK) begin
-		if(rising_edge(clk))then
+	buffer_oe: process(PLL_C) begin
+		if(rising_edge(PLL_C))then
 			if((TRANSFER_IN_PROGRES ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
@@ -319,8 +319,8 @@ begin
 	sterm_gen:process(PLL_C)
 	begin
 		if(falling_edge(PLL_C))then
-			if(CQ=commit_cas)then --cl3
-			--if(CQ=commit_cas)then --cl2
+			--if(CQ=commit_cas)then --cl3
+			if(CQ=start_cas)then --cl2
 				STERM_S <= '0' ;
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
@@ -623,7 +623,8 @@ begin
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
-		 ENACLK_PRE <= CBACK_S; --delay comes two clocks later!
+		 --ENACLK_PRE <= CBACK_S; --cl3 delay comes two clocks later!
+		 ENACLK_PRE <= '1'; --cl2
 		 SDRAM_OP <= c_nop;
  		 --CQ_D <= commit_cas2; --cl3
 		 CQ_D <= data_wait; --cl2
@@ -639,15 +640,16 @@ begin
 			--CQ_D <= pre_precharge;
 			CQ_D <= precharge;
 		 else
-			CQ_D <= data_wait3;	--cl2		
-			--CQ_D <= data_wait2;	--cl3		
+			
+			CQ_D <= data_wait2;
 		 end if;
 		 SDRAM_OP<= c_nop;
 
       when data_wait2 =>
  		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
-		 CQ_D <= data_wait3;
+		 --CQ_D <= data_wait3; --cl3
+		 CQ_D <= data_wait;	--cl2		
 
       when data_wait3 =>
  		 ENACLK_PRE <= '0'; 
@@ -675,13 +677,13 @@ begin
 	
 	--IDE STUFF
 	-- this is the clocked process
-	ide_en_gen: process (reset, clk)
+	ide_en_gen: process (reset, PLL_C)
 	begin
 	
 		if	(reset = '0') then
 			-- reset
 			IDE_ENABLE			<='0';
-		elsif rising_edge(clk) then
+		elsif rising_edge(PLL_C) then
 			if(IDE_SPACE = '1' and nAS = '0')then
 				if(RW = '0')then
 					--enable IDE on the first write on this IO-space!
@@ -693,10 +695,10 @@ begin
 
 	
 	-- this is the clocked process
-	ide_rw_gen: process (clk)
+	ide_rw_gen: process (PLL_C)
 	begin
 	
-		if rising_edge(clk) then
+		if rising_edge(PLL_C) then
 			if(IDE_SPACE = '1' and nAS = '0')then
 				IDE_CYCLE <= '0';
 				IDE_BUF_S <= not RW;
@@ -750,9 +752,9 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS_PLL_C_N ='0' else '1';
-	IDE_R		<= IDE_R_S when nAS='0' or nAS_PLL_C_N ='0' else '1';
-	IDE_W		<= IDE_W_S when nAS='0' else '1';--or nAS_PLL_C_N ='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S;-- when nAS_PLL_C_N ='0' else '1';
+	IDE_R		<= IDE_R_S;-- when nAS='0' or nAS_PLL_C_N ='0' else '1';
+	IDE_W		<= IDE_W_S;-- when nAS='0' else '1';--or nAS_PLL_C_N ='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
 	ROM_WE	<= '1';
@@ -763,7 +765,7 @@ begin
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
 			Dout2;	
 	
-	autoconfig: process (reset, clk)
+	autoconfig: process (reset, PLL_C)
 	begin
 		if	reset = '0' then
 			-- reset active ...
@@ -779,7 +781,7 @@ begin
 			SHUT_UP	<= '1';
 			IDE_BASEADR <= x"FF";
 			AUTO_CONFIG_D0 <= '0';
-		elsif rising_edge(clk) then -- no reset, so wait for rising edge of the clock		
+		elsif rising_edge(PLL_C) then -- no reset, so wait for rising edge of the clock		
 			--nDS_D0				<=nDS;
 			--nDS_D1				<=nDS_D0;
 			nAS_D0				<=nAS;
