@@ -192,7 +192,6 @@ signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal LATCH_RAM_030 :  STD_LOGIC;
 signal OE_30_RAM_S : STD_LOGIC;
 signal OE_RAM_30_S : STD_LOGIC;
-signal SM_CLK : STD_LOGIC;
 begin
 
 
@@ -229,7 +228,6 @@ begin
 	--S<="00"; --disable
 	--S<="Z0"; --recover the clock (1x
 
-	SM_CLK <= PLL_C;--clk;--not PLL_C;
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
@@ -237,8 +235,8 @@ begin
 										else '0'; 
 	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
-   adr_decode:process (SM_CLK) begin
-		if rising_edge(SM_CLK) then
+   adr_decode:process (PLL_C) begin
+		if rising_edge(PLL_C) then
 			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
 				ADR_AC_HIT <= '1';
 			else
@@ -255,7 +253,7 @@ begin
 
 
 	--SD-RAM stuff
-	CLK_RAM 	<= not SM_CLK;
+	CLK_RAM 	<= not PLL_C;
 	CLK_EN 	<= ENACLK_PRE;
 
 	LE_RAM_30 <= LATCH_RAM_030;
@@ -266,11 +264,11 @@ begin
 
 	--BA <= "00" when SDRAM_OP =c_opt_code else A(19 downto 18);
 
-	latch_states: process(RESET,SM_CLK)
+	latch_states: process(RESET,PLL_C)
 	begin 
 		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
-		elsif(rising_edge(SM_CLK))then
+		elsif(rising_edge(PLL_C))then
 			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LATCH_RAM_030<= not RW;
@@ -283,8 +281,8 @@ begin
 
 
 
-	buffer_oe: process(SM_CLK) begin
-		if(rising_edge(SM_CLK))then
+	buffer_oe: process(PLL_C) begin
+		if(rising_edge(PLL_C))then
 			if((TRANSFER_IN_PROGRES ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
@@ -311,11 +309,11 @@ begin
 		end if;
 	end process transfer_latch;
 	
-	sterm_gen:process(SM_CLK)
+	sterm_gen:process(PLL_C)
 	begin
-		if(falling_edge(SM_CLK))then
-			--if(CQ=commit_cas)then --cl3
-			if(CQ=start_cas)then --cl2
+		if(falling_edge(PLL_C))then
+			if(CQ=commit_cas)then --cl3
+			--if(CQ=start_cas)then --cl2
 				STERM_S <= '0' ;
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
@@ -324,8 +322,8 @@ begin
 	end process sterm_gen;
  
 	-- ram register Section   
-	ram_ctrl:process (SM_CLK) begin
-      if rising_edge(SM_CLK) then		
+	ram_ctrl:process (PLL_C) begin
+      if rising_edge(PLL_C) then		
 			CLK_D	<= CLK;
 			CLK_PE(0) <= CLK and not CLK_D; --the edge!			
 			CLK_PE(CLOCK_SAMPLE downto 1) <= CLK_PE((CLOCK_SAMPLE-1) downto 0);
@@ -664,13 +662,13 @@ begin
 	
 	--IDE STUFF
 	-- this is the clocked process
-	ide_en_gen: process (reset, SM_CLK)
+	ide_en_gen: process (reset, PLL_C)
 	begin
 	
 		if	(reset = '0') then
 			-- reset
 			IDE_ENABLE			<='0';
-		elsif rising_edge(SM_CLK) then
+		elsif rising_edge(PLL_C) then
 			if(IDE_SPACE = '1' and nAS = '0')then
 				if(RW = '0')then
 					--enable IDE on the first write on this IO-space!
@@ -682,10 +680,10 @@ begin
 
 	
 	-- this is the clocked process
-	ide_rw_gen: process (SM_CLK)
+	ide_rw_gen: process (PLL_C)
 	begin
 	
-		if rising_edge(SM_CLK) then
+		if rising_edge(PLL_C) then
 			if(IDE_SPACE = '1' and nAS = '0')then
 				IDE_BUF_S <= not RW;
 
@@ -750,7 +748,7 @@ begin
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
 			Dout2;	
 	
-	autoconfig: process (reset, SM_CLK)
+	autoconfig: process (reset, PLL_C)
 	begin
 		if	reset = '0' then
 			-- reset active ...
@@ -766,7 +764,7 @@ begin
 			SHUT_UP	<= '1';
 			IDE_BASEADR <= x"FF";
 			AUTO_CONFIG_D0 <= '0';
-		elsif rising_edge(SM_CLK) then -- no reset, so wait for rising edge of the clock		
+		elsif rising_edge(PLL_C) then -- no reset, so wait for rising edge of the clock		
 			--nDS_D0				<=nDS;
 			--nDS_D1				<=nDS_D0;
 			nAS_D0				<=nAS;
