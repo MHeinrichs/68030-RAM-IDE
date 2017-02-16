@@ -2946,7 +2946,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <attribute name="OC_FARNELL" value="unknown" x="-35.71875" y="27.46375" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
 <element name="C2" library="rcl" package="C0805K" value="47µF" x="30.48" y="6.35"/>
-<element name="R2" library="rcl" package="R0603" value="4.7" x="65.24625" y="29.62275" rot="R270"/>
+<element name="R2" library="rcl" package="R0603" value="4K7" x="65.24625" y="29.62275" rot="R270"/>
 <element name="R3" library="rcl" package="R2512" value="500mA" x="58.26125" y="75.72375" rot="R90"/>
 <element name="IC4" library="am29-memory" package="PLCC-SR32" value="AM29F010S" x="27.305" y="90.17" rot="R90"/>
 <element name="IC8" library="SMD-IC" package="TSOP2-54@2" value="K4S56163" x="36.8" y="39.5478"/>
@@ -3026,11 +3026,11 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <attribute name="SUPPLY" value="3.3V" x="50.4825" y="76.835" size="1.778" layer="27" rot="R270" display="off"/>
 </element>
 <element name="SJ1" library="jumper" package="SJ_2" value="" x="44.92625" y="79.85125"/>
-<element name="C36" library="rcl" package="C0603K" value="" x="45.24375" y="76.04125" rot="R270"/>
-<element name="R10" library="rcl" package="R0603" value="" x="55.08625" y="75.72375" rot="R270"/>
-<element name="R11" library="rcl" package="R0603" value="" x="52.22875" y="79.53375" rot="R180"/>
-<element name="R12" library="rcl" package="R0603" value="" x="55.08625" y="78.74" rot="R90"/>
-<element name="R13" library="rcl" package="R0603" value="" x="49.2125" y="79.53375"/>
+<element name="C36" library="rcl" package="C0603K" value="100nF" x="45.24375" y="76.04125" rot="R270"/>
+<element name="R10" library="rcl" package="R0603" value="33" x="55.08625" y="75.72375" rot="R270"/>
+<element name="R11" library="rcl" package="R0603" value="33" x="52.22875" y="79.53375" rot="R180"/>
+<element name="R12" library="rcl" package="R0603" value="4k7" x="55.08625" y="78.74" rot="R90"/>
+<element name="R13" library="rcl" package="R0603" value="4k7" x="49.2125" y="79.53375"/>
 <element name="SJ2" library="jumper" package="SJ_2" value="" x="51.435" y="71.27875"/>
 <element name="C37" library="rcl" package="C0603K" value="100pF" x="27.305" y="11.27125"/>
 <element name="C38" library="rcl" package="C0603K" value="100pF" x="14.44625" y="10.63625" rot="R270"/>

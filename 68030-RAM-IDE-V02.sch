@@ -10273,7 +10273,7 @@ nc	1	x20
 <part name="IC2" library="74xx-eu" deviceset="74*245" device="PW" technology="HCT" value="74HCT245PW"/>
 <part name="SV1" library="con-harting-ml" deviceset="ML40" device=""/>
 <part name="C2" library="rcl" deviceset="C-EU" device="C0805K" value="47µF"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="4.7"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="4k7"/>
 <part name="R3" library="rcl" deviceset="R-EU_" device="R2512" value="500mA"/>
 <part name="IC4" library="am29-memory" deviceset="AM29F010S" device=""/>
 <part name="GND4" library="SUPPLY1" deviceset="GND" device="" value="GND"/>
@@ -10377,7 +10377,7 @@ nc	1	x20
 <part name="IC10" library="IDT" deviceset="ICS570" device="" technology="B"/>
 <part name="GND34" library="SUPPLY1" deviceset="GND" device=""/>
 <part name="SJ1" library="jumper" deviceset="SJ2W" device=""/>
-<part name="C36" library="rcl" deviceset="C-EU" device="C0603K"/>
+<part name="C36" library="rcl" deviceset="C-EU" device="C0603K" value="100nF"/>
 <part name="R10" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R12" library="rcl" deviceset="R-EU_" device="R0603" value="4k7"/>

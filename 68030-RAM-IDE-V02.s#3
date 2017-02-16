@@ -10377,7 +10377,7 @@ nc	1	x20
 <part name="IC10" library="IDT" deviceset="ICS570" device="" technology="B"/>
 <part name="GND34" library="SUPPLY1" deviceset="GND" device=""/>
 <part name="SJ1" library="jumper" deviceset="SJ2W" device=""/>
-<part name="C36" library="rcl" deviceset="C-EU" device="C0603K" value="100nF"/>
+<part name="C36" library="rcl" deviceset="C-EU" device="C0603K"/>
 <part name="R10" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R12" library="rcl" deviceset="R-EU_" device="R0603" value="4k7"/>

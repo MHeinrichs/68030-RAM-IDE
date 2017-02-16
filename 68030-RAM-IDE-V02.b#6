@@ -2827,7 +2827,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <param name="mlMaxStopFrame" value="0.075mm"/>
 <param name="mlMinCreamFrame" value="0mil"/>
 <param name="mlMaxCreamFrame" value="0mil"/>
-<param name="mlViaStopLimit" value="16mil"/>
+<param name="mlViaStopLimit" value="0mil"/>
 <param name="srRoundness" value="0"/>
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
@@ -3027,13 +3027,11 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 </element>
 <element name="SJ1" library="jumper" package="SJ_2" value="" x="44.92625" y="79.85125"/>
 <element name="C36" library="rcl" package="C0603K" value="" x="45.24375" y="76.04125" rot="R270"/>
-<element name="R10" library="rcl" package="R0603" value="33" x="55.08625" y="75.72375" rot="R270"/>
-<element name="R11" library="rcl" package="R0603" value="33" x="52.22875" y="79.53375" rot="R180"/>
-<element name="R12" library="rcl" package="R0603" value="4k7" x="55.08625" y="78.74" rot="R90"/>
-<element name="R13" library="rcl" package="R0603" value="4k7" x="49.2125" y="79.53375"/>
+<element name="R10" library="rcl" package="R0603" value="" x="55.08625" y="75.72375" rot="R270"/>
+<element name="R11" library="rcl" package="R0603" value="" x="52.22875" y="79.53375" rot="R180"/>
+<element name="R12" library="rcl" package="R0603" value="" x="55.08625" y="78.74" rot="R90"/>
+<element name="R13" library="rcl" package="R0603" value="" x="49.2125" y="79.53375"/>
 <element name="SJ2" library="jumper" package="SJ_2" value="" x="51.435" y="71.27875"/>
-<element name="C37" library="rcl" package="C0603K" value="100pF" x="27.305" y="11.27125"/>
-<element name="C38" library="rcl" package="C0603K" value="100pF" x="14.44625" y="10.63625" rot="R270"/>
 </elements>
 <signals>
 <signal name="VCC">
@@ -3369,13 +3367,6 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <via x="25.87625" y="32.7025" extent="1-16" drill="0.3"/>
 <via x="25.87625" y="25.87625" extent="1-16" drill="0.3"/>
 <via x="26.82875" y="25.87625" extent="1-16" drill="0.3"/>
-<contactref element="C37" pad="2"/>
-<contactref element="C38" pad="2"/>
-<wire x1="14.44625" y1="9.76125" x2="13.575" y2="8.89" width="0.254" layer="1"/>
-<wire x1="13.575" y1="8.89" x2="11.43" y2="8.89" width="0.254" layer="1"/>
-<wire x1="11.43" y1="8.89" x2="10.63625" y2="8.09625" width="0.254" layer="1"/>
-<via x="10.63625" y="8.09625" extent="1-16" drill="0.3"/>
-<wire x1="18.4404" y1="8.6106" x2="14.44625" y2="9.76125" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="CIIN">
 <contactref element="X1" pad="A27"/>
@@ -3893,9 +3884,9 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <contactref element="X1" pad="C32"/>
 <contactref element="IC3" pad="26"/>
 <contactref element="IC6" pad="24"/>
-<wire x1="8.89" y1="8.89" x2="9.4869" y2="8.89" width="0.254" layer="1"/>
-<wire x1="9.4869" y1="8.89" x2="14.9087" y2="14.3118" width="0.254" layer="1"/>
-<wire x1="14.9087" y1="14.3118" x2="16.2974" y2="14.3118" width="0.254" layer="1"/>
+<wire x1="8.89" y1="8.89" x2="9.8044" y2="8.89" width="0.254" layer="1"/>
+<wire x1="9.8044" y1="8.89" x2="15.2262" y2="14.3118" width="0.254" layer="1"/>
+<wire x1="15.2262" y1="14.3118" x2="16.2974" y2="14.3118" width="0.254" layer="1"/>
 <via x="52.07" y="8.89" extent="1-16" drill="0.3"/>
 <wire x1="52.07" y1="8.89" x2="8.89" y2="8.89" width="0.254" layer="16"/>
 <wire x1="52.07" y1="15.39875" x2="49.2125" y2="18.25625" width="0.254" layer="1"/>
@@ -5796,10 +5787,6 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <wire x1="22.7711" y1="47.14875" x2="29.5275" y2="47.14875" width="0.254" layer="1"/>
 <wire x1="29.5275" y1="47.14875" x2="30.38875" y2="48.01" width="0.254" layer="1"/>
 <wire x1="30.38875" y1="48.01" x2="30.38875" y2="56.56" width="0.254" layer="1"/>
-<contactref element="C37" pad="1"/>
-<wire x1="26.43" y1="11.27125" x2="26.43" y2="12.305" width="0.254" layer="1"/>
-<wire x1="26.43" y1="12.305" x2="25.9231" y2="12.8119" width="0.254" layer="1"/>
-<wire x1="25.9231" y1="12.8119" x2="24.3426" y2="12.8119" width="0.254" layer="1"/>
 </signal>
 <signal name="OE_30_RAM">
 <contactref element="IC5" pad="1"/>
@@ -5904,10 +5891,6 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <wire x1="21.43125" y1="50.64125" x2="25.87625" y2="50.64125" width="0.254" layer="1"/>
 <wire x1="25.87625" y1="50.64125" x2="26.38875" y2="51.15375" width="0.254" layer="1"/>
 <wire x1="26.38875" y1="51.15375" x2="26.38875" y2="56.56" width="0.254" layer="1"/>
-<contactref element="C38" pad="1"/>
-<wire x1="16.2974" y1="12.7882" x2="14.85195" y2="12.7882" width="0.254" layer="1"/>
-<wire x1="14.85195" y1="12.7882" x2="14.44625" y2="12.3825" width="0.254" layer="1"/>
-<wire x1="14.44625" y1="12.3825" x2="14.44625" y2="11.51125" width="0.254" layer="1"/>
 </signal>
 <signal name="ROM_B0">
 <contactref element="IC4" pad="1"/>

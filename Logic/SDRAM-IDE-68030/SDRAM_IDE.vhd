@@ -95,10 +95,10 @@ begin
   end;
 
 
---constant CLOCK_SAMPLE : integer := 3; --cl3
-constant CLOCK_SAMPLE : integer := 2; --cl2
---constant NQ_TIMEOUT : integer := 9; --cl3
-constant NQ_TIMEOUT : integer := 6; --cl2
+constant CLOCK_SAMPLE : integer := 3; --cl3
+--constant CLOCK_SAMPLE : integer := 2; --cl2
+constant NQ_TIMEOUT : integer := 9; --cl3
+--constant NQ_TIMEOUT : integer := 6; --cl2
 constant IDE_WAITS : integer := 2;
 constant ROM_WAITS : integer := 8;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
@@ -166,7 +166,6 @@ signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
 signal	nAS_PLL_C_N:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
-signal	IDE_CYCLE:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
 signal REFRESH: std_logic:= '1';
 signal TRANSFER: std_logic:= '1';
@@ -175,11 +174,9 @@ signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
 signal CQ_D :  sdram_state_machine_type;
 signal SDRAM_OP :  sdram_control;
-signal ARAM_LOW: STD_LOGIC_VECTOR (8 downto 0);      
-signal ARAM_HIGH: STD_LOGIC_VECTOR (12 downto 0);      
 constant ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0) := "0010000000000";   
---constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
-constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
+constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
+--constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
 signal ENACLK_PRE : STD_LOGIC;
 signal CLK_D : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
@@ -193,10 +190,9 @@ signal ADR_AC_HIT :  STD_LOGIC;
 signal ADR_IDE_HIT :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal LATCH_RAM_030 :  STD_LOGIC;
-signal LATCH_RAM_030_D0 :  STD_LOGIC;
 signal OE_30_RAM_S : STD_LOGIC;
 signal OE_RAM_30_S : STD_LOGIC;
-
+signal SM_CLK : STD_LOGIC;
 begin
 
 
@@ -227,23 +223,22 @@ begin
 	
 	
 	--values for the 570A
-	S<="ZZ"; --double the clock - FB is CLK 
+	--S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	--S<="01"; --triple the clock - FB is CLK 
+	S<="01"; --triple the clock - FB is CLK 
+	--S<="00"; --disable
+	--S<="Z0"; --recover the clock (1x
 
-
+	SM_CLK <= PLL_C;--clk;--not PLL_C;
 	IDE_SPACE 	<= ADR_IDE_HIT;	
 	AUTO_CONFIG <= ADR_AC_HIT;
-	RAM_SPACE    <= '1' when A(27 downto 26) = "10" and A(25 downto 20) /="111111" else '0'; 
+	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
+										and A(25 downto 20) /="111111" 
+										else '0'; 
 	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
-                
---  ADR_AC_HIT <= '1' when A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0' else '0'; 
---  ADR_IDE_HIT   <= '1' when A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0'  else '0';
-   adr_decode:process (PLL_C) begin
-		if rising_edge(PLL_C) then
---			--nAS_PLL_C_N	<= nAS;
-		
+   adr_decode:process (SM_CLK) begin
+		if rising_edge(SM_CLK) then
 			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
 				ADR_AC_HIT <= '1';
 			else
@@ -260,19 +255,22 @@ begin
 
 
 	--SD-RAM stuff
-	CLK_RAM 	<= not PLL_C;
+	CLK_RAM 	<= not SM_CLK;
 	CLK_EN 	<= ENACLK_PRE;
 
 	LE_RAM_30 <= LATCH_RAM_030;
 	LE_30_RAM <= '0';
 
-	latch_states: process(RESET,PLL_C)
+	OE_30_RAM <= OE_30_RAM_S;-- when nAS_PLL_C_N='0' else '1';
+	OE_RAM_30 <= OE_RAM_30_S;-- when nAS_PLL_C_N='0' else '1';
+
+	--BA <= "00" when SDRAM_OP =c_opt_code else A(19 downto 18);
+
+	latch_states: process(RESET,SM_CLK)
 	begin 
 		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
-			LATCH_RAM_030_D0 <='1';
-		elsif(rising_edge(PLL_C))then
-			LATCH_RAM_030_D0 <= LATCH_RAM_030;
+		elsif(rising_edge(SM_CLK))then
 			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LATCH_RAM_030<= not RW;
@@ -285,8 +283,8 @@ begin
 
 
 
-	buffer_oe: process(PLL_C) begin
-		if(rising_edge(PLL_C))then
+	buffer_oe: process(SM_CLK) begin
+		if(rising_edge(SM_CLK))then
 			if((TRANSFER_IN_PROGRES ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
@@ -301,10 +299,7 @@ begin
 			end if;
 		end if;
 	end process buffer_oe;
- 
-	OE_30_RAM <= OE_30_RAM_S;-- when nAS_PLL_C_N='0' else '1';
-	OE_RAM_30 <= OE_RAM_30_S;-- when nAS_PLL_C_N='0' else '1';
- 
+  
  	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
 	TRANSFER_RESET <= '1' when CQ=commit_ras or RESET ='0' else '0';
 	
@@ -316,9 +311,9 @@ begin
 		end if;
 	end process transfer_latch;
 	
-	sterm_gen:process(PLL_C)
+	sterm_gen:process(SM_CLK)
 	begin
-		if(falling_edge(PLL_C))then
+		if(falling_edge(SM_CLK))then
 			--if(CQ=commit_cas)then --cl3
 			if(CQ=start_cas)then --cl2
 				STERM_S <= '0' ;
@@ -328,14 +323,9 @@ begin
 		end if;
 	end process sterm_gen;
  
-	--decoder signals
-
-
-	ARAM_HIGH <= A(17 downto 5);
-
 	-- ram register Section   
-	ram_ctrl:process (PLL_C) begin
-      if rising_edge(PLL_C) then		
+	ram_ctrl:process (SM_CLK) begin
+      if rising_edge(SM_CLK) then		
 			CLK_D	<= CLK;
 			CLK_PE(0) <= CLK and not CLK_D; --the edge!			
 			CLK_PE(CLOCK_SAMPLE downto 1) <= CLK_PE((CLOCK_SAMPLE-1) downto 0);
@@ -456,14 +446,7 @@ begin
 			else 
 				NQ  <= x"0";
 			end if;
-					
-			--mux for ranger mem
-			if(A(27) = '1') then
-				ARAM_LOW  <=  A(25 downto 20) & A(4 downto 2);
-			else
-				ARAM_LOW  <=  "111111" & A(4 downto 2);
-			end if;
-			
+						
 					
 			--sdram command decode
 			case SDRAM_OP is
@@ -472,31 +455,36 @@ begin
 				CAS <= '1';
 				MEM_WE <= '1';
 				--ARAM <= "0000000000000";
-				BA <= A(19 downto 18);
+				--BA <= A(19 downto 18);
 			when c_ras=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '1';
-				ARAM <= ARAM_HIGH;
+				ARAM <= A(17 downto 5);
 				BA <= A(19 downto 18);
 			when c_cas=>
 				RAS <= '1';
 				CAS <= '0';
 				MEM_WE <= RW;
-				ARAM <= "0000" & ARAM_LOW;
+				--mux for ranger mem
+				if(A(27) = '1') then
+					ARAM <= "0000" & A(25 downto 20) & A(4 downto 2);
+				else
+					ARAM <= "0000111111" & A(4 downto 2);
+				end if;
 				BA <= A(19 downto 18);
 			when c_precharge=>
 				RAS <= '0';
 				CAS <= '1';
 				MEM_WE <= '0';
 				ARAM <= ARAM_PRECHARGE;
-				BA <= A(19 downto 18);
+				--BA <= A(19 downto 18);
 			when c_refresh=>
 				RAS <= '0';
 				CAS <= '0';
 				MEM_WE <= '1';
 				--ARAM <= "0000000000000";								
-				BA <= A(19 downto 18);
+				--BA <= A(19 downto 18);
 			when c_opt_code=>
 				RAS <= '0';
 				CAS <= '0';
@@ -508,7 +496,7 @@ begin
 				CAS <= '1';
 				MEM_WE <= '0';
 				--ARAM <= "0000000000000";								
-				BA <= A(19 downto 18);
+				--BA <= A(19 downto 18);
 			end case;
 									
 			--statemachine transit
@@ -520,7 +508,6 @@ begin
 		end if;
    end process ram_ctrl;
 	
-
 	-- ram state machine decoder
    process (nDS, CQ, REFRESH, TRANSFER, NQ, RW,CLK_PE,CBACK_S)
    begin
@@ -623,11 +610,11 @@ begin
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
-		 --ENACLK_PRE <= CBACK_S; --cl3 delay comes two clocks later!
-		 ENACLK_PRE <= '1'; --cl2
+		 ENACLK_PRE <= CBACK_S; --cl3 delay comes two clocks later!
+		 --ENACLK_PRE <= '1'; --cl2
 		 SDRAM_OP <= c_nop;
- 		 --CQ_D <= commit_cas2; --cl3
-		 CQ_D <= data_wait; --cl2
+ 		 CQ_D <= commit_cas2; --cl3
+		 --CQ_D <= data_wait; --cl2
 
       when commit_cas2 =>
 		 ENACLK_PRE <= '1'; --delay comes one clock later!
@@ -648,8 +635,8 @@ begin
       when data_wait2 =>
  		 ENACLK_PRE <= '1'; 
 		 SDRAM_OP<= c_nop;
-		 --CQ_D <= data_wait3; --cl3
-		 CQ_D <= data_wait;	--cl2		
+		 CQ_D <= data_wait3; --cl3
+		 --CQ_D <= data_wait;	--cl2		
 
       when data_wait3 =>
  		 ENACLK_PRE <= '0'; 
@@ -677,13 +664,13 @@ begin
 	
 	--IDE STUFF
 	-- this is the clocked process
-	ide_en_gen: process (reset, PLL_C)
+	ide_en_gen: process (reset, SM_CLK)
 	begin
 	
 		if	(reset = '0') then
 			-- reset
 			IDE_ENABLE			<='0';
-		elsif rising_edge(PLL_C) then
+		elsif rising_edge(SM_CLK) then
 			if(IDE_SPACE = '1' and nAS = '0')then
 				if(RW = '0')then
 					--enable IDE on the first write on this IO-space!
@@ -695,12 +682,11 @@ begin
 
 	
 	-- this is the clocked process
-	ide_rw_gen: process (PLL_C)
+	ide_rw_gen: process (SM_CLK)
 	begin
 	
-		if rising_edge(PLL_C) then
+		if rising_edge(SM_CLK) then
 			if(IDE_SPACE = '1' and nAS = '0')then
-				IDE_CYCLE <= '0';
 				IDE_BUF_S <= not RW;
 
 				if(RW = '0' and IDE_WAIT = '1')then
@@ -734,7 +720,6 @@ begin
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
 				IDE_BUF_S <= '1';
-				IDE_CYCLE <= '1';
 				IDE_R_S		<= '1';
 				IDE_W_S		<= '1';
 				ROM_OE_S	<= '1';
@@ -765,7 +750,7 @@ begin
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
 			Dout2;	
 	
-	autoconfig: process (reset, PLL_C)
+	autoconfig: process (reset, SM_CLK)
 	begin
 		if	reset = '0' then
 			-- reset active ...
@@ -781,7 +766,7 @@ begin
 			SHUT_UP	<= '1';
 			IDE_BASEADR <= x"FF";
 			AUTO_CONFIG_D0 <= '0';
-		elsif rising_edge(PLL_C) then -- no reset, so wait for rising edge of the clock		
+		elsif rising_edge(SM_CLK) then -- no reset, so wait for rising edge of the clock		
 			--nDS_D0				<=nDS;
 			--nDS_D1				<=nDS_D0;
 			nAS_D0				<=nAS;
