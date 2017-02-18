@@ -99,7 +99,7 @@ constant CLOCK_SAMPLE : integer := 3; --cl3
 --constant CLOCK_SAMPLE : integer := 2; --cl2
 constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 2;
+constant IDE_WAITS : integer := 4;
 constant ROM_WAITS : integer := 8;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
@@ -197,7 +197,7 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= '0' 	when (ADR_IDE_HIT='1' or ADR_AC_HIT ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	MY_CYCLE		<= nAS 	when (IDE_SPACE='1' or AUTO_CONFIG ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
@@ -209,7 +209,7 @@ begin
 
 	--enable caching for RAM
 	CIIN	<= '1' when RAM_ACCESS = '1' else 
-				'0' when ((ADR_IDE_HIT='1' or ADR_AC_HIT ='0') and nAS='0') or RANGER_ACCESS = '1' else
+				'0' when ((IDE_SPACE='1' or AUTO_CONFIG ='1' or RANGER_ACCESS = '1') and nAS='0') else
 				'Z';
 	CBACK <= CBACK_S;
 	
@@ -233,7 +233,7 @@ begin
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
 										and A(25 downto 20) /="111111" 
 										else '0'; 
-	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
    adr_decode:process (PLL_C) begin
 		if rising_edge(PLL_C) then
@@ -268,7 +268,7 @@ begin
 	begin 
 		if(RESET ='0')then
 			LATCH_RAM_030 <='1';
-		elsif(rising_edge(PLL_C))then
+		elsif(falling_edge(PLL_C))then
 			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LATCH_RAM_030<= not RW;
@@ -283,7 +283,7 @@ begin
 
 	buffer_oe: process(PLL_C) begin
 		if(rising_edge(PLL_C))then
-			if((TRANSFER_IN_PROGRES ='1' 
+			if((TRANSFER ='1' 
 					--or TRANSFER_IN_PROGRES_D0 ='1' 
 					--or TRANSFER_IN_PROGRES_D1 ='1'
 				) 
@@ -291,7 +291,7 @@ begin
 				) then
 				OE_30_RAM_S <= RW;
 				OE_RAM_30_S <= not RW;
-			else
+			elsif(nAS_PLL_C_N='1')then
 				OE_30_RAM_S <= '1';
 				OE_RAM_30_S <= '1';
 			end if;
@@ -337,7 +337,7 @@ begin
 				UDQ0	<= '1';
 				LDQ1	<= '1';
 				UDQ1	<= '1';
-			elsif(nAS = '0' and nAS_PLL_C_N='1')then			
+			else--if(nAS = '0' and nAS_PLL_C_N='1')then			
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
 				-- bits 0-7
 				if(RW='1' or ( SIZ="00" or 
@@ -396,20 +396,20 @@ begin
 			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
-				--cache burst logic
-				if(CBREQ = '0' and (CQ=start_ras) 
-					and (RAM_ACCESS = '1') 
-					and A(3 downto 2) < "11")then
-					CBACK_S <='0';
-					burst_counter <= A(3 downto 2);
-				elsif(burst_counter = "11" and CQ=data_wait)then
-					CBACK_S <= '1';
-				end if;
-				
-				--burst increment
-				if(CQ=data_wait and burst_counter < "11")then
-					burst_counter <= burst_counter+1;
-				end if;								
+--				--cache burst logic
+--				if(CBREQ = '0' and (CQ=start_ras) 
+--					and (RAM_ACCESS = '1') 
+--					and A(3 downto 2) < "11")then
+--					CBACK_S <='0';
+--					burst_counter <= A(3 downto 2);
+--				elsif(burst_counter = "11" and CQ=data_wait)then
+--					CBACK_S <= '1';
+--				end if;
+--				
+--				--burst increment
+--				if(CQ=data_wait and burst_counter < "11")then
+--					burst_counter <= burst_counter+1;
+--				end if;								
 			else
 				TRANSFER_IN_PROGRES <= '0';
 				CBACK_S <= '1';
@@ -427,7 +427,7 @@ begin
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
-			elsif(CLK_PE(0)='1' and RQ <RQ_TIMEOUT) then --count on edges
+			elsif(CLK = '1' and CLK_D = '0' and RQ <RQ_TIMEOUT) then --count on edges
 				RQ <= RQ + 1;
 			end if;
 			
@@ -452,8 +452,12 @@ begin
 				RAS <= '1';
 				CAS <= '1';
 				MEM_WE <= '1';
-				--ARAM <= "0000000000000";
-				--BA <= A(19 downto 18);
+				--mux for ranger mem
+				if(A(27) = '1') then
+					ARAM <= "0000" & A(25 downto 20) & A(4 downto 2);
+				else
+					ARAM <= "0000111111" & A(4 downto 2);
+				end if;				--BA <= A(19 downto 18);
 			when c_ras=>
 				RAS <= '0';
 				CAS <= '1';
@@ -470,7 +474,7 @@ begin
 				else
 					ARAM <= "0000111111" & A(4 downto 2);
 				end if;
-				BA <= A(19 downto 18);
+				--BA <= A(19 downto 18);
 			when c_precharge=>
 				RAS <= '0';
 				CAS <= '1';
@@ -608,7 +612,7 @@ begin
 		 CQ_D <= commit_cas;
 
       when commit_cas =>
-		 ENACLK_PRE <= CBACK_S; --cl3 delay comes two clocks later!
+		 ENACLK_PRE <= '1'; --cl3 delay comes two clocks later!
 		 --ENACLK_PRE <= '1'; --cl2
 		 SDRAM_OP <= c_nop;
  		 CQ_D <= commit_cas2; --cl3
