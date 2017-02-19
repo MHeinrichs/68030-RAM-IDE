@@ -1,0 +1,17 @@
+ISim log file
+Running: C:\Users\Matze\Amiga\Hardwarehacks\68030-RAM-IDE\Logic\SDRAM-IDE-68030\SDRAM_IDE_TB_isim_beh.exe -intstyle ise -gui -tclbatch isim.cmd -wdb C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB_isim_beh.wdb 
+ISim P.68d (signature 0x7708f090)
+This is a Full version of ISim.
+Time resolution is 1 ps
+# onerror resume
+# wave add /
+# run 1000 ns
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+at 3333 ps(1), Instance /sdram_ide_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
