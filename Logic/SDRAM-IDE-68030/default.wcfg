@@ -90,6 +90,22 @@
       <obj_property name="ElementShortName">aram[12:0]</obj_property>
       <obj_property name="ObjectShortName">aram[12:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/le_30_ram" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">le_30_ram</obj_property>
+      <obj_property name="ObjectShortName">le_30_ram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/oe_30_ram" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_30_ram</obj_property>
+      <obj_property name="ObjectShortName">oe_30_ram</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/le_ram_30" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">le_ram_30</obj_property>
+      <obj_property name="ObjectShortName">le_ram_30</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/oe_ram_30" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_ram_30</obj_property>
+      <obj_property name="ObjectShortName">oe_ram_30</obj_property>
+   </wvobject>
    <wvobject fp_name="/sdram_ide_tb/udq0" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">udq0</obj_property>
       <obj_property name="ObjectShortName">udq0</obj_property>
@@ -133,22 +149,6 @@
    <wvobject fp_name="/sdram_ide_tb/nram_sel" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">nram_sel</obj_property>
       <obj_property name="ObjectShortName">nram_sel</obj_property>
-   </wvobject>
-   <wvobject fp_name="/sdram_ide_tb/le_30_ram" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">le_30_ram</obj_property>
-      <obj_property name="ObjectShortName">le_30_ram</obj_property>
-   </wvobject>
-   <wvobject fp_name="/sdram_ide_tb/oe_30_ram" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">oe_30_ram</obj_property>
-      <obj_property name="ObjectShortName">oe_30_ram</obj_property>
-   </wvobject>
-   <wvobject fp_name="/sdram_ide_tb/le_ram_30" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">le_ram_30</obj_property>
-      <obj_property name="ObjectShortName">le_ram_30</obj_property>
-   </wvobject>
-   <wvobject fp_name="/sdram_ide_tb/oe_ram_30" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">oe_ram_30</obj_property>
-      <obj_property name="ObjectShortName">oe_ram_30</obj_property>
    </wvobject>
    <wvobject fp_name="/sdram_ide_tb/cback" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">cback</obj_property>

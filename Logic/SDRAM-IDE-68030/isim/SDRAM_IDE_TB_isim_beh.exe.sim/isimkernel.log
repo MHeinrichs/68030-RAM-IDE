@@ -2,27 +2,9 @@ Command line:
    SDRAM_IDE_TB_isim_beh.exe
      -simmode  gui
      -simrunnum  0
-     -socket  55183
+     -socket  60161
 
-Mon Feb 20 00:13:08 2017
+Mon Feb 20 21:35:57 2017
 
 
- Elaboration Time: 1.14063 sec
-
- Current Memory Usage: 1769.11 Meg
-
- Total Signals          : 1138
- Total Nets             : 961
- Total Signal Drivers   : 773
- Total Blocks           : 113
- Total Primitive Blocks : 76
- Total Processes        : 713
- Total Traceable Variables  : 1149
- Total Scalar Nets and Variables : 8858
-
- Total Simulation Time: 1.60938 sec
-
- Current Memory Usage: 1297.21 Meg
-
-Mon Feb 20 00:14:06 2017
-
+ Elaboration Time: 1.03125 sec

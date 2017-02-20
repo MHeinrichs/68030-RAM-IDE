@@ -15,3 +15,80 @@ at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank
 at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
 at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
 at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+# run all
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+Stopped at time : 2560 ns : File "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" Line 807
+ISim P.68d (signature 0x7708f090)
+This is a Full version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+at 3333 ps(1), Instance /sdram_ide_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+# run all
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2046462 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: 
+TO_NAT found illegal value:  b"X"
+converting input to integer 0
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+Stopped at time : 2560 ns : File "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" Line 807
+ISim P.68d (signature 0x7708f090)
+This is a Full version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+at 3333 ps(1), Instance /sdram_ide_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+# run all
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+Stopped at time : 2560 ns : File "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" Line 807
+ISim P.68d (signature 0x7708f090)
+This is a Full version of ISim.
+# run 1000 ns
+Simulator is doing circuit initialization process.
+Finished circuit initialization process.
+at 3333 ps(1), Instance /sdram_ide_tb/uut/ : Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2: Could not decode bank selection - results may be incorrect.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQML must be held high during initialization.
+at 26664 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-X : DQMH must be held high during initialization.
+# run all
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_LOW/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+at 2073126 ps(4), Instance /sdram_ide_tb/SDRAM_HIGH/ : Warning: *mt48lc16m16a2 Bank-0 : precharge command does not meet tRAS time.
+at 2471420 ps(1), Instance /sdram_ide_tb/Latch0/ : Warning: VitalGlitch: GLITCH Detected on port Aint ; Preempted Future Value := 0 @ 2473.653 ns; Newly Scheduled Value := 1 @ 2474.62 ns;
+Stopped at time : 2560 ns : File "C:/Users/Matze/Amiga/Hardwarehacks/68030-RAM-IDE/Logic/SDRAM-IDE-68030/SDRAM_IDE_TB.vhd" Line 807
