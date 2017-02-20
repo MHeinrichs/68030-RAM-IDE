@@ -235,7 +235,7 @@ begin
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
 										and A(25 downto 20) /="111111" 
 										else '0'; 
-	RANGER_SPACE <= '0';--'1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
    adr_decode:process (PLL_C) begin
 		if rising_edge(PLL_C) then
