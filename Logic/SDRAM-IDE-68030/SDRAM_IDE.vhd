@@ -163,6 +163,7 @@ signal CBACK_S : STD_LOGIC;
 signal TRANSFER_CLK :  STD_LOGIC;
 signal TRANSFER_RESET :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
+signal RAM_BANK_ACTIVATE  :  STD_LOGIC;
 begin
 
 
@@ -227,6 +228,8 @@ begin
 	
 	--transparent latch for writes
 	LE_30_RAM <= '0';
+	
+	BA <= "00" when RAM_BANK_ACTIVATE='0' else A(19 downto 18);
 
 	--32bit ram and rangermem adress decode
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
@@ -252,12 +255,10 @@ begin
 		if(falling_edge(PLL_C))then
 			
 			--latch control for reads
-			if(RESET ='0')then
-				LE_RAM_30 <='1';
-			elsif(CQ=start_ras or CQ=data_wait2)then --cl2
+			if(CQ=start_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LE_RAM_30<= not RW;
-			elsif(CQ=data_wait)then
+			elsif(CQ=data_wait or RESET ='0')then
 			--elsif(CQ=data_wait2 or CQ=precharge)then
 				LE_RAM_30<= '1';
 			end if;
@@ -392,6 +393,13 @@ begin
 			else 
 				NQ  <= x"0";
 			end if;
+			
+			--bank activate decoder
+			if(reset ='0') then
+				RAM_BANK_ACTIVATE <='0';
+			elsif(CQ= init_wait)then --now its save to switch on the bank decode
+				RAM_BANK_ACTIVATE <='1';
+			end if;
 		
 			-- ram state machine decoder
 	      if reset='0' then
@@ -399,7 +407,7 @@ begin
 				RAS <= '1';
 				CAS <= '1';
 				MEM_WE <= '1';
-  			   ARAM <= ARAM_PRECHARGE;
+  			   ARAM <= (others => '0');
 			else
 				case CQ is
 
@@ -416,7 +424,7 @@ begin
 				 RAS <= '0';
 				 CAS <= '1';
 				 MEM_WE <= '0';
-				 ARAM <= ARAM_PRECHARGE;
+				 --ARAM <= ARAM_PRECHARGE;
 				 CQ <= init_precharge_commit;
 				
 				when init_precharge_commit =>
@@ -425,7 +433,6 @@ begin
 				 CAS <= '1';
 				 MEM_WE <= '1';
 				 ARAM <= ARAM_OPTCODE;			
-				 BA <= "00";
 				 if (NQ >= x"3") then
 				 	 CQ <= init_opcode;  
 				 else
@@ -437,8 +444,7 @@ begin
 				 RAS <= '0';
 				 CAS <= '0';
 				 MEM_WE <= '0';
-				 ARAM <= ARAM_OPTCODE;			
-				 BA <= "00";
+				 --ARAM <= ARAM_OPTCODE;			
 				 CQ <= init_opcode_wait;
 
 				when init_opcode_wait =>
@@ -475,7 +481,6 @@ begin
 				 CAS <= '1';
 				 MEM_WE <= '1';
 				 ARAM <= A(17 downto 5);
-				 BA <= A(19 downto 18);
 				 if (REFRESH = '1') then
 					 CQ <= refresh_start;
 				 elsif (TRANSFER = '1'
@@ -517,8 +522,7 @@ begin
 				 RAS <= '0';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 ARAM <= A(17 downto 5);
-				 BA <= A(19 downto 18);
+				 --ARAM <= A(17 downto 5);
 				 CQ <= commit_ras;
 
 			  when commit_ras =>
@@ -532,7 +536,6 @@ begin
 				 else
 				 	ARAM <= "0000111111" & A(4 downto 2);
 				 end if;
-				 --ARAM <= "0000" & ARAM_CAS;
 				 CQ <= start_cas;
 
 				when start_cas =>
@@ -541,12 +544,11 @@ begin
 				 CAS <= '0';
 				 MEM_WE <= RW;
 				 --mux for ranger mem
-				 if(A(27)='1')then
-					ARAM <= "0000" & A(25 downto 20) & A(4 downto 2);
-				 else
-				 	ARAM <= "0000111111" & A(4 downto 2);
-				 end if;
-				 BA <= A(19 downto 18);
+				 --if(A(27)='1')then
+				 --	ARAM <= "0000" & A(25 downto 20) & A(4 downto 2);
+				 --else
+				 --	ARAM <= "0000111111" & A(4 downto 2);
+				 --end if;
 				 CQ <= commit_cas;
 
 				when commit_cas =>
@@ -598,7 +600,7 @@ begin
 				 RAS <= '0';
 				 CAS <= '1';
 				 MEM_WE <= '0';
-				 ARAM <= ARAM_PRECHARGE;
+				 --ARAM <= ARAM_PRECHARGE;
 				 CQ <= precharge_wait;
 
 				when precharge_wait =>
