@@ -10435,7 +10435,7 @@ nc	1	x20
 <part name="C17" library="rcl" deviceset="C-EU" device="C0805K" value="10µF"/>
 <part name="GND10" library="SUPPLY1" deviceset="GND" device=""/>
 <part name="IC1" library="burr-brown" deviceset="REG1117" device=""/>
-<part name="IC7" library="xilinx_xc9572xl-tq100" deviceset="XC95288XL-TQ144" device=""/>
+<part name="IC7" library="xilinx_xc9572xl-tq100" deviceset="XC95288XL-TQ144" device="" value="XC95144XL-TQ144"/>
 <part name="C18" library="rcl" deviceset="C-EU" device="C0805K" value="100nF"/>
 <part name="C19" library="rcl" deviceset="C-EU" device="C0805K" value="100nF"/>
 <part name="C20" library="rcl" deviceset="C-EU" device="C0805K" value="100nF"/>

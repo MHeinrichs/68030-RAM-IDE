@@ -3069,7 +3069,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <attribute name="NAME" x="20.32" y="1.778" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="15.748" y="9.144" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="IC7" library="xilinx_xc9572xl-tq100" package="TQFP144" value="XC95288XL-TQ144" x="30.63875" y="67.31" smashed="yes" rot="R270">
+<element name="IC7" library="xilinx_xc9572xl-tq100" package="TQFP144" value="XC95144XL-TQ144" x="30.63875" y="67.31" smashed="yes" rot="R270">
 <attribute name="NAME" x="18.669" y="64.23025" size="1.778" layer="25" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="28.09875" y="72.39" size="1.778" layer="27" ratio="10" rot="R270"/>
 </element>
