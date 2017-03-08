@@ -18,7 +18,11 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="46" />
+   <WVObjectSize size="47" />
+   <wave_markers>
+      <marker time="2691000000" label="" />
+      <marker time="2698900000" label="" />
+   </wave_markers>
    <wvobject fp_name="/sdram_ide_tb/a" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">a[31:0]</obj_property>
       <obj_property name="ObjectShortName">a[31:0]</obj_property>
@@ -105,6 +109,12 @@
    <wvobject fp_name="/sdram_ide_tb/oe_ram_30" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">oe_ram_30</obj_property>
       <obj_property name="ObjectShortName">oe_ram_30</obj_property>
+   </wvobject>
+   <wvobject fp_name="/sdram_ide_tb/uut/cq" type="other" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">cq</obj_property>
+      <obj_property name="ObjectShortName">cq</obj_property>
+      <obj_property name="label">cq</obj_property>
    </wvobject>
    <wvobject fp_name="/sdram_ide_tb/udq0" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">udq0</obj_property>

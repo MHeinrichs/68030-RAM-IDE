@@ -667,18 +667,18 @@ BEGIN
  
    PLL_CLK_process :process
    begin
-		PLL_C <= '0';
-		wait for CLK_period/6;
 		PLL_C <= '1';
-		wait for CLK_period/6;
+		wait for CLK_period/4;
+		PLL_C <= '0';
+		wait for CLK_period/4;
    end process;
 
    PLL_H_CLK_process :process
    begin
 		PLL_C_HALF <= '0';
-		wait for CLK_period/3;
+		wait for CLK_period/2;
 		PLL_C_HALF <= '1';
-		wait for CLK_period/3;
+		wait for CLK_period/2;
    end process;
 
    -- Stimulus process

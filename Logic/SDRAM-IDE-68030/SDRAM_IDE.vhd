@@ -66,7 +66,7 @@ entity SDRAM_IDE is
            nAS : in  STD_LOGIC;
            nDS : in  STD_LOGIC;
            RESET : in  STD_LOGIC;
-           ECS : in  STD_LOGIC);			  
+           ECS : in  STD_LOGIC);
 end SDRAM_IDE;
 
 architecture Behavioral of SDRAM_IDE is
@@ -86,11 +86,11 @@ begin
   end;
 
 
-constant CLOCK_SAMPLE : integer := 3; --cl3
---constant CLOCK_SAMPLE : integer := 2; --cl2
-constant NQ_TIMEOUT : integer := 9; --cl3
---constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 3;
+--constant CLOCK_SAMPLE : integer := 3; --cl3
+constant CLOCK_SAMPLE : integer := 2; --cl2
+--constant NQ_TIMEOUT : integer := 9; --cl3
+constant NQ_TIMEOUT : integer := 6; --cl2
+constant IDE_WAITS : integer := 4;
 constant ROM_WAITS : integer := 8;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
@@ -130,10 +130,10 @@ signal   IDE_SPACE:STD_LOGIC;
 signal   RAM_SPACE:STD_LOGIC;
 signal   RANGER_SPACE:STD_LOGIC;
 signal	AUTO_CONFIG:STD_LOGIC;
-signal	AUTO_CONFIG_DONE:STD_LOGIC_VECTOR(1 downto 0);
+signal	AUTO_CONFIG_DONE:STD_LOGIC;
 signal	AUTO_CONFIG_PAUSE:STD_LOGIC;
-signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC_VECTOR(1 downto 0);
-signal	SHUT_UP:STD_LOGIC_VECTOR (1 downto 0);
+signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC;
+signal	SHUT_UP:STD_LOGIC;
 signal	IDE_BASEADR:STD_LOGIC_VECTOR(7 downto 0);
 signal	Dout2:STD_LOGIC_VECTOR(3 downto 0);
 signal	IDE_DSACK_D:STD_LOGIC_VECTOR(IDE_DELAY downto 0);
@@ -153,8 +153,8 @@ signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
 signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
 constant ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0) := "0010000000000";   
-constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
---constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
+--constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
+constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
 signal ENACLK_PRE : STD_LOGIC;
 signal CLK_D : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
@@ -164,7 +164,6 @@ signal TRANSFER_CLK :  STD_LOGIC;
 signal TRANSFER_RESET :  STD_LOGIC;
 signal burst_counter : STD_LOGIC_VECTOR(1 downto 0);
 signal RAM_BANK_ACTIVATE  :  STD_LOGIC;
-signal RAM_BASE_ADR : STD_LOGIC_VECTOR(3 downto 0);
 begin
 
 
@@ -197,9 +196,9 @@ begin
 	
 	
 	--values for the 570A
-	--S<="ZZ"; --double the clock - FB is CLK 
+	S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	S<="01"; --triple the clock - FB is CLK 
+	--S<="01"; --triple the clock - FB is CLK 
 	--S<="00"; --disable
 	--S<="Z0"; --recover the clock (1x
 
@@ -236,11 +235,7 @@ begin
 	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
 										and A(25 downto 20) /="111111" 
 										else '0'; 
-	RANGER_SPACE <= '1' when 	A(27) = '0' 
-										and A(23 downto 20) = RAM_BASE_ADR 
-										--and A(23 downto 20) = x"C" 
-										--and SHUT_UP(1)='0'
-										else '0'; 
+	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
 	--transfer start detectioon via latch
   	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
@@ -268,6 +263,14 @@ begin
 				LE_RAM_30<= '1';
 			end if;
 			
+		end if;
+	end process neg_edge_ctrl;
+ 
+	--all signals, which need to be clocked on the positive edge
+	pos_edge_ctrl:process (PLL_C) begin
+      if rising_edge(PLL_C) then		
+
+
 			--sterm control
 			if(CQ=commit_cas)then --cl3
 			--if(CQ=start_cas)then --cl2
@@ -275,12 +278,7 @@ begin
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
 			end if;
-		end if;
-	end process neg_edge_ctrl;
- 
-	--all signals, which need to be clocked on the positive edge
-	pos_edge_ctrl:process (PLL_C) begin
-      if rising_edge(PLL_C) then		
+
 			
 			--clock edge detection
 			CLK_D	<= CLK;
@@ -510,14 +508,8 @@ begin
 				 CAS <= '1';
 				 MEM_WE <= '1';
 				 ARAM <= A(17 downto 5);
-				 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here
-					 if (TRANSFER = '1'  
-							and CLK_PE(CLOCK_SAMPLE)='1'
-							) then
-						CQ <= start_ras;
-					 else
-						CQ <= start_state;
-					 end if;
+				 if (NQ >= NQ_TIMEOUT) then			--wait 60ns here				 
+					 CQ <= start_state;
 				 else
 					 CQ <= refresh_wait;
 				 end if;
@@ -557,13 +549,13 @@ begin
 				 CQ <= commit_cas;
 
 				when commit_cas =>
-				 ENACLK_PRE <= '1'; --cl3 delay comes two clocks later!
-				 --ENACLK_PRE <= '1'; --cl2
+				 --ENACLK_PRE <= '1'; 
+				 ENACLK_PRE <= CBACK_S; --cl2
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 CQ <= commit_cas2; --cl3
-				 --CQ_D <= data_wait; --cl2
+				 --CQ <= commit_cas2; --cl3
+				 CQ <= data_wait; --cl2
 
 				when commit_cas2 =>
 				 ENACLK_PRE <= CBACK_S; --delay comes one clock later!
@@ -586,12 +578,12 @@ begin
 				 end if;
 
 				when data_wait2 =>
-				 ENACLK_PRE <= '1'; 
+				 ENACLK_PRE <= '1';				 
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 CQ <= data_wait3; --cl3
-				 --CQ_D <= data_wait;	--cl2		
+				 --CQ <= data_wait3; --cl3
+				 CQ <= data_wait;	--cl2		
 
 				when data_wait3 =>
 				 ENACLK_PRE <= '0'; 
@@ -619,7 +611,7 @@ begin
 			end if;
 			
 			--IDE address decode section 
-			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP(0) ='0') then
+			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
 				IDE_SPACE <= '1';
 			else
 				IDE_SPACE <= '0';
@@ -676,7 +668,7 @@ begin
 			end if;				
 
 			--Autoconfig(tm) address decode section 
-			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE /="11") then
+			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
 				AUTO_CONFIG <= '1';
 			else
 				AUTO_CONFIG <= '0';
@@ -686,93 +678,51 @@ begin
 			if	reset = '0' then
 				-- reset active ...
 				AUTO_CONFIG_PAUSE <= '0';
-				AUTO_CONFIG_DONE_CYCLE	<="00";
-				AUTO_CONFIG_DONE	<= "00";
+				AUTO_CONFIG_DONE_CYCLE	<= '0';
+				AUTO_CONFIG_DONE	<= '0';
 				
 				--use these presets for CDTV: This makes the DMAC config first!
 				--AUTO_CONFIG_PAUSE <='1';
-				--AUTO_CONFIG_DONE_CYCLE	<="11";
-				--AUTO_CONFIG_DONE	<="11";
+				--AUTO_CONFIG_DONE_CYCLE	<='1';
+				--AUTO_CONFIG_DONE	<='1';
 				Dout2 <= "1111";
-				SHUT_UP	<= "11";
+				SHUT_UP	<= '1';
 				IDE_BASEADR <= x"FF";
 				AUTO_CONFIG_D0 <= '0';
-				RAM_BASE_ADR<= x"2";
 			else
---				if( 	A(31 downto 16) = x"00E8" 
---						and A (6 downto 1)= "100100"
---						and RW='0' and nAS_D0='0')  then
---					AUTO_CONFIG_FINISH <= '1';
---				else
---					AUTO_CONFIG_FINISH <= '0';
---				end if;
---				
---				-- wait one autoconfig-strobe for CDTV!
---				if(AUTO_CONFIG_FINISH = '1'
---					and nAS_D0='1' and AUTO_CONFIG_PAUSE ='1') then
---					AUTO_CONFIG_PAUSE <= '0';
---					AUTO_CONFIG_DONE_CYCLE	<= "00";
---					AUTO_CONFIG_DONE <= "00";
---				end if;
-				if(nAS= '1' and nAS_D0= '0' )then
+				if( 	A(31 downto 16) = x"00E8" 
+						and A (6 downto 1)= "100100"
+						and RW='0' and nAS_D0='0')  then
+					AUTO_CONFIG_FINISH <= '1';
+				else
+					AUTO_CONFIG_FINISH <= '0';
+				end if;
+				
+				-- wait one autoconfig-strobe for CDTV!
+				if(AUTO_CONFIG_FINISH = '1'
+					and nAS_D0='1' and AUTO_CONFIG_PAUSE ='1') then
+					AUTO_CONFIG_PAUSE <= '0';
+					AUTO_CONFIG_DONE_CYCLE	<= '0';
+					AUTO_CONFIG_DONE <= '0';
+				elsif(nAS= '1' and nAS_D0= '0' )then
 					AUTO_CONFIG_DONE <= AUTO_CONFIG_DONE_CYCLE;
 				end if;
 			
 				if(AUTO_CONFIG = '1' and nAS = '0') then
 					AUTO_CONFIG_D0 <= '1';
 					case A(6 downto 1) is
-						when "000000"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <= "1101" ; --ZII, no Memory,  ROM
-							else
-								Dout2 <= "1110" ; --ZII, System-Memory, no ROM
-							end if;
-						when "000001"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"0001" ; --one Card, 64kb = 001
-							else
-								Dout2 <=	"0101" ; --one Card, 1MB = 101
-							end if;
-						when "000010"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
-							else
-								Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
-							end if;
-						when "000011"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"1001" ; --ProductID low nibble: 9->0110=6
-							else
-								Dout2 <=	"1000" ; --ProductID low nibble: 8->0111=7
-							end if;
+						when "000000"	=> Dout2 <= "1101" ; --ZII, no Memory,  ROM
+						when "000001"	=> Dout2 <=	"0001" ; --one Card, 64kb = 001
+						when "000010"	=> Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
+						when "000011"	=> Dout2 <=	"1001" ; --ProductID low nibble: 9->0110=6
 						when "000100"	=> Dout2 <=	"1111" ; --Z3 Config HIGH                                                                                                                                                                                                                                                                                                                      Dout <=	"1111" ; --Config HIGH: 0x20 and no shut down
 						when "000101"	=> Dout2 <=	"1111" ; --Z3 Config LOW
 						when "000110"	=> Dout2 <=	"1111" ; --reserved
 						when "000111"	=> Dout2 <=	"1111" ; --reserved
-						when "001000"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"1111" ; --Ventor ID 0
-							else
-								Dout2 <=	"1111" ; --Ventor ID 0
-							end if;
-						when "001001"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"0111" ; --Ventor ID 1
-							else
-								Dout2 <=	"0101" ; --Ventor ID 1
-							end if;
-						when "001010"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"1101" ; --Ventor ID 2
-							else
-								Dout2 <=	"1110" ; --Ventor ID 2
-							end if;
-						when "001011"	=> 
-							if(AUTO_CONFIG_DONE(0)='0') then
-								Dout2 <=	"0011" ; --Ventor ID 3 : $082C: BSC
-							else
-								Dout2 <=	"0011" ; --Ventor ID 3 : $0A1C: A1K.org
-							end if;
+						when "001000"	=> Dout2 <=	"1111" ; --Ventor ID 0
+						when "001001"	=> Dout2 <=	"0111" ; --Ventor ID 1
+						when "001010"	=> Dout2 <=	"1101" ; --Ventor ID 2
+						when "001011"	=> Dout2 <=	"0011" ; --Ventor ID 3 : $082C: BSC
 						when "001100"	=> Dout2 <=	"0100" ; --Serial byte 0 (msb) high nibble
 						when "001101"	=> Dout2 <=	"1110" ; --Serial byte 0 (msb) low  nibble
 						when "001110"	=> Dout2 <=	"1001" ; --Serial byte 1       high nibble
@@ -788,24 +738,18 @@ begin
 						when "100000"	=> Dout2 <=	"1111" ; --Interrupt config: all zero
 						when "100001"	=> Dout2 <=	"1111" ; --Interrupt config: all zero
 						when "100100"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE(0) = '0')then 
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
 								IDE_BASEADR(7 downto 4)	<= D(3 downto 0); --Base adress
-								SHUT_UP(0) <= '0'; --enable board
-								AUTO_CONFIG_DONE_CYCLE(0)	<= '1'; --done here
-							elsif(nDS = '0' and RW='0' and AUTO_CONFIG_DONE(1) = '0')then 
-								RAM_BASE_ADR <= D(3 downto 0); --Base adress
-								SHUT_UP(1) <= '0'; --enable board
-								AUTO_CONFIG_DONE_CYCLE(1)	<= '1'; --done here							
+								SHUT_UP <= '0'; --enable board
+								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
 							end if;
 						when "100101"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE(0) = '0')then 
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
 								IDE_BASEADR(3 downto 0)	<= D(3 downto 0); --Base adress
 							end if;
 						when "100110"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE(0) = '0')then 
-								AUTO_CONFIG_DONE_CYCLE(0)	<= '1'; --done here
-							elsif(nDS = '0' and RW='0' and AUTO_CONFIG_DONE(1) = '0')then 
-								AUTO_CONFIG_DONE_CYCLE(1)	<= '1'; --done here							
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
+								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
 							end if;
 						when others	=> Dout2 <=	"1111" ;
 					end case;	
