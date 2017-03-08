@@ -255,7 +255,7 @@ begin
 		if(falling_edge(PLL_C))then
 			
 			--latch control for reads
-			if(CQ=start_ras or CQ=data_wait2)then --cl2
+			if(CQ=commit_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
 				LE_RAM_30<= not RW;
 			elsif(CQ=data_wait or RESET ='0')then
@@ -347,7 +347,7 @@ begin
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
-				if(CBREQ = '0' and (CQ=start_ras) 
+				if(CBREQ = '0' and (CQ=commit_ras) 
 					--and (RAM_ACCESS = '1') 
 					and A(3 downto 2) < "11")then
 					CBACK_S <='0';
@@ -480,6 +480,7 @@ begin
 
 				when start_state =>		 
 				 ENACLK_PRE <= '1';
+				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
 				 ARAM <= A(17 downto 5);
@@ -488,10 +489,11 @@ begin
 				 elsif (TRANSFER = '1'
 							 and CLK_PE(CLOCK_SAMPLE)='1'
 							) then
-					 CQ <= start_ras;
+					--RAS <= '0';
+					CQ <= start_ras;
 				 else
-					 CQ <= start_state;
-				 RAS <= '1';
+					CQ <= start_state;
+					--RAS <= '1';
 				 end if;
 				 
 				when refresh_start =>
