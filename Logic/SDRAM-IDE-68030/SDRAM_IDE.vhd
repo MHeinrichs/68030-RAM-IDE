@@ -86,10 +86,10 @@ begin
   end;
 
 
---constant CLOCK_SAMPLE : integer := 3; --cl3
-constant CLOCK_SAMPLE : integer := 2; --cl2
---constant NQ_TIMEOUT : integer := 9; --cl3
-constant NQ_TIMEOUT : integer := 6; --cl2
+constant CLOCK_SAMPLE : integer := 3; --cl3
+--constant CLOCK_SAMPLE : integer := 2; --cl2
+constant NQ_TIMEOUT : integer := 9; --cl3
+--constant NQ_TIMEOUT : integer := 6; --cl2
 constant IDE_WAITS : integer := 4;
 constant ROM_WAITS : integer := 8;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
@@ -153,8 +153,8 @@ signal NQ :  STD_LOGIC_VECTOR (3 downto 0);
 signal RQ :  STD_LOGIC_VECTOR (7 downto 0);
 signal CQ :  sdram_state_machine_type;
 constant ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0) := "0010000000000";   
---constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
-constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
+constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
+--constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
 signal ENACLK_PRE : STD_LOGIC;
 signal CLK_D : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
@@ -196,9 +196,9 @@ begin
 	
 	
 	--values for the 570A
-	S<="ZZ"; --double the clock - FB is CLK 
+	--S<="ZZ"; --double the clock - FB is CLK 
 	--S<="0Z"; --Quarduple the clock - FB is CLK 
-	--S<="01"; --triple the clock - FB is CLK 
+	S<="01"; --triple the clock - FB is CLK 
 	--S<="00"; --disable
 	--S<="Z0"; --recover the clock (1x
 
@@ -263,14 +263,6 @@ begin
 				LE_RAM_30<= '1';
 			end if;
 			
-		end if;
-	end process neg_edge_ctrl;
- 
-	--all signals, which need to be clocked on the positive edge
-	pos_edge_ctrl:process (PLL_C) begin
-      if rising_edge(PLL_C) then		
-
-
 			--sterm control
 			if(CQ=commit_cas)then --cl3
 			--if(CQ=start_cas)then --cl2
@@ -278,6 +270,13 @@ begin
 			elsif(CQ=precharge or nAS = '1' or RESET='0')then
 				STERM_S <= '1';
 			end if;
+
+		end if;
+	end process neg_edge_ctrl;
+ 
+	--all signals, which need to be clocked on the positive edge
+	pos_edge_ctrl:process (PLL_C) begin
+      if rising_edge(PLL_C) then		
 
 			
 			--clock edge detection
@@ -550,12 +549,12 @@ begin
 
 				when commit_cas =>
 				 --ENACLK_PRE <= '1'; 
-				 ENACLK_PRE <= CBACK_S; --cl2
+				 ENACLK_PRE <= '1'; --cl2
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 --CQ <= commit_cas2; --cl3
-				 CQ <= data_wait; --cl2
+				 CQ <= commit_cas2; --cl3
+				 --CQ <= data_wait; --cl2
 
 				when commit_cas2 =>
 				 ENACLK_PRE <= CBACK_S; --delay comes one clock later!
@@ -582,8 +581,8 @@ begin
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 --CQ <= data_wait3; --cl3
-				 CQ <= data_wait;	--cl2		
+				 CQ <= data_wait3; --cl3
+				 --CQ <= data_wait;	--cl2		
 
 				when data_wait3 =>
 				 ENACLK_PRE <= '0'; 
