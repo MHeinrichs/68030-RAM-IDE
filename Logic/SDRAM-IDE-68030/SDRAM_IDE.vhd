@@ -638,6 +638,8 @@ begin
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
+					else
+						DSACK_16BIT		<=	'1';
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '1' and IDE_WAIT = '1')then
 					IDE_DSACK_D(0)		<=	'0';
@@ -647,15 +649,22 @@ begin
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
+					else
+						DSACK_16BIT		<=	'1';
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '0')then
-					IDE_DSACK_D(0)		<=	'0';
+					IDE_DSACK_D(0)	<=	'0';
 					DSACK_16BIT		<= IDE_DSACK_D(ROM_WAITS);
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '1';
-					ROM_OE_S		<=	'0';						
+					ROM_OE_S		<=	'0';	
+				else
+					IDE_DSACK_D(0)	<=	'1';
+					DSACK_16BIT		<= '1';
+					IDE_W_S		<= '1';
+					IDE_R_S		<= '1';
+					ROM_OE_S		<=	'1';	
 				end if;
-
 				--generate IO-delay
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
