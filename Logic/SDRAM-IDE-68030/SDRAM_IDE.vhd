@@ -338,6 +338,7 @@ begin
 				OE_30_RAM <= RW;
 				OE_RAM_30 <= not RW;
 			elsif(nAS = '1' 
+					--and nAS_D0='1'
 					)then -- delay the output a bit
 				OE_30_RAM <= '1';
 				OE_RAM_30 <= '1';
