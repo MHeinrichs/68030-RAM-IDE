@@ -143,7 +143,7 @@ signal	ROM_OE_S:STD_LOGIC;
 signal	IDE_R_S:STD_LOGIC;
 signal	IDE_W_S:STD_LOGIC;
 signal	IDE_BUF_S:STD_LOGIC;
-signal	AUTO_CONFIG_D0:STD_LOGIC;
+--signal	AUTO_CONFIG_D0:STD_LOGIC;
 signal	nAS_D0:STD_LOGIC;
 signal	AUTO_CONFIG_FINISH:STD_LOGIC;
 signal TRANSFER_IN_PROGRES:STD_LOGIC:= '1';
@@ -175,7 +175,7 @@ begin
 	--map DSACK signal
 	nDSACK		<= "ZZ" when MY_CYCLE ='1' ELSE
 						"01" when DSACK_16BIT	 ='0' else 						
-						"01" when AUTO_CONFIG_D0='1' else 
+						"01" when AUTO_CONFIG='1' else 
 						"11";
 	STERM		<= STERM_S when TRANSFER_IN_PROGRES = '1' else 'Z';
 
@@ -232,14 +232,14 @@ begin
 	BA <= "00" when RAM_BANK_ACTIVATE='0' else A(19 downto 18);
 
 	--32bit ram and rangermem adress decode
-	RAM_SPACE    <= '1' when A(27 downto 26) = "10" 
+	RAM_SPACE    <= '1' when A(27) = '1'  
 										and A(25 downto 20) /="111111" 
 										else '0'; 
 	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
 
 	--transfer start detectioon via latch
   	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
-	TRANSFER_RESET <= '1' when CQ=commit_ras or RESET ='0' else '0';
+	TRANSFER_RESET <= '1' when CQ=commit_cas or RESET ='0' else '0';
 	
 	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
 		if(TRANSFER_RESET ='1') then
@@ -288,12 +288,12 @@ begin
 			nAS_D0	<=nAS;
 								
 			--bussizing decode
-			if(RESET = '0')then
-				LDQ0	<= '1';
-				UDQ0	<= '1';
-				LDQ1	<= '1';
-				UDQ1	<= '1';
-			else--if(nAS = '0' and nAS_PLL_C_N='1')then			
+--			if(RESET = '0')then
+--				LDQ0	<= '1';
+--				UDQ0	<= '1';
+--				LDQ1	<= '1';
+--				UDQ1	<= '1';
+--			else--if(nAS = '0' and nAS_PLL_C_N='1')then			
 				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
 				-- bits 0-7
 				if(RW='1' or ( SIZ="00" or 
@@ -330,14 +330,15 @@ begin
 				else
 					UDQ1	<= '1';
 				end if;
-			end if;
+--			end if;
 			
 			--output buffer control
 			if( CQ=commit_ras
 				) then
 				OE_30_RAM <= RW;
 				OE_RAM_30 <= not RW;
-			elsif(nAS = '1' and nAS_D0='1')then -- delay the output a bit
+			elsif(nAS = '1' 
+					)then -- delay the output a bit
 				OE_30_RAM <= '1';
 				OE_RAM_30 <= '1';
 			end if;
@@ -572,7 +573,6 @@ begin
  				 MEM_WE <= '1';
 				 ARAM <= ARAM_PRECHARGE;
 				 if(CBACK_S = '1')then
-					--CQ_D <= pre_precharge;
 					CQ <= precharge;
 				 else
 					CQ <= data_wait2;
@@ -638,8 +638,6 @@ begin
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
-					else
-						DSACK_16BIT		<=	'1';
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '1' and IDE_WAIT = '1')then
 					IDE_DSACK_D(0)		<=	'0';
@@ -649,8 +647,6 @@ begin
 					ROM_OE_S		<=	'1';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
-					else
-						DSACK_16BIT		<=	'1';
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '0')then
 					IDE_DSACK_D(0)	<=	'0';
@@ -658,12 +654,6 @@ begin
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'0';	
-				else
-					IDE_DSACK_D(0)	<=	'1';
-					DSACK_16BIT		<= '1';
-					IDE_W_S		<= '1';
-					IDE_R_S		<= '1';
-					ROM_OE_S		<=	'1';	
 				end if;
 				--generate IO-delay
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
@@ -698,7 +688,7 @@ begin
 				Dout2 <= "1111";
 				SHUT_UP	<= '1';
 				IDE_BASEADR <= x"FF";
-				AUTO_CONFIG_D0 <= '0';
+				--AUTO_CONFIG_D0 <= '0';
 			else
 				if( 	A(31 downto 16) = x"00E8" 
 						and A (6 downto 1)= "100100"
@@ -719,7 +709,7 @@ begin
 				end if;
 			
 				if(AUTO_CONFIG = '1' and nAS = '0') then
-					AUTO_CONFIG_D0 <= '1';
+					--AUTO_CONFIG_D0 <= '1';
 					case A(6 downto 1) is
 						when "000000"	=> Dout2 <= "1101" ; --ZII, no Memory,  ROM
 						when "000001"	=> Dout2 <=	"0001" ; --one Card, 64kb = 001
@@ -763,8 +753,8 @@ begin
 							end if;
 						when others	=> Dout2 <=	"1111" ;
 					end case;	
-				else
-					AUTO_CONFIG_D0 <= '0';
+				--else
+				--	AUTO_CONFIG_D0 <= '0';
 				end if;
 			end if;
 		end if;
