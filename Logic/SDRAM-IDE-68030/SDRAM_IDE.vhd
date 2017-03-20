@@ -130,11 +130,12 @@ signal   IDE_SPACE:STD_LOGIC;
 signal   RAM_SPACE:STD_LOGIC;
 signal   RANGER_SPACE:STD_LOGIC;
 signal	AUTO_CONFIG:STD_LOGIC;
-signal	AUTO_CONFIG_DONE:STD_LOGIC;
+signal	AUTO_CONFIG_DONE:STD_LOGIC_VECTOR(1 downto 0);
 signal	AUTO_CONFIG_PAUSE:STD_LOGIC;
-signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC;
-signal	SHUT_UP:STD_LOGIC;
+signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC_VECTOR(1 downto 0);
+signal	SHUT_UP:STD_LOGIC_VECTOR(1 downto 0);
 signal	IDE_BASEADR:STD_LOGIC_VECTOR(7 downto 0);
+signal	Dout1:STD_LOGIC_VECTOR(3 downto 0);
 signal	Dout2:STD_LOGIC_VECTOR(3 downto 0);
 signal	IDE_DSACK_D:STD_LOGIC_VECTOR(IDE_DELAY downto 0);
 signal	DSACK_16BIT:STD_LOGIC;
@@ -224,6 +225,7 @@ begin
 	
 	--data out for autoconfig(tm)
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
+			Dout1	when 	AUTO_CONFIG_DONE(0)='0' else
 			Dout2;	
 	
 	--transparent latch for writes
@@ -235,7 +237,11 @@ begin
 	RAM_SPACE    <= '1' when A(27) = '1'  
 										and A(25 downto 20) /="111111" 
 										else '0'; 
-	RANGER_SPACE <= '1' when A(27) = '0' and A(23 downto 20) =x"C" else '0'; 
+	RANGER_SPACE <= '1' when 
+									A(27) = '0' 
+									and A(23 downto 20) =x"2" --evil hack but cpld is full!
+									and SHUT_UP(0)='0' 
+								else '0'; 
 
 	--transfer start detectioon via latch
   	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
@@ -613,7 +619,7 @@ begin
 			end if;
 			
 			--IDE address decode section 
-			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP ='0') then
+			if(A(31 downto 16) = (x"00" & IDE_BASEADR) AND SHUT_UP(1) ='0') then
 				IDE_SPACE <= '1';
 			else
 				IDE_SPACE <= '0';
@@ -669,7 +675,7 @@ begin
 			end if;				
 
 			--Autoconfig(tm) address decode section 
-			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE ='0') then
+			if(A(31 downto 16) =x"00E8" AND AUTO_CONFIG_DONE /="11") then
 				AUTO_CONFIG <= '1';
 			else
 				AUTO_CONFIG <= '0';
@@ -679,78 +685,145 @@ begin
 			if	reset = '0' then
 				-- reset active ...
 				AUTO_CONFIG_PAUSE <= '0';
-				AUTO_CONFIG_DONE_CYCLE	<= '0';
-				AUTO_CONFIG_DONE	<= '0';
+				AUTO_CONFIG_DONE_CYCLE	<= "00";
+				AUTO_CONFIG_DONE	<= "00";
 				
 				--use these presets for CDTV: This makes the DMAC config first!
 				--AUTO_CONFIG_PAUSE <='1';
 				--AUTO_CONFIG_DONE_CYCLE	<='1';
 				--AUTO_CONFIG_DONE	<='1';
+				Dout1 <= "1111";
 				Dout2 <= "1111";
-				SHUT_UP	<= '1';
+				SHUT_UP	<= "11";
 				IDE_BASEADR <= x"FF";
 				--AUTO_CONFIG_D0 <= '0';
 			else
-				if( 	A(31 downto 16) = x"00E8" 
-						and A (6 downto 1)= "100100"
-						and RW='0' and nAS_D0='0')  then
-					AUTO_CONFIG_FINISH <= '1';
-				else
-					AUTO_CONFIG_FINISH <= '0';
-				end if;
+--				if( 	A(31 downto 16) = x"00E8" 
+--						and A (6 downto 1)= "100100"
+--						and RW='0' and nAS_D0='0')  then
+--					AUTO_CONFIG_FINISH <= '1';
+--				else
+--					AUTO_CONFIG_FINISH <= '0';
+--				end if;
 				
-				-- wait one autoconfig-strobe for CDTV!
-				if(AUTO_CONFIG_FINISH = '1'
-					and nAS_D0='1' and AUTO_CONFIG_PAUSE ='1') then
-					AUTO_CONFIG_PAUSE <= '0';
-					AUTO_CONFIG_DONE_CYCLE	<= '0';
-					AUTO_CONFIG_DONE <= '0';
-				elsif(nAS= '1' and nAS_D0= '0' )then
+--				-- wait one autoconfig-strobe for CDTV!
+--				if(AUTO_CONFIG_FINISH = '1'
+--					and nAS_D0='1' and AUTO_CONFIG_PAUSE ='1') then
+--					AUTO_CONFIG_PAUSE <= '0';
+--					AUTO_CONFIG_DONE_CYCLE	<= "00";
+--					AUTO_CONFIG_DONE <= "00";
+--				els
+				if(nAS= '1' and nAS_D0= '0' )then
 					AUTO_CONFIG_DONE <= AUTO_CONFIG_DONE_CYCLE;
 				end if;
 			
 				if(AUTO_CONFIG = '1' and nAS = '0') then
 					--AUTO_CONFIG_D0 <= '1';
 					case A(6 downto 1) is
-						when "000000"	=> Dout2 <= "1101" ; --ZII, no Memory,  ROM
-						when "000001"	=> Dout2 <=	"0001" ; --one Card, 64kb = 001
-						when "000010"	=> Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
-						when "000011"	=> Dout2 <=	"1001" ; --ProductID low nibble: 9->0110=6
-						when "000100"	=> Dout2 <=	"1111" ; --Z3 Config HIGH                                                                                                                                                                                                                                                                                                                      Dout <=	"1111" ; --Config HIGH: 0x20 and no shut down
-						when "000101"	=> Dout2 <=	"1111" ; --Z3 Config LOW
-						when "000110"	=> Dout2 <=	"1111" ; --reserved
-						when "000111"	=> Dout2 <=	"1111" ; --reserved
-						when "001000"	=> Dout2 <=	"1111" ; --Ventor ID 0
-						when "001001"	=> Dout2 <=	"0111" ; --Ventor ID 1
-						when "001010"	=> Dout2 <=	"1101" ; --Ventor ID 2
-						when "001011"	=> Dout2 <=	"0011" ; --Ventor ID 3 : $082C: BSC
-						when "001100"	=> Dout2 <=	"0100" ; --Serial byte 0 (msb) high nibble
-						when "001101"	=> Dout2 <=	"1110" ; --Serial byte 0 (msb) low  nibble
-						when "001110"	=> Dout2 <=	"1001" ; --Serial byte 1       high nibble
-						when "001111"	=> Dout2 <=	"0100" ; --Serial byte 1       low  nibble
-						when "010000"	=> Dout2 <=	"1111" ; --Serial byte 2       high nibble
-						when "010001"	=> Dout2 <=	"1111" ; --Serial byte 2       low  nibble
-						when "010010"	=> Dout2 <=	"0100" ; --Serial byte 3 (lsb) high nibble
-						when "010011"	=> Dout2 <=	"1010" ; --Serial byte 3 (lsb) low  nibble: B16B00B5
-						when "010100"	=> Dout2 <=	"1111" ; --Rom vector high byte high nibble 
-						when "010101"	=> Dout2 <=	"1111" ; --Rom vector high byte low  nibble 
-						when "010110"	=> Dout2 <=	"1111" ; --Rom vector low byte high nibble
-						when "010111"	=> Dout2 <=	"1110" ; --Rom vector low byte low  nibble
-						when "100000"	=> Dout2 <=	"1111" ; --Interrupt config: all zero
-						when "100001"	=> Dout2 <=	"1111" ; --Interrupt config: all zero
-						when "100100"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
-								IDE_BASEADR(7 downto 4)	<= D(3 downto 0); --Base adress
-								SHUT_UP <= '0'; --enable board
-								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
+						when "000000"	=> 
+							Dout1 <= "1110" ; --ZII, Memory,  no ROM
+							Dout2 <= "1101" ; --ZII, no Memory,  ROM
+						when "000001"	=> 
+							Dout1 <=	"0101" ; --one Card, 1MB =  101
+							Dout2 <=	"0001" ; --one Card, 64kb = 001
+						when "000010"	=> 
+							Dout1 <=	"1111" ; --ProductID high nibble : F->0000=0
+							Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
+						when "000011"	=> 
+							Dout1 <=	"1001" ;
+							Dout2 <=	"1001" ; --ProductID low nibble: 9->0110=6
+						when "000100"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Z3 Config HIGH                                                                                                                                                                                                                                                                                                                      Dout <=	"1111" ; --Config HIGH: 0x20 and no shut down
+						when "000101"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Z3 Config LOW
+						when "000110"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --reserved
+						when "000111"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --reserved
+						when "001000"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Ventor ID 0
+						when "001001"	=> 
+							Dout1 <=	"0101" ;
+							Dout2 <=	"0111" ; --Ventor ID 1
+						when "001010"	=> 
+							Dout1 <=	"1110" ;
+							Dout2 <=	"1101" ; --Ventor ID 2
+						when "001011"	=> 
+							Dout1 <=	"0011" ; --Ventor ID 3 : $0A1C: A1k.org
+							Dout2 <=	"0011" ; --Ventor ID 3 : $082C: BSC
+						when "001100"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"0100" ; --Serial byte 0 (msb) high nibble
+						when "001101"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1110" ; --Serial byte 0 (msb) low  nibble
+						when "001110"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1001" ; --Serial byte 1       high nibble
+						when "001111"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"0100" ; --Serial byte 1       low  nibble
+						when "010000"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Serial byte 2       high nibble
+						when "010001"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Serial byte 2       low  nibble
+						when "010010"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"0100" ; --Serial byte 3 (lsb) high nibble
+						when "010011"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1010" ; --Serial byte 3 (lsb) low  nibble: B16B00B5
+						when "010100"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Rom vector high byte high nibble 
+						when "010101"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Rom vector high byte low  nibble 
+						when "010110"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Rom vector low byte high nibble
+						when "010111"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1110" ; --Rom vector low byte low  nibble
+						when "100000"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Interrupt config: all zero
+						when "100001"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ; --Interrupt config: all zero
+						when "100100"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ;
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "00")then 
+								SHUT_UP(0) <= '0'; --enable board
+								AUTO_CONFIG_DONE_CYCLE	<= "01"; --done here
 							end if;
-						when "100101"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "01")then 
+								IDE_BASEADR(7 downto 4)	<= D(3 downto 0); --Base adress
+								SHUT_UP(1) <= '0'; --enable board
+								AUTO_CONFIG_DONE_CYCLE	<= "11"; --done here
+							end if;
+						when "100101"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ;
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "01")then 
 								IDE_BASEADR(3 downto 0)	<= D(3 downto 0); --Base adress
 							end if;
-						when "100110"	=> Dout2 <=	"1111" ;
-							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = '0')then 
-								AUTO_CONFIG_DONE_CYCLE	<= '1'; --done here
+						when "100110"	=> 
+							Dout1 <=	"1111" ;
+							Dout2 <=	"1111" ;
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "00")then 
+								AUTO_CONFIG_DONE_CYCLE	<= "01"; --done here
+							end if;
+							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "01")then 
+								AUTO_CONFIG_DONE_CYCLE	<= "11"; --done here
 							end if;
 						when others	=> Dout2 <=	"1111" ;
 					end case;	

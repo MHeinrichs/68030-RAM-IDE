@@ -21,80 +21,8 @@
 
   <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="SDRAM-IDE-68030.xise"/>
 
-  <files xmlns="http://www.xilinx.com/XMLSchema">
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGDBUILD_LOG" xil_pn:name="SDRAM_IDE.bld"/>
-    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="SDRAM_IDE.cmd_log"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="SDRAM_IDE.lso"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGC" xil_pn:name="SDRAM_IDE.ngc"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGD" xil_pn:name="SDRAM_IDE.ngd"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGR" xil_pn:name="SDRAM_IDE.ngr"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="SDRAM_IDE.prj"/>
-    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="SDRAM_IDE.rpt"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="SDRAM_IDE.stx"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="SDRAM_IDE.syr"/>
-    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="SDRAM_IDE.tspec"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="SDRAM_IDE.xst"/>
-    <file xil_pn:fileType="FILE_HTML" xil_pn:name="SDRAM_IDE_envsettings.html"/>
-    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="SDRAM_IDE_html"/>
-    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="SDRAM_IDE_ngdbuild.xrpt"/>
-    <file xil_pn:fileType="FILE_HTML" xil_pn:name="SDRAM_IDE_summary.html"/>
-    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="SDRAM_IDE_vhdl.prj"/>
-    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="SDRAM_IDE_xst.xrpt"/>
-    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="_ngo"/>
-    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
-    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
-    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
-    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xlnx_auto_0_xdb"/>
-    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
-  </files>
+  <files xmlns="http://www.xilinx.com/XMLSchema"/>
 
-  <transforms xmlns="http://www.xilinx.com/XMLSchema">
-    <transform xil_pn:end_ts="1490025929" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1490025929">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1490025929" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="-1518019761039280101" xil_pn:start_ts="1490025929">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1490026128" xil_pn:in_ck="4145160102032195629" xil_pn:name="TRANEXT_xstsynthesize_xc9500xl" xil_pn:prop_ck="-6167662143266360089" xil_pn:start_ts="1490026117">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="WarningsGenerated"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="SDRAM_IDE.lso"/>
-      <outfile xil_pn:name="SDRAM_IDE.ngc"/>
-      <outfile xil_pn:name="SDRAM_IDE.ngr"/>
-      <outfile xil_pn:name="SDRAM_IDE.prj"/>
-      <outfile xil_pn:name="SDRAM_IDE.stx"/>
-      <outfile xil_pn:name="SDRAM_IDE.syr"/>
-      <outfile xil_pn:name="SDRAM_IDE.xst"/>
-      <outfile xil_pn:name="SDRAM_IDE_vhdl.prj"/>
-      <outfile xil_pn:name="SDRAM_IDE_xst.xrpt"/>
-      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
-      <outfile xil_pn:name="webtalk_pn.xml"/>
-      <outfile xil_pn:name="xst"/>
-    </transform>
-    <transform xil_pn:end_ts="1490025940" xil_pn:in_ck="176569500195729039" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="-1787009425631663328" xil_pn:start_ts="1490025940">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-    </transform>
-    <transform xil_pn:end_ts="1490026136" xil_pn:in_ck="4201451181389721853" xil_pn:name="TRAN_ngdbuild" xil_pn:prop_ck="6932115226421322529" xil_pn:start_ts="1490026128">
-      <status xil_pn:value="SuccessfullyRun"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="SDRAM_IDE.bld"/>
-      <outfile xil_pn:name="SDRAM_IDE.ngd"/>
-      <outfile xil_pn:name="SDRAM_IDE_ngdbuild.xrpt"/>
-      <outfile xil_pn:name="_ngo"/>
-      <outfile xil_pn:name="_xmsgs/ngdbuild.xmsgs"/>
-    </transform>
-    <transform xil_pn:end_ts="1490026155" xil_pn:in_ck="-5573540943129765073" xil_pn:name="TRANEXT_vm6File_xc9500xl" xil_pn:prop_ck="7312011709315620126" xil_pn:start_ts="1490026136">
-      <status xil_pn:value="FailedRun"/>
-      <status xil_pn:value="WarningsGenerated"/>
-      <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name="SDRAM_IDE.rpt"/>
-      <outfile xil_pn:name="SDRAM_IDE.tspec"/>
-      <outfile xil_pn:name="SDRAM_IDE_html"/>
-    </transform>
-  </transforms>
+  <transforms xmlns="http://www.xilinx.com/XMLSchema"/>
 
 </generated_project>
