@@ -135,7 +135,7 @@ signal	AUTO_CONFIG_PAUSE:STD_LOGIC;
 signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC_VECTOR(1 downto 0);
 signal	SHUT_UP:STD_LOGIC_VECTOR(1 downto 0);
 signal	IDE_BASEADR:STD_LOGIC_VECTOR(7 downto 0);
-signal	Dout1:STD_LOGIC_VECTOR(3 downto 0);
+--signal	Dout1:STD_LOGIC_VECTOR(3 downto 0);
 signal	Dout2:STD_LOGIC_VECTOR(3 downto 0);
 signal	IDE_DSACK_D:STD_LOGIC_VECTOR(IDE_DELAY downto 0);
 signal	DSACK_16BIT:STD_LOGIC;
@@ -225,7 +225,7 @@ begin
 	
 	--data out for autoconfig(tm)
 	D	<=	"ZZZZ" when RW='0' or AUTO_CONFIG ='0' or nAS='1' else
-			Dout1	when 	AUTO_CONFIG_DONE(0)='0' else
+			--Dout1	when 	AUTO_CONFIG_DONE(0)='0' else
 			Dout2;	
 	
 	--transparent latch for writes
@@ -692,7 +692,7 @@ begin
 				--AUTO_CONFIG_PAUSE <='1';
 				--AUTO_CONFIG_DONE_CYCLE	<='1';
 				--AUTO_CONFIG_DONE	<='1';
-				Dout1 <= "1111";
+				--Dout1 <= "1111";
 				Dout2 <= "1111";
 				SHUT_UP	<= "11";
 				IDE_BASEADR <= x"FF";
@@ -722,24 +722,25 @@ begin
 					case A(6 downto 1) is
 						when "000000"	=> 
 							--Dout1 <= "1110" ; --ZII, Memory,  no ROM
-							Dout1(0) <=	'0' ;
 							--Dout2 <= "1101" ; --ZII, no Memory,  ROM
-							Dout2(1) <=	'0' ;
+							if(AUTO_CONFIG_DONE(0)='0') then
+								Dout2(0) <=	'0' ;
+							else
+								Dout2(1) <=	'0' ;
+							end if;
 						when "000001"	=> 
 							--Dout1 <=	"0101" ; --one Card, 1MB =  101
-							Dout1(1) <=	'0' ;
-							Dout1(3) <=	'0' ;
 							--Dout2 <=	"0001" ; --one Card, 64kb = 001
 							Dout2(1) <=	'0' ;
-							Dout2(2) <=	'0' ;
+							if(AUTO_CONFIG_DONE(0)='1') then
+								Dout2(2) <=	'0' ;
+							end if;
 							Dout2(3) <=	'0' ;
 						--when "000010"	=> 
 						--	Dout1 <=	"1111" ; --ProductID high nibble : F->0000=0
 						--	Dout2 <=	"1111" ; --ProductID high nibble : F->0000=0
 						when "000011"	=> 
 							--Dout1 <=	"1001" ;
-							Dout1(1) <=	'0' ;
-							Dout1(2) <=	'0' ;
 							--Dout2 <=	"1001" ; --ProductID low nibble: 9->0110=6
 							Dout2(1) <=	'0' ;
 							Dout2(2) <=	'0' ;
@@ -760,20 +761,24 @@ begin
 						--	Dout2 <=	"1111" ; --Ventor ID 0
 						when "001001"	=> 
 							--Dout1 <=	"0101" ;
-							Dout1(1) <=	'0' ;
-							Dout1(3) <=	'0' ;
+							if(AUTO_CONFIG_DONE(0)='0') then
+								Dout2(1) <=	'0' ;
+							end if;
 							--Dout2 <=	"0111" ; --Ventor ID 1
 							Dout2(3) <=	'0' ;
 						when "001010"	=> 
 							--Dout1 <=	"1110" ;
-							Dout1(0) <=	'0' ;
 							--Dout2 <=	"1101" ; --Ventor ID 2
-							Dout2(1) <=	'0' ;
+							if(AUTO_CONFIG_DONE(0)='0') then
+								Dout2(0) <=	'0' ;
+							else
+								Dout2(1) <=	'0' ;
+							end if;
 							
 						when "001011"	=> 
 							--Dout1 <=	"0011" ; --Ventor ID 3 : $0A1C: A1k.org
-							Dout1(2) <=	'0' ;
-							Dout1(3) <=	'0' ;
+							--Dout1(2) <=	'0' ;
+							--Dout1(3) <=	'0' ;
 							--Dout2 <=	"0011" ; --Ventor ID 3 : $082C: BSC
 							Dout2(2) <=	'0' ;
 							Dout2(3) <=	'0' ;
@@ -867,7 +872,7 @@ begin
 							--Dout2 <=	"1111" ;
 					end case;	
 				else
-					Dout1 <=	"1111" ;
+					--Dout1 <=	"1111" ;
 					Dout2 <=	"1111" ;
 				end if;
 			end if;
