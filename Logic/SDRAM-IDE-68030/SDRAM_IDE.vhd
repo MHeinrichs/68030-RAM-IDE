@@ -94,10 +94,10 @@ end;
 
 constant CLOCK_SAMPLE : integer := 3; --cl3
 --constant CLOCK_SAMPLE : integer := 3; --cl2
-constant NQ_TIMEOUT : integer := 11; --cl3
+constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
 constant IDE_WAITS : integer := 2;
-constant ROM_WAITS : integer := 4;
+constant ROM_WAITS : integer := 5;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
 	--should be 60ns minus one cycle, because the refresh command counts too 150mhz= 6,66ns *9 =60ns
@@ -220,9 +220,9 @@ begin
 	IDE_A(0)	<= A(9);
 	IDE_A(1)	<= A(10);
 	IDE_A(2)	<= A(11);
-	IDE_BUFFER_DIR	<= IDE_BUF_S when nAS='0' or nAS_D0 ='0' else '1';
-	IDE_R		<= IDE_R_S when nAS='0' or nAS_D0 ='0' else '1';
-	IDE_W		<= IDE_W_S when nAS='0' else '1';
+	IDE_BUFFER_DIR	<= IDE_BUF_S;-- when nAS='0' or nAS_D0 ='0' else '1';
+	IDE_R		<= IDE_R_S;-- when nAS='0' or nAS_D0 ='0' else '1';
+	IDE_W		<= IDE_W_S;-- when nAS='0' else '1';
 	IDE_RESET<= RESET;
 	ROM_EN	<= IDE_ENABLE;
 	ROM_WE	<= '1';
@@ -506,6 +506,7 @@ begin
 							 and CLK_PE(CLOCK_SAMPLE)='1'
 							) then
 					--RAS <= '0';
+					--CQ <= commit_ras;
 					CQ <= start_ras;
 				 else
 					CQ <= start_state;
@@ -621,6 +622,7 @@ begin
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
+				 ARAM <= A(17 downto 5);
 				 CQ <= start_state; 
 				 
 				end case;
@@ -640,67 +642,7 @@ begin
 				AUTO_CONFIG <= '0';
 			end if;
 
-		end if;
-   end process pos_edge_ctrl;	
-
---	IDE_CTRL: process(clk) begin
---	if(rising_edge(clk)) then
---				--ide enable generation
---			if	(reset = '0') then
---				IDE_ENABLE			<='0';
---			elsif(IDE_SPACE = '1' and nAS = '0' and RW = '0')then
---				--enable IDE on the first write on this IO-space!
---				IDE_ENABLE <= '1';
---			end if;							
---			
---			--ide control signals
---			if(IDE_SPACE = '1' and nAS = '0')then
---				IDE_BUF_S <= not RW;
---
---				if(RW = '0' and IDE_WAIT = '1')then
---					IDE_DSACK_D(0)		<=	'0';
---					--the write goes to the hdd!
---					IDE_W_S		<= '0';
---					IDE_R_S		<= '1';
---					ROM_OE_S		<=	'1';
---					if(IDE_WAIT = '1')then --IDE I/O
---						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
---					end if;
---				elsif(RW = '1' and IDE_ENABLE = '1' and IDE_WAIT = '1')then
---					IDE_DSACK_D(0)		<=	'0';
---					--read from IDE instead from ROM
---					IDE_W_S		<= '1';
---					IDE_R_S		<= '0';
---					ROM_OE_S		<=	'1';
---					if(IDE_WAIT = '1')then --IDE I/O
---						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
---					end if;
---				elsif(RW = '1' and IDE_ENABLE = '0')then
---					IDE_DSACK_D(0)	<=	'0';
---					DSACK_16BIT		<= IDE_DSACK_D(ROM_WAITS);
---					IDE_W_S		<= '1';
---					IDE_R_S		<= '1';
---					ROM_OE_S		<=	'0';	
---				end if;
---				--generate IO-delay
---				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
---			else
---				IDE_BUF_S <= '1';
---				IDE_R_S		<= '1';
---				IDE_W_S		<= '1';
---				ROM_OE_S	<= '1';
---				--ROM_EN_S	<= '1';
---				IDE_DSACK_D		<= (others => '1');
---				DSACK_16BIT			<= '1';		
---			end if;				
---
---	end if;
---	end process IDE_CTRL;
-
-	
-	AC_PROC: process(clk,reset)
-	begin
-				--Autoconfig(tm) data-encoding
+			--Autoconfig(tm) data-encoding
 			if	reset = '0' then
 				-- reset active ...
 				AUTO_CONFIG_PAUSE <= '0';
@@ -716,7 +658,7 @@ begin
 				SHUT_UP	<= "11";
 				IDE_BASEADR <= x"FF";
 				--AUTO_CONFIG_D0 <= '0';
-			elsif(rising_Edge(clk))then
+			else
 --				if( 	A(31 downto 16) = x"00E8" 
 --						and A (6 downto 1)= "100100"
 --						and RW='0' and nAS_D0='0')  then
@@ -896,9 +838,63 @@ begin
 					Dout2 <=	"1111" ;
 				end if;
 			end if;
+		end if;
+   end process pos_edge_ctrl;	
 
-	end process AC_PROC;
-	
+--	IDE_CTRL: process(clk) begin
+--	if(rising_edge(clk)) then
+--				--ide enable generation
+--			if	(reset = '0') then
+--				IDE_ENABLE			<='0';
+--			elsif(IDE_SPACE = '1' and nAS = '0' and RW = '0')then
+--				--enable IDE on the first write on this IO-space!
+--				IDE_ENABLE <= '1';
+--			end if;							
+--			
+--			--ide control signals
+--			if(IDE_SPACE = '1' and nAS = '0')then
+--				IDE_BUF_S <= not RW;
+--
+--				if(RW = '0' and IDE_WAIT = '1')then
+--					IDE_DSACK_D(0)		<=	'0';
+--					--the write goes to the hdd!
+--					IDE_W_S		<= '0';
+--					IDE_R_S		<= '1';
+--					ROM_OE_S		<=	'1';
+--					if(IDE_WAIT = '1')then --IDE I/O
+--						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
+--					end if;
+--				elsif(RW = '1' and IDE_ENABLE = '1' and IDE_WAIT = '1')then
+--					IDE_DSACK_D(0)		<=	'0';
+--					--read from IDE instead from ROM
+--					IDE_W_S		<= '1';
+--					IDE_R_S		<= '0';
+--					ROM_OE_S		<=	'1';
+--					if(IDE_WAIT = '1')then --IDE I/O
+--						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
+--					end if;
+--				elsif(RW = '1' and IDE_ENABLE = '0')then
+--					IDE_DSACK_D(0)	<=	'0';
+--					DSACK_16BIT		<= IDE_DSACK_D(ROM_WAITS);
+--					IDE_W_S		<= '1';
+--					IDE_R_S		<= '1';
+--					ROM_OE_S		<=	'0';	
+--				end if;
+--				--generate IO-delay
+--				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
+--			else
+--				IDE_BUF_S <= '1';
+--				IDE_R_S		<= '1';
+--				IDE_W_S		<= '1';
+--				ROM_OE_S	<= '1';
+--				--ROM_EN_S	<= '1';
+--				IDE_DSACK_D		<= (others => '1');
+--				DSACK_16BIT			<= '1';		
+--			end if;				
+--
+--	end if;
+--	end process IDE_CTRL;
+
 	
 	-- this is the clocked process
 	ide_rw_gen: process (clk)
