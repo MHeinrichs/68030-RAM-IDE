@@ -502,6 +502,7 @@ begin
 				 ARAM <= A(17 downto 5);
 				 if (REFRESH = '1') then
 					 CQ <= refresh_start;
+					 --RAS <= '1';
 				 elsif (TRANSFER = '1'
 							 and CLK_PE(CLOCK_SAMPLE)='1'
 							) then
@@ -567,8 +568,7 @@ begin
 				 CQ <= commit_cas;
 
 				when commit_cas =>
-				 --ENACLK_PRE <= '1'; 
-				 ENACLK_PRE <= '1'; --cl2
+				 ENACLK_PRE <= '1'; 
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
