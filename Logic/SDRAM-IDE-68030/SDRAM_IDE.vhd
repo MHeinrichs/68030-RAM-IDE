@@ -96,7 +96,7 @@ constant CLOCK_SAMPLE : integer := 3; --cl3
 --constant CLOCK_SAMPLE : integer := 3; --cl2
 constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
-constant IDE_WAITS : integer := 2;
+constant IDE_WAITS : integer := 1;
 constant ROM_WAITS : integer := 5;
 constant IDE_DELAY : integer := MAX(IDE_WAITS,ROM_WAITS);
 	--wait this number of cycles for a refresh
