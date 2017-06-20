@@ -135,12 +135,14 @@ signal	MY_CYCLE: STD_LOGIC;
 signal   IDE_SPACE:STD_LOGIC;
 signal   RAM_SPACE:STD_LOGIC;
 signal   RANGER_SPACE:STD_LOGIC;
+signal   MEM_SPACE:STD_LOGIC;
 signal	AUTO_CONFIG:STD_LOGIC;
 signal	AUTO_CONFIG_DONE:STD_LOGIC_VECTOR(1 downto 0);
 signal	AUTO_CONFIG_PAUSE:STD_LOGIC;
 signal	AUTO_CONFIG_DONE_CYCLE:STD_LOGIC_VECTOR(1 downto 0);
 signal	SHUT_UP:STD_LOGIC_VECTOR(1 downto 0);
 signal	IDE_BASEADR:STD_LOGIC_VECTOR(7 downto 0);
+signal	MEM_BASE:STD_LOGIC_VECTOR(3 downto 0);
 --signal	Dout1:STD_LOGIC_VECTOR(3 downto 0);
 signal	Dout2:STD_LOGIC_VECTOR(3 downto 0);
 signal	IDE_DSACK_D:STD_LOGIC_VECTOR(IDE_DELAY downto 0);
@@ -176,7 +178,11 @@ begin
 
 	--internal signals	
 	--output
-	MY_CYCLE		<= nAS 	when (IDE_SPACE='1' or AUTO_CONFIG ='1' or TRANSFER = '1' or TRANSFER_IN_PROGRES = '1') else '1';
+	MY_CYCLE		<= nAS 	when (IDE_SPACE='1' or AUTO_CONFIG ='1' 
+										--or MEM_SPACE = '1'
+										or TRANSFER='1'
+										or TRANSFER_IN_PROGRES ='1'
+										) else '1';
 	nRAM_SEL 	<= MY_CYCLE; 
 
 	--map DSACK signal
@@ -245,12 +251,13 @@ begin
 										else '0'; 
 	RANGER_SPACE <= '1' when 
 									A(27) = '0' 
-									and A(23 downto 20) =x"2" --evil hack but cpld is full!
+									--and A(23 downto 20) =x"2" --evil hack but cpld is full!
+									and A(23 downto 20) =MEM_BASE --evil hack but cpld is full!
 									and SHUT_UP(0)='0' 
 								else '0'; 
 
 	--transfer start detectioon via latch
-  	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
+	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
 	TRANSFER_RESET <= '1' when CQ=commit_cas or RESET ='0' else '0';
 	
 	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
@@ -269,8 +276,8 @@ begin
 			--latch control for reads
 			if(CQ=commit_ras or CQ=data_wait2)then --cl2
 			--if(CQ=start_ras or CQ=data_wait2)then --cl3
-				LE_RAM_30<= not RW;
-			elsif(CQ=data_wait or RESET ='0')then
+				LE_RAM_30<= '0';--not RW;
+			elsif(CQ=data_wait or CQ =start_state)then
 			--elsif(CQ=data_wait2 or CQ=precharge)then
 				LE_RAM_30<= '1';
 			end if;
@@ -285,6 +292,46 @@ begin
 
 		end if;
 	end process neg_edge_ctrl;
+	
+	bus_siz_ctrl:process (RW,SIZ,A)begin
+		--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
+		-- bits 0-7
+		if(RW='1' or ( SIZ="00" or 
+							(A(0)='1' and A(1)='1') or 
+							(A(1)='1' and SIZ(1)='1') or
+							(A(0)='1' and SIZ="11" )))then
+			LDQ0	<= '0';
+		else
+			LDQ0	<= '1';
+		end if;
+					
+		-- bits 8-15
+		if(RW='1' or (	(A(0)='0' and A(1)='1') or
+							(A(0)='1' and A(1)='0' and SIZ(0)='0') or
+							(A(1)='0' and SIZ="11") or 
+							(A(1)='0' and SIZ="00")))then
+			UDQ0	<= '0';
+		else
+			UDQ0	<= '1';
+		end if;				
+				
+		--bits 16-23
+		if(RW='1' or (	(A(0)='1' and A(1)='0') or
+							(A(1)='0' and SIZ(0)='0') or 
+							(A(1)='0' and SIZ(1)='1')))then
+			LDQ1	<= '0';
+		else
+			LDQ1	<= '1';
+		end if;									
+				
+		--bits 24--31
+		if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
+			UDQ1	<= '0';
+		else
+			UDQ1	<= '1';
+		end if;
+
+	end process bus_siz_ctrl;
  
 	--all signals, which need to be clocked on the positive edge
 	pos_edge_ctrl:process (PLL_C) begin
@@ -306,42 +353,6 @@ begin
 --				LDQ1	<= '1';
 --				UDQ1	<= '1';
 --			else--if(nAS = '0' and nAS_PLL_C_N='1')then			
-				--now decode the adresslines A[0..1] and SIZ[0..1] to determine the ram bank to write				
-				-- bits 0-7
-				if(RW='1' or ( SIZ="00" or 
-									(A(0)='1' and A(1)='1') or 
-									(A(1)='1' and SIZ(1)='1') or
-									(A(0)='1' and SIZ="11" )))then
-					LDQ0	<= '0';
-				else
-					LDQ0	<= '1';
-				end if;
-					
-				-- bits 8-15
-				if(RW='1' or (	(A(0)='0' and A(1)='1') or
-									(A(0)='1' and A(1)='0' and SIZ(0)='0') or
-									(A(1)='0' and SIZ="11") or 
-									(A(1)='0' and SIZ="00")))then
-					UDQ0	<= '0';
-				else
-					UDQ0	<= '1';
-				end if;				
-				
-				--bits 16-23
-				if(RW='1' or (	(A(0)='1' and A(1)='0') or
-									(A(1)='0' and SIZ(0)='0') or 
-									(A(1)='0' and SIZ(1)='1')))then
-					LDQ1	<= '0';
-				else
-					LDQ1	<= '1';
-				end if;									
-				
-				--bits 24--31
-				if(RW='1' or ( 	A(0)='0' and A(1)='0' ))then
-					UDQ1	<= '0';
-				else
-					UDQ1	<= '1';
-				end if;
 --			end if;
 			
 			--output buffer control
@@ -357,7 +368,7 @@ begin
 			end if;
 
 			--transfer detection, cacheburst length and cacheburst acknowledge
-			if ((TRANSFER ='1' or TRANSFER_IN_PROGRES = '1') and nAS='0')then
+			if ((CQ=commit_ras or TRANSFER_IN_PROGRES = '1') and nAS='0')then
 				TRANSFER_IN_PROGRES <= '1';
 
 				--cache burst logic
@@ -503,7 +514,8 @@ begin
 				 if (REFRESH = '1') then
 					 CQ <= refresh_start;
 					 --RAS <= '1';
-				 elsif (TRANSFER = '1'
+				 elsif (	TRANSFER = '1'
+							--MEM_SPACE ='1' and TRANSFER_IN_PROGRES='0' and nAS='0'
 							 and CLK_PE(CLOCK_SAMPLE)='1'
 							) then
 					--RAS <= '0';
@@ -622,7 +634,7 @@ begin
 				 RAS <= '1';
 				 CAS <= '1';
 				 MEM_WE <= '1';
-				 ARAM <= A(17 downto 5);
+				 --ARAM <= A(17 downto 5);
 				 CQ <= start_state; 
 				 
 				end case;
@@ -642,6 +654,9 @@ begin
 				AUTO_CONFIG <= '0';
 			end if;
 
+			--MEM_SPACE <= RAM_SPACE OR RANGER_SPACE;
+	
+
 			--Autoconfig(tm) data-encoding
 			if	reset = '0' then
 				-- reset active ...
@@ -657,6 +672,7 @@ begin
 				Dout2 <= "1111";
 				SHUT_UP	<= "11";
 				IDE_BASEADR <= x"FF";
+				MEM_BASE <= x"F";
 				--AUTO_CONFIG_D0 <= '0';
 			else
 --				if( 	A(31 downto 16) = x"00E8" 
@@ -806,6 +822,7 @@ begin
 							--Dout1 <=	"1111" ;
 							--Dout2 <=	"1111" ;
 							if(nDS = '0' and RW='0' and AUTO_CONFIG_DONE = "00")then 
+								MEM_BASE <= D(3 downto 0);
 								SHUT_UP(0) <= '0'; --enable board
 								AUTO_CONFIG_DONE_CYCLE	<= "01"; --done here
 							end if;
