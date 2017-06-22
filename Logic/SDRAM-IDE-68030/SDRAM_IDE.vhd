@@ -251,8 +251,7 @@ begin
 										else '0'; 
 	RANGER_SPACE <= '1' when 
 									A(27) = '0' 
-									--and A(23 downto 20) =x"2" --evil hack but cpld is full!
-									and A(23 downto 20) =MEM_BASE --evil hack but cpld is full!
+									and A(23 downto 20) =MEM_BASE 
 									and SHUT_UP(0)='0' 
 								else '0'; 
 
@@ -935,16 +934,14 @@ begin
 					IDE_W_S		<= '0';
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'1';					
-					IDE_DSACK_D(0)		<=	'0';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
 				elsif(RW = '1' and IDE_ENABLE = '1')then
-						--read from IDE instead from ROM
+					--read from IDE instead from ROM
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '0';
 					ROM_OE_S		<=	'1';
-					IDE_DSACK_D(0)		<=	'0';
 					if(IDE_WAIT = '1')then --IDE I/O
 						DSACK_16BIT		<=	IDE_DSACK_D(IDE_WAITS);
 					end if;
@@ -954,10 +951,10 @@ begin
 					IDE_W_S		<= '1';
 					IDE_R_S		<= '1';
 					ROM_OE_S		<=	'0';	
-					IDE_DSACK_D(0)		<=	'0';
 				end if;
 
 				
+				IDE_DSACK_D(0)		<=	'0';
 				IDE_DSACK_D(IDE_DELAY downto 1) <= IDE_DSACK_D((IDE_DELAY-1) downto 0);
 			else
 				IDE_BUF_S <= '1';
