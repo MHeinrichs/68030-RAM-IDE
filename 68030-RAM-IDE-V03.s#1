@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -10364,8 +10364,6 @@ nc	1	x20
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
-<class number="1" name="SDRAM-CTRL" width="0" drill="0">
-</class>
 </classes>
 <parts>
 <part name="X1" library="con-vg" deviceset="MABC96R" device=""/>
@@ -10766,7 +10764,7 @@ nc	1	x20
 </bus>
 </busses>
 <nets>
-<net name="GND" class="1">
+<net name="GND" class="0">
 <segment>
 <pinref part="C2" gate="G$1" pin="2"/>
 <wire x1="33.02" y1="73.66" x2="33.02" y2="69.85" width="0.1524" layer="91"/>
@@ -12663,7 +12661,7 @@ nc	1	x20
 <busses>
 </busses>
 <nets>
-<net name="GND" class="1">
+<net name="GND" class="0">
 <segment>
 <wire x1="78.74" y1="78.74" x2="78.74" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="78.74" x2="78.74" y2="78.74" width="0.1524" layer="91"/>
@@ -13558,7 +13556,7 @@ nc	1	x20
 <pinref part="IC9" gate="A" pin="D7"/>
 </segment>
 </net>
-<net name="ARAM_0" class="1">
+<net name="ARAM_0" class="0">
 <segment>
 <wire x1="203.2" y1="167.64" x2="191.77" y2="167.64" width="0.1524" layer="91"/>
 <label x="191.77" y="167.9575" size="1.27" layer="95"/>
@@ -13575,7 +13573,7 @@ nc	1	x20
 <pinref part="RN2" gate="B" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_1" class="1">
+<net name="ARAM_1" class="0">
 <segment>
 <wire x1="203.2" y1="165.1" x2="191.77" y2="165.1" width="0.1524" layer="91"/>
 <label x="191.77" y="165.4175" size="1.27" layer="95"/>
@@ -13592,7 +13590,7 @@ nc	1	x20
 <pinref part="RN2" gate="D" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_2" class="1">
+<net name="ARAM_2" class="0">
 <segment>
 <wire x1="203.2" y1="162.56" x2="191.77" y2="162.56" width="0.1524" layer="91"/>
 <label x="191.77" y="162.8775" size="1.27" layer="95"/>
@@ -13609,7 +13607,7 @@ nc	1	x20
 <pinref part="RN1" gate="B" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_3" class="1">
+<net name="ARAM_3" class="0">
 <segment>
 <wire x1="203.2" y1="160.02" x2="191.77" y2="160.02" width="0.1524" layer="91"/>
 <label x="191.77" y="160.3375" size="1.27" layer="95"/>
@@ -13626,7 +13624,7 @@ nc	1	x20
 <pinref part="RN1" gate="D" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_4" class="1">
+<net name="ARAM_4" class="0">
 <segment>
 <wire x1="203.2" y1="157.48" x2="191.77" y2="157.48" width="0.1524" layer="91"/>
 <label x="191.77" y="157.7975" size="1.27" layer="95"/>
@@ -13643,7 +13641,7 @@ nc	1	x20
 <pinref part="RN1" gate="C" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_5" class="1">
+<net name="ARAM_5" class="0">
 <segment>
 <wire x1="203.2" y1="154.94" x2="191.77" y2="154.94" width="0.1524" layer="91"/>
 <label x="191.77" y="155.2575" size="1.27" layer="95"/>
@@ -13660,7 +13658,7 @@ nc	1	x20
 <pinref part="RN1" gate="A" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_6" class="1">
+<net name="ARAM_6" class="0">
 <segment>
 <wire x1="203.2" y1="152.4" x2="191.77" y2="152.4" width="0.1524" layer="91"/>
 <label x="191.77" y="152.7175" size="1.27" layer="95"/>
@@ -13677,7 +13675,7 @@ nc	1	x20
 <pinref part="RN2" gate="C" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_7" class="1">
+<net name="ARAM_7" class="0">
 <segment>
 <wire x1="203.2" y1="149.86" x2="191.77" y2="149.86" width="0.1524" layer="91"/>
 <label x="191.77" y="150.1775" size="1.27" layer="95"/>
@@ -13694,7 +13692,7 @@ nc	1	x20
 <pinref part="RN2" gate="A" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_8" class="1">
+<net name="ARAM_8" class="0">
 <segment>
 <wire x1="203.2" y1="147.32" x2="191.77" y2="147.32" width="0.1524" layer="91"/>
 <label x="191.77" y="147.6375" size="1.27" layer="95"/>
@@ -13711,7 +13709,7 @@ nc	1	x20
 <pinref part="RN3" gate="C" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_9" class="1">
+<net name="ARAM_9" class="0">
 <segment>
 <wire x1="203.2" y1="144.78" x2="191.77" y2="144.78" width="0.1524" layer="91"/>
 <label x="191.77" y="145.0975" size="1.27" layer="95"/>
@@ -13728,7 +13726,7 @@ nc	1	x20
 <pinref part="RN3" gate="A" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_10" class="1">
+<net name="ARAM_10" class="0">
 <segment>
 <wire x1="203.2" y1="142.24" x2="191.77" y2="142.24" width="0.1524" layer="91"/>
 <label x="191.77" y="142.5575" size="1.27" layer="95"/>
@@ -13745,7 +13743,7 @@ nc	1	x20
 <pinref part="RN3" gate="D" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_11" class="1">
+<net name="ARAM_11" class="0">
 <segment>
 <wire x1="203.2" y1="139.7" x2="191.77" y2="139.7" width="0.1524" layer="91"/>
 <label x="191.77" y="140.0175" size="1.27" layer="95"/>
@@ -13762,7 +13760,7 @@ nc	1	x20
 <pinref part="RN4" gate="C" pin="P$1"/>
 </segment>
 </net>
-<net name="ARAM_12" class="1">
+<net name="ARAM_12" class="0">
 <segment>
 <wire x1="203.2" y1="137.16" x2="191.77" y2="137.16" width="0.1524" layer="91"/>
 <label x="191.77" y="137.4775" size="1.27" layer="95"/>
@@ -13779,7 +13777,7 @@ nc	1	x20
 <pinref part="RN4" gate="B" pin="P$1"/>
 </segment>
 </net>
-<net name="BA0" class="1">
+<net name="BA0" class="0">
 <segment>
 <wire x1="203.2" y1="132.08" x2="191.77" y2="132.08" width="0.1524" layer="91"/>
 <label x="191.77" y="132.3975" size="1.27" layer="95"/>
@@ -13796,7 +13794,7 @@ nc	1	x20
 <pinref part="RN4" gate="D" pin="P$1"/>
 </segment>
 </net>
-<net name="BA1" class="1">
+<net name="BA1" class="0">
 <segment>
 <wire x1="203.2" y1="129.54" x2="191.77" y2="129.54" width="0.1524" layer="91"/>
 <label x="191.77" y="129.8575" size="1.27" layer="95"/>
@@ -13813,7 +13811,7 @@ nc	1	x20
 <pinref part="RN3" gate="B" pin="P$1"/>
 </segment>
 </net>
-<net name="WE" class="1">
+<net name="WE" class="0">
 <segment>
 <wire x1="203.2" y1="121.92" x2="191.77" y2="121.92" width="0.1524" layer="91"/>
 <label x="191.77" y="122.2375" size="1.27" layer="95"/>
@@ -13830,7 +13828,7 @@ nc	1	x20
 <pinref part="RN5" gate="A" pin="P$1"/>
 </segment>
 </net>
-<net name="RAS" class="1">
+<net name="RAS" class="0">
 <segment>
 <wire x1="228.6" y1="124.46" x2="240.03" y2="124.46" width="0.1524" layer="91"/>
 <label x="231.14" y="124.7775" size="1.27" layer="95"/>
@@ -13847,7 +13845,7 @@ nc	1	x20
 <pinref part="RN4" gate="A" pin="P$1"/>
 </segment>
 </net>
-<net name="CAS" class="1">
+<net name="CAS" class="0">
 <segment>
 <wire x1="228.6" y1="121.92" x2="240.03" y2="121.92" width="0.1524" layer="91"/>
 <label x="231.14" y="122.2375" size="1.27" layer="95"/>
@@ -13864,7 +13862,7 @@ nc	1	x20
 <pinref part="RN5" gate="C" pin="P$1"/>
 </segment>
 </net>
-<net name="UDQ1" class="1">
+<net name="UDQ1" class="0">
 <segment>
 <wire x1="228.6" y1="33.02" x2="234.95" y2="33.02" width="0.1524" layer="91"/>
 <label x="234.315" y="33.655" size="1.27" layer="95" rot="MR0"/>
@@ -13876,7 +13874,7 @@ nc	1	x20
 <pinref part="IC9" gate="A" pin="LDQM"/>
 </segment>
 </net>
-<net name="LDQ1" class="1">
+<net name="LDQ1" class="0">
 <segment>
 <wire x1="228.6" y1="35.56" x2="234.95" y2="35.56" width="0.1524" layer="91"/>
 <label x="234.315" y="36.195" size="1.27" layer="95" rot="MR0"/>
@@ -13888,7 +13886,7 @@ nc	1	x20
 <pinref part="IC9" gate="A" pin="UDQM"/>
 </segment>
 </net>
-<net name="UDQ0" class="1">
+<net name="UDQ0" class="0">
 <segment>
 <wire x1="228.6" y1="38.1" x2="234.95" y2="38.1" width="0.1524" layer="91"/>
 <label x="234.6325" y="38.735" size="1.27" layer="95" rot="MR0"/>
@@ -13900,7 +13898,7 @@ nc	1	x20
 <pinref part="IC8" gate="A" pin="LDQM"/>
 </segment>
 </net>
-<net name="LDQ0" class="1">
+<net name="LDQ0" class="0">
 <segment>
 <wire x1="228.6" y1="40.64" x2="234.95" y2="40.64" width="0.1524" layer="91"/>
 <label x="234.6325" y="41.275" size="1.27" layer="95" rot="MR0"/>
@@ -13912,7 +13910,7 @@ nc	1	x20
 <pinref part="IC8" gate="A" pin="UDQM"/>
 </segment>
 </net>
-<net name="CLK_RAM" class="1">
+<net name="CLK_RAM" class="0">
 <segment>
 <wire x1="142.24" y1="115.57" x2="130.81" y2="115.57" width="0.1524" layer="91"/>
 <label x="130.81" y="115.8875" size="1.27" layer="95"/>
@@ -13973,7 +13971,7 @@ nc	1	x20
 <pinref part="IC6" gate="A" pin="OEAB2"/>
 </segment>
 </net>
-<net name="CLKEN" class="1">
+<net name="CLKEN" class="0">
 <segment>
 <wire x1="203.2" y1="114.3" x2="191.77" y2="114.3" width="0.1524" layer="91"/>
 <label x="191.77" y="114.6175" size="1.27" layer="95"/>
@@ -14090,168 +14088,168 @@ nc	1	x20
 <pinref part="IC6" gate="A" pin="1A2"/>
 </segment>
 </net>
-<net name="C_BA0" class="1">
+<net name="C_BA0" class="0">
 <segment>
 <pinref part="RN4" gate="D" pin="P$2"/>
 <wire x1="218.44" y1="60.96" x2="215.9" y2="60.96" width="0.1524" layer="91"/>
 <label x="215.9" y="60.96" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_RAS" class="1">
+<net name="C_RAS" class="0">
 <segment>
 <pinref part="RN4" gate="A" pin="P$2"/>
 <wire x1="218.44" y1="58.42" x2="215.9" y2="58.42" width="0.1524" layer="91"/>
 <label x="215.9" y="58.42" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_11" class="1">
+<net name="C_ARAM_11" class="0">
 <segment>
 <pinref part="RN4" gate="C" pin="P$2"/>
 <wire x1="218.44" y1="55.88" x2="215.9" y2="55.88" width="0.1524" layer="91"/>
 <label x="215.9" y="55.88" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_12" class="1">
+<net name="C_ARAM_12" class="0">
 <segment>
 <pinref part="RN4" gate="B" pin="P$2"/>
 <wire x1="218.44" y1="53.34" x2="215.9" y2="53.34" width="0.1524" layer="91"/>
 <label x="215.9" y="53.34" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_CAS" class="1">
+<net name="C_CAS" class="0">
 <segment>
 <pinref part="RN5" gate="C" pin="P$2"/>
 <wire x1="218.44" y1="50.8" x2="215.9" y2="50.8" width="0.1524" layer="91"/>
 <label x="215.9" y="50.8" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_WE" class="1">
+<net name="C_WE" class="0">
 <segment>
 <pinref part="RN5" gate="A" pin="P$2"/>
 <wire x1="218.44" y1="48.26" x2="215.9" y2="48.26" width="0.1524" layer="91"/>
 <label x="215.9" y="48.26" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_CLKEN" class="1">
+<net name="C_CLKEN" class="0">
 <segment>
 <pinref part="RN5" gate="D" pin="P$2"/>
 <wire x1="218.44" y1="45.72" x2="215.9" y2="45.72" width="0.1524" layer="91"/>
 <label x="215.9" y="45.72" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_CLK_RAM" class="1">
+<net name="C_CLK_RAM" class="0">
 <segment>
 <pinref part="RN5" gate="B" pin="P$2"/>
 <wire x1="218.44" y1="43.18" x2="215.9" y2="43.18" width="0.1524" layer="91"/>
 <label x="215.9" y="43.18" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_LDQ0" class="1">
+<net name="C_LDQ0" class="0">
 <segment>
 <pinref part="RN6" gate="A" pin="P$1"/>
 <wire x1="218.44" y1="40.64" x2="215.9" y2="40.64" width="0.1524" layer="91"/>
 <label x="215.9" y="40.64" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_UDQ0" class="1">
+<net name="C_UDQ0" class="0">
 <segment>
 <pinref part="RN6" gate="C" pin="P$1"/>
 <wire x1="218.44" y1="38.1" x2="215.9" y2="38.1" width="0.1524" layer="91"/>
 <label x="215.9" y="38.1" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_LDQ1" class="1">
+<net name="C_LDQ1" class="0">
 <segment>
 <pinref part="RN6" gate="B" pin="P$1"/>
 <wire x1="218.44" y1="35.56" x2="215.9" y2="35.56" width="0.1524" layer="91"/>
 <label x="215.9" y="35.56" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_UDQ1" class="1">
+<net name="C_UDQ1" class="0">
 <segment>
 <pinref part="RN6" gate="D" pin="P$1"/>
 <wire x1="218.44" y1="33.02" x2="215.9" y2="33.02" width="0.1524" layer="91"/>
 <label x="215.9" y="33.02" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_9" class="1">
+<net name="C_ARAM_9" class="0">
 <segment>
 <pinref part="RN3" gate="A" pin="P$2"/>
 <wire x1="215.9" y1="63.5" x2="218.44" y2="63.5" width="0.1524" layer="91"/>
 <label x="215.9" y="63.5" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_8" class="1">
+<net name="C_ARAM_8" class="0">
 <segment>
 <pinref part="RN3" gate="C" pin="P$2"/>
 <wire x1="215.9" y1="66.04" x2="218.44" y2="66.04" width="0.1524" layer="91"/>
 <label x="215.9" y="66.04" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_BA1" class="1">
+<net name="C_BA1" class="0">
 <segment>
 <pinref part="RN3" gate="B" pin="P$2"/>
 <wire x1="215.9" y1="68.58" x2="218.44" y2="68.58" width="0.1524" layer="91"/>
 <label x="215.9" y="68.58" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_10" class="1">
+<net name="C_ARAM_10" class="0">
 <segment>
 <pinref part="RN3" gate="D" pin="P$2"/>
 <wire x1="215.9" y1="71.12" x2="218.44" y2="71.12" width="0.1524" layer="91"/>
 <label x="215.9" y="71.12" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_1" class="1">
+<net name="C_ARAM_1" class="0">
 <segment>
 <pinref part="RN2" gate="D" pin="P$2"/>
 <wire x1="215.9" y1="81.28" x2="218.44" y2="81.28" width="0.1524" layer="91"/>
 <label x="215.9" y="81.28" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_0" class="1">
+<net name="C_ARAM_0" class="0">
 <segment>
 <pinref part="RN2" gate="B" pin="P$2"/>
 <wire x1="218.44" y1="78.74" x2="215.9" y2="78.74" width="0.1524" layer="91"/>
 <label x="215.9" y="78.74" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_6" class="1">
+<net name="C_ARAM_6" class="0">
 <segment>
 <pinref part="RN2" gate="C" pin="P$2"/>
 <wire x1="215.9" y1="76.2" x2="218.44" y2="76.2" width="0.1524" layer="91"/>
 <label x="215.9" y="76.2" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_7" class="1">
+<net name="C_ARAM_7" class="0">
 <segment>
 <pinref part="RN2" gate="A" pin="P$2"/>
 <wire x1="215.9" y1="73.66" x2="218.44" y2="73.66" width="0.1524" layer="91"/>
 <label x="215.9" y="73.66" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_5" class="1">
+<net name="C_ARAM_5" class="0">
 <segment>
 <pinref part="RN1" gate="A" pin="P$2"/>
 <wire x1="215.9" y1="83.82" x2="218.44" y2="83.82" width="0.1524" layer="91"/>
 <label x="215.9" y="83.82" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_2" class="1">
+<net name="C_ARAM_2" class="0">
 <segment>
 <pinref part="RN1" gate="B" pin="P$2"/>
 <wire x1="215.9" y1="86.36" x2="218.44" y2="86.36" width="0.1524" layer="91"/>
 <label x="215.9" y="86.36" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_4" class="1">
+<net name="C_ARAM_4" class="0">
 <segment>
 <pinref part="RN1" gate="C" pin="P$2"/>
 <wire x1="215.9" y1="88.9" x2="218.44" y2="88.9" width="0.1524" layer="91"/>
 <label x="215.9" y="88.9" size="1.27" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="C_ARAM_3" class="1">
+<net name="C_ARAM_3" class="0">
 <segment>
 <pinref part="RN1" gate="D" pin="P$2"/>
 <wire x1="215.9" y1="91.44" x2="218.44" y2="91.44" width="0.1524" layer="91"/>
@@ -14414,7 +14412,7 @@ nc	1	x20
 <busses>
 </busses>
 <nets>
-<net name="GND" class="1">
+<net name="GND" class="0">
 <segment>
 <pinref part="C34" gate="G$1" pin="1"/>
 <pinref part="GND11" gate="1" pin="GND"/>
@@ -15029,168 +15027,168 @@ nc	1	x20
 <label x="91.44" y="17.78" size="1.27" layer="95" rot="R270"/>
 </segment>
 </net>
-<net name="C_BA0" class="1">
+<net name="C_BA0" class="0">
 <segment>
 <wire x1="139.7" y1="20.32" x2="139.7" y2="17.78" width="0.1524" layer="91"/>
 <label x="139.7" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$71-FB13MC02"/>
 </segment>
 </net>
-<net name="C_RAS" class="1">
+<net name="C_RAS" class="0">
 <segment>
 <wire x1="132.08" y1="20.32" x2="132.08" y2="17.78" width="0.1524" layer="91"/>
 <label x="132.08" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$68-FB11MC12"/>
 </segment>
 </net>
-<net name="C_ARAM_11" class="1">
+<net name="C_ARAM_11" class="0">
 <segment>
 <wire x1="137.16" y1="20.32" x2="137.16" y2="17.78" width="0.1524" layer="91"/>
 <label x="137.16" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$70-FB11MC17"/>
 </segment>
 </net>
-<net name="C_ARAM_12" class="1">
+<net name="C_ARAM_12" class="0">
 <segment>
 <wire x1="134.62" y1="20.32" x2="134.62" y2="17.78" width="0.1524" layer="91"/>
 <label x="134.62" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$69-FB11MC14"/>
 </segment>
 </net>
-<net name="C_CAS" class="1">
+<net name="C_CAS" class="0">
 <segment>
 <wire x1="121.92" y1="20.32" x2="121.92" y2="17.78" width="0.1524" layer="91"/>
 <label x="121.92" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$64-FB11MC10"/>
 </segment>
 </net>
-<net name="C_WE" class="1">
+<net name="C_WE" class="0">
 <segment>
 <wire x1="111.76" y1="17.78" x2="111.76" y2="20.32" width="0.1524" layer="91"/>
 <label x="111.76" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$60-FB11MC03"/>
 </segment>
 </net>
-<net name="C_CLKEN" class="1">
+<net name="C_CLKEN" class="0">
 <segment>
 <wire x1="127" y1="20.32" x2="127" y2="17.78" width="0.1524" layer="91"/>
 <label x="127" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$66-FB11MC11"/>
 </segment>
 </net>
-<net name="C_CLK_RAM" class="1">
+<net name="C_CLK_RAM" class="0">
 <segment>
 <wire x1="114.3" y1="17.78" x2="114.3" y2="20.32" width="0.1524" layer="91"/>
 <label x="114.3" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$61-FB11MC05"/>
 </segment>
 </net>
-<net name="C_LDQ0" class="1">
+<net name="C_LDQ0" class="0">
 <segment>
 <wire x1="109.22" y1="17.78" x2="109.22" y2="20.32" width="0.1524" layer="91"/>
 <label x="109.22" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$59-FB9MC17"/>
 </segment>
 </net>
-<net name="C_UDQ0" class="1">
+<net name="C_UDQ0" class="0">
 <segment>
 <wire x1="104.14" y1="20.32" x2="104.14" y2="17.78" width="0.1524" layer="91"/>
 <label x="104.14" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$57-FB9MC12"/>
 </segment>
 </net>
-<net name="C_LDQ1" class="1">
+<net name="C_LDQ1" class="0">
 <segment>
 <wire x1="106.68" y1="20.32" x2="106.68" y2="17.78" width="0.1524" layer="91"/>
 <label x="106.68" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$58-FB9MC14"/>
 </segment>
 </net>
-<net name="C_UDQ1" class="1">
+<net name="C_UDQ1" class="0">
 <segment>
 <wire x1="101.6" y1="20.32" x2="101.6" y2="17.78" width="0.1524" layer="91"/>
 <label x="101.6" y="17.78" size="1.27" layer="95" rot="R270"/>
 <pinref part="IC7" gate="G$1" pin="P$56-FB9MC11"/>
 </segment>
 </net>
-<net name="C_ARAM_9" class="1">
+<net name="C_ARAM_9" class="0">
 <segment>
 <wire x1="162.56" y1="45.72" x2="165.1" y2="45.72" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$74-FB13MC08"/>
 <label x="165.1" y="45.72" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_8" class="1">
+<net name="C_ARAM_8" class="0">
 <segment>
 <wire x1="162.56" y1="50.8" x2="165.1" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$76-FB13MC14"/>
 <label x="165.1" y="50.8" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_BA1" class="1">
+<net name="C_BA1" class="0">
 <segment>
 <wire x1="162.56" y1="48.26" x2="165.1" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$75-FB13MC11"/>
 <label x="165.1" y="48.26" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_10" class="1">
+<net name="C_ARAM_10" class="0">
 <segment>
 <wire x1="162.56" y1="53.34" x2="165.1" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$77-FB13MC15"/>
 <label x="165.1" y="53.34" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_1" class="1">
+<net name="C_ARAM_1" class="0">
 <segment>
 <wire x1="162.56" y1="63.5" x2="165.1" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$81-FB15MC08"/>
 <label x="165.1" y="63.5" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_0" class="1">
+<net name="C_ARAM_0" class="0">
 <segment>
 <wire x1="165.1" y1="58.42" x2="162.56" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$79-FB15MC02"/>
 <label x="165.1" y="58.42" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_6" class="1">
+<net name="C_ARAM_6" class="0">
 <segment>
 <wire x1="162.56" y1="60.96" x2="165.1" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$80-FB15MC03"/>
 <label x="165.1" y="60.96" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_7" class="1">
+<net name="C_ARAM_7" class="0">
 <segment>
 <wire x1="162.56" y1="55.88" x2="165.1" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$78-FB13MC17"/>
 <label x="165.1" y="55.88" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_5" class="1">
+<net name="C_ARAM_5" class="0">
 <segment>
 <wire x1="162.56" y1="66.04" x2="165.1" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$82-FB15MC10"/>
 <label x="165.1" y="66.04" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_2" class="1">
+<net name="C_ARAM_2" class="0">
 <segment>
 <wire x1="162.56" y1="68.58" x2="165.1" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$83-FB15MC11"/>
 <label x="165.1" y="68.58" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_4" class="1">
+<net name="C_ARAM_4" class="0">
 <segment>
 <wire x1="162.56" y1="73.66" x2="165.1" y2="73.66" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$85-FB15MC12"/>
 <label x="165.1" y="73.66" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="C_ARAM_3" class="1">
+<net name="C_ARAM_3" class="0">
 <segment>
 <wire x1="162.56" y1="76.2" x2="165.1" y2="76.2" width="0.1524" layer="91"/>
 <pinref part="IC7" gate="G$1" pin="P$86-FB15MC14"/>

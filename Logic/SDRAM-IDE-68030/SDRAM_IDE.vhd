@@ -92,7 +92,7 @@ begin
 end;
 
 
-constant CLOCK_SAMPLE : integer := 3; --cl3
+constant CLOCK_SAMPLE : integer := 2; --cl3
 --constant CLOCK_SAMPLE : integer := 3; --cl2
 constant NQ_TIMEOUT : integer := 9; --cl3
 --constant NQ_TIMEOUT : integer := 6; --cl2
@@ -165,7 +165,8 @@ constant ARAM_PRECHARGE: STD_LOGIC_VECTOR (12 downto 0) := "0010000000000";
 constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000110010"; --cl3   
 --constant ARAM_OPTCODE: STD_LOGIC_VECTOR (12 downto 0) := "0001000100010"; --cl2
 signal ENACLK_PRE : STD_LOGIC;
-signal CLK_D : STD_LOGIC;
+signal CLK_D0 : STD_LOGIC;
+signal CLK_D1 : STD_LOGIC;
 signal CLK_PE : STD_LOGIC_VECTOR(CLOCK_SAMPLE downto 0);
 signal STERM_S : STD_LOGIC;
 signal CBACK_S : STD_LOGIC;
@@ -256,14 +257,25 @@ begin
 								else '0'; 
 
 	--transfer start detectioon via latch
-	TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
+	--TRANSFER_CLK <= '1' when (RAM_SPACE ='1' or RANGER_SPACE  ='1') and nAS ='0' else '0';
+	TRANSFER_CLK <= not nAS;
 	TRANSFER_RESET <= '1' when CQ=commit_cas or RESET ='0' else '0';
 	
 	transfer_latch:process(TRANSFER_RESET,TRANSFER_CLK) begin
 		if(TRANSFER_RESET ='1') then
 			TRANSFER <= '0';
 		elsif(rising_edge(TRANSFER_CLK))then
-			TRANSFER <= '1';			
+			if(
+				(A(31 downto 26) = "000010"
+				 and A(25 downto 20) /="111111") or
+				(A(31 downto 24) = "00000000"
+				 and A(23 downto 20) =MEM_BASE 
+				 and SHUT_UP(0)='0' )
+				)then
+				TRANSFER <= '1';			
+			else 
+				TRANSFER <= '0';
+			end if;
 		end if;
 	end process transfer_latch;
 
@@ -338,8 +350,10 @@ begin
 
 			
 			--clock edge detection
-			CLK_D	<= CLK;
-			CLK_PE(0) <= CLK and not CLK_D; --the edge!			
+			CLK_D0	<= CLK;
+			CLK_D1 	<= CLK_D0;
+
+			CLK_PE(0) <= CLK_D0 and not CLK_D1; --the edge!			
 			CLK_PE(CLOCK_SAMPLE downto 1) <= CLK_PE((CLOCK_SAMPLE-1) downto 0);
 			
 			--nAS delay
@@ -404,7 +418,7 @@ begin
 			if CQ = init_refresh or 
 				CQ = refresh_start then
 				RQ<=	x"00";
-			elsif(CLK = '1' and CLK_D = '0' and RQ <RQ_TIMEOUT) then --count on edges
+			elsif(CLK_D0 = '1' and CLK_D1 = '0' and RQ <RQ_TIMEOUT) then --count on edges
 				RQ <= RQ + 1;
 			end if;
 			
@@ -913,10 +927,10 @@ begin
 
 	
 	-- this is the clocked process
-	ide_rw_gen: process (clk)
+	ide_rw_gen: process (CLK)
 	begin
 	
-		if rising_edge(clk) then
+		if rising_edge(CLK) then
 		
 			if	(reset = '0') then
 				-- reset

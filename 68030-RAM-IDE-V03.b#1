@@ -5906,7 +5906,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <wire x1="38.6" y1="44.2" x2="38.6" y2="46.4" width="0.1524" layer="1"/>
 <wire x1="38.6" y1="46.4" x2="37.6925" y2="47.3075" width="0.1524" layer="1"/>
 <wire x1="37.6925" y1="47.3075" x2="34.44875" y2="47.3075" width="0.1524" layer="1"/>
-<wire x1="32.23125" y1="49.525" x2="34.44875" y2="47.3075" width="0.1524" layer="1"/>
+<wire x1="34.44875" y1="47.3075" x2="32.23125" y2="49.525" width="0.1524" layer="1"/>
 <wire x1="32.23125" y1="49.525" x2="32.23125" y2="50.5025" width="0.1524" layer="1"/>
 </signal>
 <signal name="LDQ0" class="1">
@@ -5954,7 +5954,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <wire x1="22.2504" y1="46.62805" x2="22.7711" y2="47.14875" width="0.254" layer="1"/>
 <wire x1="22.7711" y1="47.14875" x2="29.5275" y2="47.14875" width="0.254" layer="1"/>
 <wire x1="29.5275" y1="47.14875" x2="30.38875" y2="48.01" width="0.254" layer="1"/>
-<wire x1="30.38875" y1="56.56" x2="30.38875" y2="48.01" width="0.254" layer="1"/>
+<wire x1="30.38875" y1="48.01" x2="30.38875" y2="56.56" width="0.254" layer="1"/>
 <contactref element="C37" pad="1"/>
 <wire x1="26.27125" y1="12.305" x2="25.76435" y2="12.8119" width="0.254" layer="1"/>
 <wire x1="25.76435" y1="12.8119" x2="24.3426" y2="12.8119" width="0.254" layer="1"/>
@@ -6172,7 +6172,7 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <signal name="C_UDQ0" class="1">
 <contactref element="RN6" pad="P$3"/>
 <contactref element="IC7" pad="57"/>
-<wire x1="31.88875" y1="56.56" x2="31.88875" y2="53.79625" width="0.254" layer="1"/>
+<wire x1="31.88875" y1="53.79625" x2="31.88875" y2="56.56" width="0.254" layer="1"/>
 <wire x1="31.88875" y1="53.79625" x2="32.23125" y2="53.45375" width="0.254" layer="1"/>
 <wire x1="32.23125" y1="53.45375" x2="32.23125" y2="52.3025" width="0.254" layer="1"/>
 </signal>
@@ -6188,19 +6188,19 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <contactref element="IC7" pad="56"/>
 <wire x1="31.33125" y1="52.3025" x2="31.33125" y2="52.92125" width="0.254" layer="1"/>
 <wire x1="31.33125" y1="52.92125" x2="31.38875" y2="52.97875" width="0.254" layer="1"/>
-<wire x1="31.38875" y1="56.56" x2="31.38875" y2="52.97875" width="0.254" layer="1"/>
+<wire x1="31.38875" y1="52.97875" x2="31.38875" y2="56.56" width="0.254" layer="1"/>
 </signal>
 <signal name="C_ARAM_9" class="1">
 <contactref element="RN3" pad="P$8"/>
 <contactref element="IC7" pad="74"/>
-<wire x1="43.785" y1="57.4975" x2="43.785" y2="52.335" width="0.254" layer="1"/>
+<wire x1="43.785" y1="52.335" x2="43.785" y2="57.4975" width="0.254" layer="1"/>
 <wire x1="43.785" y1="57.4975" x2="42.2225" y2="59.06" width="0.254" layer="1"/>
 <wire x1="42.2225" y1="59.06" x2="41.38875" y2="59.06" width="0.254" layer="1"/>
 </signal>
 <signal name="C_ARAM_8" class="1">
 <contactref element="RN3" pad="P$6"/>
 <contactref element="IC7" pad="76"/>
-<wire x1="45.485" y1="57.22625" x2="45.485" y2="52.335" width="0.254" layer="1"/>
+<wire x1="45.485" y1="52.335" x2="45.485" y2="57.22625" width="0.254" layer="1"/>
 <wire x1="45.485" y1="57.22625" x2="42.65125" y2="60.06" width="0.254" layer="1"/>
 <wire x1="42.65125" y1="60.06" x2="41.38875" y2="60.06" width="0.254" layer="1"/>
 </signal>
@@ -6208,7 +6208,8 @@ Sollten andere Lagen belegt und relevant sein, so teilen Sie uns dies bitte expl
 <contactref element="RN3" pad="P$7"/>
 <contactref element="IC7" pad="75"/>
 <wire x1="44.685" y1="52.335" x2="44.685" y2="57.39125" width="0.254" layer="1"/>
-<wire x1="44.685" y1="57.39125" x2="42.51625" y2="59.56" width="0.254" layer="1"/>
+<wire x1="44.685" y1="57.39125" x2="42.70375" y2="59.3725" width="0.254" layer="1"/>
+<wire x1="42.51625" y1="59.56" x2="42.70375" y2="59.3725" width="0.254" layer="1"/>
 <wire x1="42.51625" y1="59.56" x2="41.38875" y2="59.56" width="0.254" layer="1"/>
 </signal>
 <signal name="C_ARAM_10" class="1">
